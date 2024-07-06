@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   // uploading the confirmation slip
 
-  $slipFolder = '../../assets/conf_slips/' . $trainingID;
+  $slipFolder = '../../assets/conf_slips/' . $trainingID . '/';
 
   if (!file_exists($slipFolder)) {
     mkdir($slipFolder, 0777, true); // Create directory with full permissions (0777)
@@ -43,17 +43,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   //check if it is an actual image
   $check = getimagesize($_FILES['uploadFile']['tmp_name']);
   if ($check === false) {
-    $status += ", not_image";
+    // $status += ", not_image";
   }
 
   // Check file size
   if ($_FILES['uploadFile']['size'] > 5000000) {
-    $status += ", file_too_large";
+    // $status += ", file_too_large";
   }
 
   // check image format
   if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
-    $status += ", wrong_format";
+    // $status += ", wrong_format";
   }
 
   if ($status === "ok") {
