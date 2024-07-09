@@ -49,9 +49,9 @@
     <div class="container d-flex align-items-center justify-content-between">
 
       <div class="logo">
-        <h1><a href="/hrd_hub"><img src="assets/img/logo.png" alt="" width="100%" height="100%"></a></h1>
+        <!-- <h1><a href="/hrd_hub"><img src="assets/img/logo.png" alt="" width="100%" height="100%"></a></h1> -->
         <!-- Uncomment below if you prefer to use an image logo -->
-        <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+        <a href="/hrd_hub"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>
       </div>
 
       <nav id="navbar" class="navbar">
@@ -879,7 +879,7 @@
             </div>
             <div class="form-row">
               <div class="form-group col-md-4">
-                <label for="gender">Gender</label>
+                <label for="gender">Sex</label>
                 <select class="form-control" id="gender" name="gender" required>
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
@@ -907,14 +907,9 @@
                 required>
             </div>
             <div class="form-group">
-              <label for="personalEmail">Personal Email</label>
+              <label for="personalEmail">Email Address</label>
               <input type="email" class="form-control" id="personalEmail" name="personalEmail"
                 placeholder="e.g. juandelacruz@gmail.com" required>
-            </div>
-            <div class="form-group">
-              <label for="alternateEmail">Alternate Email</label>
-              <input type="email" class="form-control" id="alternateEmail" name="alternateEmail"
-                placeholder="e.g. juandelacruz@yahoo.com" required>
             </div>
 
             <!-- Agency Information -->
@@ -932,7 +927,6 @@
                   <option value="suc">State Universities and Colleges</option>
                   <option value="gocc">Government-Owned and Controlled Corporations</option>
                   <option value="nga">National Government Agencies</option>
-                  <option value="lh">Local Hospitals</option>
                   <option value="others">Others</option>
                 </select>
               </div>
@@ -944,13 +938,19 @@
                 placeholder="e.g. Civil Service Commission Regional Office No. 6" required>
             </div>
             <div class="form-group">
-              <label for="location">Location</label>
-              <input type="text" class="form-control" id="location" name="location"
-                placeholder="e.g. Province of Iloilo" required>
+              <label for="location">CSC Field Office that has jurisdiction in your area</label>
+              <select name="fo" id="fo" class="form-control">
+                <option value="fo-iloilo">FO Iloilo</option>
+                <option value="fo-guimaras">FO Guimaras</option>
+                <option value="fo-antique">FO Antique</option>
+                <option value="fo-capiz">FO Capiz</option>
+                <option value="fo-negros">FO Negros Occidental</option>
+                <option value="fo-aklan">FO Aklan</option>
+              </select>
             </div>
 
             <!-- Food Restrictions -->
-            <h6 class="mb-3 form-title">FOOD RESTRICTIONS</h6>
+            <h6 class="mb-3 form-title">FOOD RESTRICTIONS <small>(leave blank if none)</small></h6>
             <div class="form-group">
               <input type="text" class="form-control" id="foodRestrictions" name="foodRestrictions"
                 placeholder="If any, please specify.">
@@ -959,8 +959,8 @@
             <!-- Upload Confirmation Slip -->
             <h6 class="mb-3 form-title">UPLOAD CONFIRMATION SLIP</h6>
             <div class="form-group">
-              <label for="uploadFile" class="info-text">Please name your confirmation slip using the following format:
-                Agency.name_training.date_name (e.g. CSC_SOCE_June18-19_2024_JuanCruz)</label>
+              <label for="uploadFile" class="info-text">Accepted format of document: PDF, DOCX, DOC, JPEG, JPG,
+                PNG</label>
               <input type="file" class="form-control-file confirmation-slip-input" id="uploadFile" name="uploadFile"
                 required>
             </div>
@@ -970,8 +970,8 @@
             <div class="form-check mb-2">
               <input class="form-check-input" type="checkbox" id="privacyPolicy" required>
               <label class="form-check-label info-text" for="privacyPolicy">
-                I hereby agree and consent for the processing of my personal data information, as well as have read and
-                understood the Privacy Policy.
+                I hereby agree and consent for the processing of my personal data information in regards of the Data
+                Privacy Act.
               </label>
             </div>
             <div class="form-check mb-2">

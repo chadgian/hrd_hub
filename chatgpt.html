@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning & Development Hub</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Custom styles to make the layout fit well */
+        .left-side, .middle-content, .right-side {
+            padding: 15px;
+            border: 1px solid #ddd;
+        }
+        .left-side {
+            background-color: #f8f9fa;
+        }
+        .middle-content {
+            background-color: #ffffff;
+        }
+        .right-side {
+            background-color: #f8f9fa;
+            position: fixed;
+            top: 0;
+            right: 0;
+            height: 100%;
+            width: 25%;
+            overflow-y: auto;
+            border-left: 1px solid #ddd;
+            padding: 20px;
+        }
+        .container-fluid {
+            margin-right: 25%;
+        }
+        .profile {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .profile img {
+            border-radius: 50%;
+            width: 100px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Left Side Navigation -->
+            <div class="col-md-3 left-side">
+                <div class="profile">
+                    <img src="path-to-profile-image.jpg" alt="Profile Image">
+                    <h3>Sheila P. Arendain</h3>
+                    <p>OIC - Chief HRS (HRDI)</p>
+                </div>
+                <nav>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Notices</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Add Training</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Generate ID</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">View Attendance</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Scan Attendance</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Edit Attendance</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">All Trainings</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Database</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <!-- Middle Content -->
+            <div class="col-md-6 middle-content">
+                <h2>Recent Training</h2>
+                <div class="training">
+                    <div class="training-item">
+                        <h4>Service with a SMILE: Mastering Customer Handling Skills</h4>
+                        <p>June 13</p>
+                        <button class="btn btn-primary">View</button>
+                    </div>
+                    <div class="training-item">
+                        <h4>Supervisory Development Course Track 2</h4>
+                        <p>June 18-19</p>
+                        <button class="btn btn-primary">View</button>
+                    </div>
+                </div>
+                <h2>Upcoming Training</h2>
+                <div class="training">
+                    <div class="training-item">
+                        <h4>Public Service Values Program (PSVP)</h4>
+                        <p>July 17</p>
+                        <button class="btn btn-primary">View</button>
+                    </div>
+                    <div class="training-item">
+                        <h4>Blueprint Towards Success: A Training on SPMS</h4>
+                        <p>July 17-18</p>
+                        <button class="btn btn-primary">View</button>
+                    </div>
+                    <div class="training-item">
+                        <h4>The Ethical Compass: A Seminar on PSVP, RA 6713, and RA 11032</h4>
+                        <p>July 24</p>
+                        <button class="btn btn-primary">View</button>
+                    </div>
+                    <div class="training-item">
+                        <h4>Bida Ka, Kawani: Strategies on Empowerment through Rewards and Recognition</h4>
+                        <p>August 7-8</p>
+                        <button class="btn btn-primary">View</button>
+                    </div>
+                    <div class="training-item">
+                        <h4>Supervisory Development Course Track 1</h4>
+                        <p>August 13-14</p>
+                        <button class="btn btn-primary">View</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Right Side Activities Log -->
+    <div class="right-side">
+        <h2>Recent Activities</h2>
+        <div class="activity-log">
+            <!-- Add the activity log content here -->
+            <p>Activities log goes here...</p>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
