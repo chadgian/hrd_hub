@@ -65,9 +65,7 @@ header {
   align-items: start;
   justify-content: start;
   padding: 0px;
-  position: sticky;
-  left: 0;
-  z-index: 999;
+  /* z-index: 999; */
   /* height: 90%; */
 }
 
@@ -87,14 +85,37 @@ header {
   align-items: center;
   gap: 10px;
   font-size: medium;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  padding-left: 15px;
 }
 
 .nav-sidebar li {
   box-shadow: 0 0.5px 2px #24305E;
-  padding-top: 7px;
-  padding-bottom: 7px;
-  padding-left: 15px;
   font-weight: bold;
+}
+
+.profile-sidebar {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile-name {
+  font-weight: bold;
+  color: #24305E;
+}
+
+.profile-position {
+  font-size: small;
+  color: #24305E;
+  text-decoration: overline;
+} 
+
+.nav-sidebar-mobile {
+  display: none;
 }
 
 /*--------------------------------- main-content ---------------------------------*/
@@ -109,6 +130,10 @@ header {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .training-list {
@@ -130,12 +155,14 @@ header {
   border-left: 15px #FF5B5B solid;
   background-color: #fff;
   border-radius: 5px;
+  padding: 5px;
 }
 
 .date-training {
   font-weight: bold;
   color: #CE2F2F;
   text-align: center;
+  flex: 0.5;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
@@ -144,16 +171,21 @@ header {
 }
 
 .date-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   padding-right: 30%;
 }
 
+.date-content div {
+  text-align: center;
+}
+
 .date-training::after {
-  content: " ";
+  content: "│";
   display: block;
-  position: absolute;
-  height: 1.5rem;
-  width: 1px;
-  background: #8D8D8D;
+  color: #8D8D8D;
 }
 
 .training-name {
@@ -161,7 +193,7 @@ header {
   flex-direction: row;
   justify-content: start;
   align-items: start;
-  flex: 2;
+  flex: 5;
   font-weight: bold;
   color: #093980;
   padding-top: 5px;
@@ -175,21 +207,290 @@ header {
   padding-left: 10px;
   display: flex;
   justify-content: end;
-  align-items: end;
+  align-items: center;
+  position: relative;
 }
 
 .view-training-btn {
   background-color: #4A88FF;
   color: #fff;
-  border-radius: 15px;
+  border-radius: 5px;
   padding-top: 5px;
   padding-bottom: 5px;
   padding-left: 15px;
   padding-right: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease-out;
+  text-decoration: none;
 }
 
-/*--------------------------------- main-content ---------------------------------*/
+.view-training-btn:hover {
+  background-color: #235ac0;
+}
 
+.training-badge{
+  background-color: #FC3C15;
+  color: #fff;
+  padding: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  margin-left: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  position: absolute;
+  font-size: 8px;
+  top: -7px;
+  right: 3px;
+  border: 1px #fff solid;
+}
+
+::-webkit-scrollbar {
+  width: 5px; /* Width of the scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Color of the track */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888; /* Color of the thumb */
+  border-radius: 0px; /* Rounding the corners of the thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Color of the thumb when hovered */
+}
+
+/*--------------------------------- right side ---------------------------------*/
+
+.right-side {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.recent-acts {
+  display: flex;
+  flex-direction: column;
+  margin: 0px;
+  padding: 0px;
+  width: 95%;
+  height: 95%;
+  background-color: #fff;
+  box-shadow: 0 1px 3px #555;
+}
+
+.recent-header, .recent-content, .recent-footer {
+  width: 100%;
+}
+
+.recent-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  height: 50px;
+  border-bottom: 1px #999999 solid;
+}
+
+.recent-content {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: start;
+  padding: 10px;
+  height: 100%;
+  overflow-y: scroll;
+  border-bottom: 1px #999999 solid;
+  gap: 3px;
+}
+
+.recent-footer {
+  display: flex;
+  flex-direction: row;
+  gap: 2px;
+  justify-content: space-between;
+  align-items: center;
+  /* padding: 10px; */
+  height: 40px;
+  color: #093980;
+}
+
+.recent-header-title {
+  font-size: small;
+  font-weight: bold;
+  color: #093980;
+}
+
+.recent-refresh {
+  color: #093980;
+  font-size: small;
+}
+
+.recent-img img {
+  width: 40px;
+}
+
+.recent-act {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  border-radius: 5px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.recent-act:hover {
+  background-color: #ebebeb;
+}
+
+.recent-act-content {
+  font-size: 12px;
+}
+
+.recent-age {
+  font-size: 10px;
+}
+
+.recent-act-read {
+  color: #6e6e6e;
+}
+
+.recent-duration {
+  color: #fff;
+  background-color: #24305E;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: x-small;
+  cursor: pointer;
+}
+
+
+/*--------------------------------- add training page ---------------------------------*/
+
+input {
+  border: 1px #686868 solid !important;
+  box-shadow: 1px 3px 3px #555;
+}
+
+input[type="checkbox"] {
+  box-shadow: 0px 0px 0px;
+}
+
+select {
+  border: 1px #686868 solid !important;
+  border-radius: 5px;
+}
+
+textarea {
+  border: 1px #686868 solid !important;
+  box-shadow: 1px 3px 3px #555;
+}
+
+label {
+  font-weight: bold;
+  color: #24305E;
+}
+/* 
+input[type="date"]{
+  width: 80%;
+} */
+
+.addTraining-title {
+  font-weight: bold;
+  color: #24305E;
+  text-decoration: underline;
+  margin-bottom: 30px;
+}
+
+.addTraining-content {
+  background-color: #FEFEFE;
+  padding: 30px;
+  padding-top: 10px;
+  border-radius: 5px;
+  border: 1.5px #929292 solid;
+  border-top: 20px #CE2F2F solid;
+}
+
+.addTraining-btn {
+  background-color: #24305E;
+  color: #fff;
+  border-radius: 20px;
+  font-weight: bold;
+}
+
+.addTraining-btn:hover {
+  background-color: #0e183f;
+  color: #fff;
+  font-weight: bold;
+}
+
+/*--------------------------------- viewTraining ---------------------------------*/
+
+.viewTraining-title {
+  font-weight: bold;
+  color: #093980;
+}
+
+.viewTraining-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2;
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 5px;
+}
+
+.viewTraining-info-title {
+  flex: 1;
+  font-weight: bold;
+  color: #24305E;
+}
+
+.viewTraining-info-content {
+  flex: 2;
+  font-weight: 500;
+  color: #570000;
+}
+
+.viewTraining-item {
+  display: flex;
+  flex-direction: row;
+}
+
+.viewTraining-item p {
+  margin: 2px;
+}
+
+.viewTraining-edit {
+  display: flex;
+  justify-content: end;
+}
+
+.openReg-btn {
+  background-color: #0e183f;
+  padding: 10px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  text-decoration: none;
+  color: white;
+  border-radius: 5px;
+  box-shadow: 0 1px 3px 1px grey;
+}
+
+.openReg-btn:hover {
+  background-color: #0f226e;
+}
+
+/*--------------------------------- media ---------------------------------*/
 
 @media (max-width: 1200px) {
   
@@ -198,16 +499,47 @@ header {
   .nav-sidebar li a {
     font-size: 9px;
   }
+  .profile-name {
+    font-size:10px;
+  }
+
+  .profile-position {
+    font-size: 9px;
+  }
+
 }
 @media (max-width: 768px) {
   
 }
 @media (max-width: 576px) {
+  
   .main-body .body-content {
     height: fit-content;
   }
 
   .nav-sidebar {
+    display: none;
+  }
+
+  .nav-sidebar-mobile {
+    display: flex;
     flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    border-top: 1px #24305E solid;
+
+  }
+
+  .nav-sidebar-mobile a {
+    color: #24305E;
+    text-decoration: none;
+    padding: 10px;
+  }
+
+  .middle-content {
+    /* transform: scale(1); */
+    font-size: small;
   }
 }

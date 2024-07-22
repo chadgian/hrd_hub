@@ -1,10 +1,11 @@
 <?php
-include_once ('db_connection.php');
+include_once 'db_connection.php';
 
 $today = new DateTime();
 $todayFormatted = $today->format('Y-m-d');
 
-$trainingStmt = $conn->prepare("SELECT * FROM training_details WHERE endDate >= $todayFormatted");
+$trainingStmt = $conn->prepare("SELECT * FROM training_details WHERE startDate > ? ORDER BY startDate ASC");
+$trainingStmt->bind_param("s", $todayFormatted);
 $trainingStmt->execute();
 $trainingResult = $trainingStmt->get_result();
 
@@ -18,13 +19,7 @@ if ($trainingResult->num_rows > 0) {
     $startDate = new DateTime($trainingData['startDate']);
     $endDate = new DateTime($trainingData['endDate']);
 
-    if ($startDate->format('j') == $endDate->format('j')) {
-      $trainingDate = $startDate->format('F j, Y');
-    } else {
-      $trainingDate = $startDate->format('F j') . "-" . $endDate->format('j, Y');
-    }
-
-
+    $trainingDate = ($startDate->format('j') == $endDate->format('j')) ? $startDate->format('F j, Y') : $startDate->format('F j') . "-" . $endDate->format('j, Y');
 
     $venue = $trainingData['venue'];
     $mode = $trainingData['mode'];
@@ -45,5 +40,3 @@ if ($trainingResult->num_rows > 0) {
 
 $trainingStmt->close();
 $conn->close();
-
-?>

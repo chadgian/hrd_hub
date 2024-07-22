@@ -8,6 +8,10 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <link rel="stylesheet" href="assets/styles/main.css">
+
+  <!-- Favicons -->
+  <link href="assets/images/icon/favicon.ico" rel="icon">
+  <link href="assets/images/icon/apple-touch-icon.png" rel="apple-touch-icon">
 </head>
 
 <body>
@@ -25,25 +29,43 @@
   </header>
 
   <div class="main-body">
-    <div class="container-fluid body-content">
-      <div class="row body-content-row">
-        <div class="col-md-2 left-side">
-          <?php include 'components/navbar.php'; ?>
-        </div>
-        <div class="col-md-8 middle-content">
-          <?php include 'components/main-content.php'; ?>
-        </div>
-        <div class="col-md-2 right-side">
+    <?php
+    $pageName = ['homePage', 'addTrainingPage', 'noticesPage', 'messagesPage', 'generateIDPage', 'manageAccountsPage', 'scanAttendancePage', 'allTrainingsPage', 'databasePage'];
 
-        </div>
-      </div>
-    </div>
+    $page = $_GET['p'] ?? 0;
+
+    if (isset($_GET['t']) && $page == 0) {
+      $trainingID = $_GET['t'];
+      include 'components/viewTraining.php';
+    } else {
+      include 'components/' . $pageName[$page] . '.php';
+    }
+
+    ?>
   </div>
 
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+    integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+    crossorigin="anonymous"></script>
 
+  <script>
+    var page = <?php echo $page; ?>;
+
+    const pageArray = ["home", "addTraining", "notices", "messages", "generateID", "manageAccounts", "scanAttendance", "allTrainings", "database"];
+
+    const pageName = document.querySelectorAll('#' + pageArray[page]);
+    // const pageName = document.getElementById(pageArray[page]);
+
+    pageName.forEach(function (element) {
+      element.style.backgroundColor = "#24305E";
+      element.style.color = "#fff";
+    })
+
+  </script>
 </body>
 
 </html>

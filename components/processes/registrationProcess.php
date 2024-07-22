@@ -15,11 +15,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $civilStatus = $_POST['civilStatus'];
   $phoneNumber = $_POST['phoneNumber'];
   $personalEmail = $_POST['personalEmail'];
-  $alternateEmail = $_POST['alternateEmail'];
   $position = $_POST['position'];
   $sector = $_POST['sector'];
+  $fo = $_POST['fo'];
   $agencyName = $_POST['agencyName'];
-  $location = $_POST['location'];
   $foodRestriction = $_POST['foodRestrictions'];
 
   $trainingID = $_POST['trainingID'];
@@ -29,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   // uploading the confirmation slip
 
-  $slipFolder = '../../assets/conf_slips/' . $trainingID . '/';
+  $slipFolder = "../../assets/conf_slips/$trainingID/";
 
   if (!file_exists($slipFolder)) {
     mkdir($slipFolder, 0777, true); // Create directory with full permissions (0777)
@@ -58,8 +57,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   if ($status === "ok") {
     $confirmationSlip = "confirmed";
-    $regStmt = $conn->prepare("INSERT INTO registration_details (trainingID, fname, lname, minitial, age, gender, civilStatus, phoneNumber, personalEmail, altEmail, position, agencyName, sector, location, foodRestriction, confirmationSlip, timeDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $regStmt->bind_param("sssssssssssssssss", $trainingID, $firstName, $lastName, $middleInitial, $age, $gender, $civilStatus, $phoneNumber, $personalEmail, $alternateEmail, $position, $agencyName, $sector, $location, $foodRestriction, $confirmationSlip, $currentDayTime);
+    $regStmt = $conn->prepare("INSERT INTO registration_details (trainingID, fname, lname, minitial, age, gender, civilStatus, phoneNumber, personalEmail, position, agencyName, sector, fo, foodRestriction, confirmationSlip, timeDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $regStmt->bind_param("ssssssssssssssss", $trainingID, $firstName, $lastName, $middleInitial, $age, $gender, $civilStatus, $phoneNumber, $personalEmail, $position, $agencyName, $sector, $fo, $foodRestriction, $confirmationSlip, $currentDayTime);
 
 
     if ($regStmt->execute()) {
@@ -71,6 +70,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       if (move_uploaded_file($_FILES["uploadFile"]["tmp_name"], $targetFile)) {
         $status = "ok";
         echo $status;
+        header("Location: ../../index.php");
+        exit;
       } else {
         $status += ", error_upload";
         echo $status;

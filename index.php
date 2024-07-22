@@ -10,8 +10,8 @@
   <meta content="" name="keywords">
 
   <!-- Favicons -->
-  <link href="assets/img/favicon.png" rel="icon">
-  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+  <link href="assets/img/icon/favicon.ico" rel="icon">
+  <link href="assets/img/icon/apple-touch-icon.png" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
   <link
@@ -850,8 +850,8 @@
       <div class="modal-content register-modal">
         <div class="modal-header">
           <h4 class="modal-title fs-5" id="registerBackdropLabel">REGISTRATION FORM</h4>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
-              class="bi bi-x-lg"></i></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" data-bs-toggle="modal"
+            data-bs-target="#staticBackdrop" aria-label="Close"><i class="bi bi-x-lg"></i></button>
         </div>
         <div class="modal-body">
           <form class="regForm" method="POST" action="components/processes/registrationProcess.php"
@@ -940,12 +940,12 @@
             <div class="form-group">
               <label for="location">CSC Field Office that has jurisdiction in your area</label>
               <select name="fo" id="fo" class="form-control">
-                <option value="fo-iloilo">FO Iloilo</option>
-                <option value="fo-guimaras">FO Guimaras</option>
-                <option value="fo-antique">FO Antique</option>
-                <option value="fo-capiz">FO Capiz</option>
-                <option value="fo-negros">FO Negros Occidental</option>
-                <option value="fo-aklan">FO Aklan</option>
+                <option value="iloilo">FO Iloilo</option>
+                <option value="guimaras">FO Guimaras</option>
+                <option value="antique">FO Antique</option>
+                <option value="capiz">FO Capiz</option>
+                <option value="negros">FO Negros Occidental</option>
+                <option value="aklan">FO Aklan</option>
               </select>
             </div>
 
@@ -1027,7 +1027,7 @@
         success: function (data) {
           $('#training-body').html(data);
           $('#trainingTable').DataTable({
-            "ordering": true // Enable sorting
+            "ordering": false // Enable sorting
           });
         }
       });
@@ -1072,6 +1072,13 @@
           $('#trainingHours').text(data.trainingHours + " hours");
           $('#trainingSlots').text(remainingSlots);
 
+          console.log(data.openReg);
+          if (data.openReg == "0") {
+            $('.proceed-btn')
+              .prop('disabled', true)       // Disable the button
+              .text('Registration Close')   // Change the text
+              .css('background-color', 'grey'); // Change the color
+          }
 
         }
       });
