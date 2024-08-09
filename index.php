@@ -63,7 +63,7 @@
           <li><a class="nav-link scrollto" href="#faq">FAQs</a></li>
           <li><a class="nav-link scrollto" href="#team">About</a></li>
           <li><a class="nav-link scrollto " href="#contact">Contact Us</a></li>
-          <li><a class="nav-link scrollto " href="#">Login</a></li>
+          <li><a class="nav-link scrollto " href="login.php">Login</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
@@ -832,12 +832,43 @@
             </div>
             <div class="col-md-8" id="trainingDetails"></div>
           </div>
-          <div class="d-flex justify-content-end"><button type="button" class="proceed-btn" data-bs-toggle="modal"
-              data-bs-target="#registerBackdrop">Proceed</button></div>
         </div>
-        <!-- <div class="modal-footer">
-        <span class="footer-msg">The information collected will be used only for training purposes. Contact details will be used solely to reach out to participants and will not be shared with anyone else without the individual's consent.</span>
-      </div> -->
+        <div class="modal-footer">
+          <div class="d-flex justify-content-end"><button type="button" class="proceed-btn" data-bs-toggle="modal"
+              data-bs-target="#conSlipModal">Proceed</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirmation Slip Modal -->
+  <div class="modal fade" id="conSlipModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="conSlipModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <span class="modal-title fs-5" id="conSlipModalLabel">Confirmation Slip</span>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Upload Confirmation Slip -->
+          <div>Before you proceed, make sure that you have already filled and downloaded the confirmation slip. <br>If
+            you
+            haven't yet, download the confirmation slip <a href="assets/conf_slips/2024 Confirmation Slip.docx"
+              downlaod>here</a>.</div>
+          <div class="form-group">
+            <label for="uploadFile" class="info-text">Accepted format of document: PDF, DOCX, DOC, JPEG, JPG,
+              PNG</label>
+            <input type="file" class="form-control-file confirmation-slip-input" id="uploadFile" name="uploadFile"
+              required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-bs-toggle="modal"
+            data-bs-target="#staticBackdrop">Back</button>
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registerBackdrop"
+            id="confSlip-btn">Register</button>
+        </div>
       </div>
     </div>
   </div>
@@ -851,46 +882,67 @@
         <div class="modal-header">
           <h4 class="modal-title fs-5" id="registerBackdropLabel">REGISTRATION FORM</h4>
           <button type="button" class="btn-close" data-bs-dismiss="modal" data-bs-toggle="modal"
-            data-bs-target="#staticBackdrop" aria-label="Close"><i class="bi bi-x-lg"></i></button>
+            data-bs-target="#conSlipModal" aria-label="Close"><i class="bi bi-x-lg"></i></button>
         </div>
         <div class="modal-body">
-          <form class="regForm" method="POST" action="components/processes/registrationProcess.php"
-            enctype="multipart/form-data">
+          <form class="regForm" enctype="multipart/form-data">
             <h5 class="mb-4" id="trainingNameRegForm">PUBLIC SECTOR UNION</h5>
             <input type="hidden" id="trainingID" name="trainingID">
             <!-- Personal Information -->
             <h6 class="mb-3 form-title">PERSONAL INFORMATION</h6>
             <div class="form-row">
-              <div class="form-group col-md-4">
-                <label for="firstName">First Name</label>
+              <div class="form-group col-md-2">
+                <label for="prefix">Prefix <small><i>(optional)</i></small></label>
+                <input type="text" class="form-control" id="prefix" name="prefix" placeholder="e.g. Atty.">
+              </div>
+              <div class="form-group col-md-3">
+                <label for="firstName">First Name <small>*</small></label>
                 <input type="text" class="form-control" id="firstName" name="firstName" placeholder="e.g. Juan"
                   required>
               </div>
-              <div class="form-group col-md-4">
-                <label for="middleInitial">Middle Initial</label>
-                <input type="text" class="form-control" id="middleInitial" name="middleInitial" placeholder="e.g. B"
-                  required>
+              <div class="form-group col-md-2">
+                <label for="middleInitial">Middle Initial <small>*</small></label>
+                <input type="text" class="form-control" id="middleInitial" name="middleInitial" placeholder="e.g. B">
               </div>
-              <div class="form-group col-md-4">
-                <label for="lastName">Last Name</label>
+              <div class="form-group col-md-3">
+                <label for="lastName">Last Name <small>*</small></label>
                 <input type="text" class="form-control" id="lastName" name="lastName" placeholder="e.g. Dela Cruz"
                   required>
+              </div>
+              <div class="form-group col-md-2">
+                <label for="suffix">Suffix <small>*</small></label>
+                <select class="form-control" id="suffix" name="suffix" required>
+                  <option value="">None</option>
+                  <option value=" Jr. ">Jr.</option>
+                  <option value=" Sr. ">Sr.</option>
+                  <option value=" I ">I</option>
+                  <option value=" II ">II</option>
+                  <option value=" III ">III</option>
+                  <option value=" IV ">IV</option>
+                  <option value=" V ">V</option>
+                  <option value=" VI ">VI</option>
+                </select>
               </div>
             </div>
             <div class="form-row">
               <div class="form-group col-md-4">
-                <label for="gender">Sex</label>
-                <select class="form-control" id="gender" name="gender" required>
+                <label for="age">Nickname <small><u>(to be shown in your training ID)</u></small>
+                  <small>*</small></label>
+                <input type="text" class="form-control" id="nickname" name="nickname" placeholder="e.g. Juan" required>
+              </div>
+              <div class="form-group col-md-2">
+                <label for="gender">Sex <small>*</small></label>
+                <select class="form-control" id="sex" name="sex" required>
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
                 </select>
               </div>
-              <div class="form-group col-md-4">
-                <label for="age">Age</label>
+              <div class="form-group col-md-2">
+                <label for="age">Age <small>*</small></label>
                 <input type="number" class="form-control" id="age" name="age" required>
               </div>
               <div class="form-group col-md-4">
-                <label for="civilStatus">Civil Status</label>
+                <label for="civilStatus">Civil Status <small>*</small></label>
                 <select class="form-control" name="civilStatus" id="civilStatus" name="civilStatus" required>
                   <option value="single">Single</option>
                   <option value="married">Married</option>
@@ -901,52 +953,61 @@
 
             <!-- Contact Information -->
             <h6 class="mb-3 form-title">CONTACT INFORMATION</h6>
-            <div class="form-group">
-              <label for="phoneNumber">Phone Number</label>
-              <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="e.g. 09123456789"
-                required>
-            </div>
-            <div class="form-group">
-              <label for="personalEmail">Email Address</label>
-              <input type="email" class="form-control" id="personalEmail" name="personalEmail"
-                placeholder="e.g. juandelacruz@gmail.com" required>
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <label for="phoneNumber">Phone Number <small>*</small></label>
+                <input type="text" class="form-control" id="phoneNumber" name="phoneNumber"
+                  placeholder="e.g. 09123456789" required>
+              </div>
+              <div class="form-group col-md-4">
+                <label for="personalEmail">Email Address <small>*</small><small id='emailNotice'></small></label>
+                <input type="email" class="form-control" id="personalEmail" name="personalEmail"
+                  placeholder="e.g. juandelacruz@gmail.com" required>
+              </div>
+              <div class="form-group col-md-4">
+                <label for="altEmail">Alternative Email Address <small><i>(optional)</i></small></label>
+                <input type="email" class="form-control" id="altEmail" name="altEmail"
+                  placeholder="e.g. juandelacruz@gmail.com">
+              </div>
             </div>
 
             <!-- Agency Information -->
             <h6 class="mb-3 form-title">AGENCY INFORMATION</h6>
             <div class="form-row">
               <div class="form-group col-md-6">
-                <label for="position">Position</label>
+                <label for="sector">Sector <small>*</small></label>
+                <select class="form-control" id="sector" name="sector">
+                  <option value="lgu">LGU (Local Government Unit)</option>
+                  <option value="suc">SUC/LUC (State University and College/Local University and College)</option>
+                  <option value="gocc">GOCC (Government-Owned and Controlled Corporation)</option>
+                  <option value="nga">NGA (National Government Agency)</option>
+                  <option value="others">Other</option>
+                </select>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="agencyName">Name of Agency / Organization <small><u>(please don't
+                      abbreviate)</u></small> <small>*</small></label>
+                <input type="text" class="form-control" id="agencyName" name="agencyName"
+                  placeholder="e.g. Civil Service Commission Regional Office No. 6" required>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="position">Position <small>*</small></label>
                 <input type="text" class="form-control" id="position" name="position"
                   placeholder="Human Resource Specialist I" required>
               </div>
               <div class="form-group col-md-6">
-                <label for="sector">Sector</label>
-                <select class="form-control" id="sector" name="sector">
-                  <option value="lgu">Local Government Units</option>
-                  <option value="suc">State Universities and Colleges</option>
-                  <option value="gocc">Government-Owned and Controlled Corporations</option>
-                  <option value="nga">National Government Agencies</option>
-                  <option value="others">Others</option>
+                <label for="location">CSC Field Office that has jurisdiction in your area <small>*</small></label>
+                <select name="fo" id="fo" class="form-control">
+                  <option value="iloilo">FO Iloilo</option>
+                  <option value="guimaras">FO Guimaras</option>
+                  <option value="antique">FO Antique</option>
+                  <option value="capiz">FO Capiz</option>
+                  <option value="negros">FO Negros Occidental</option>
+                  <option value="aklan">FO Aklan</option>
                 </select>
               </div>
-            </div>
-            <div class="form-group">
-              <label for="agencyName">Name of Agency / Organization <small><u>(please don't
-                    abbreviate)</u></small></label>
-              <input type="text" class="form-control" id="agencyName" name="agencyName"
-                placeholder="e.g. Civil Service Commission Regional Office No. 6" required>
-            </div>
-            <div class="form-group">
-              <label for="location">CSC Field Office that has jurisdiction in your area</label>
-              <select name="fo" id="fo" class="form-control">
-                <option value="iloilo">FO Iloilo</option>
-                <option value="guimaras">FO Guimaras</option>
-                <option value="antique">FO Antique</option>
-                <option value="capiz">FO Capiz</option>
-                <option value="negros">FO Negros Occidental</option>
-                <option value="aklan">FO Aklan</option>
-              </select>
             </div>
 
             <!-- Food Restrictions -->
@@ -954,15 +1015,6 @@
             <div class="form-group">
               <input type="text" class="form-control" id="foodRestrictions" name="foodRestrictions"
                 placeholder="If any, please specify.">
-            </div>
-
-            <!-- Upload Confirmation Slip -->
-            <h6 class="mb-3 form-title">UPLOAD CONFIRMATION SLIP</h6>
-            <div class="form-group">
-              <label for="uploadFile" class="info-text">Accepted format of document: PDF, DOCX, DOC, JPEG, JPG,
-                PNG</label>
-              <input type="file" class="form-control-file confirmation-slip-input" id="uploadFile" name="uploadFile"
-                required>
             </div>
 
             <!-- Agreement -->
@@ -989,17 +1041,94 @@
                 completely submit all the accomplished outputs.
               </label>
             </div>
-
-            <!-- Register Button -->
-            <div class="d-flex justify-content-center">
-              <button type="submit" class="btn btn-primary btn-block register-submit">REGISTER</button>
-            </div>
-          </form>
+          </form><!-- Register Button -->
+          <div class="d-flex justify-content-center">
+            <button class="btn btn-primary btn-block register-submit" onclick="registerParticipant()">REGISTER</button>
+            <!-- onclick="registerParticipant()" -->
+          </div>
         </div>
         <div class="modal-footer">
           <span class="footer-msg">The information collected will be used only for training purposes. Contact details
             will be used solely to reach out to participants and will not be shared with anyone else without the
             individual's consent.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Regitsration form review Modal -->
+  <div class="modal fade" id="regReviewModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="regReviewModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <span class="modal-title fs-5" id="regReviewModalLabel">Review Registration Details</span>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-bs-toggle="modal"
+            data-bs-target="#staticBackdrop">Back</button>
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registerBackdrop"
+            id="confSlip-btn">Register</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Registration loading modal -->
+  <div class="modal fade" id="registrationLoading" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="registrationLoadingLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div id="reg-loading-content">
+            <div id="loading-status"></div>
+            <div id="reg-loader" style="display: flex; justify-content: center;">
+              <svg width="80px" height="80px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"
+                preserveAspectRatio="xMidYMid" class="lds-hourglass">
+                <defs>
+                  <clipPath ng-attr-id="{{config.cpid}}" id="lds-hourglass-cpid-2378206027203">
+                    <rect x="0" y="28.3826" width="100" height="21.6174">
+                      <animate attributeName="y" calcMode="spline" values="0;50;0;0;0" keyTimes="0;0.4;0.5;0.9;1"
+                        dur="2.2" keySplines="0.3 0 1 0.7;0.3 0 1 0.7;0.3 0 1 0.7;0.3 0 1 0.7" begin="0s"
+                        repeatCount="indefinite"></animate>
+                      <animate attributeName="height" calcMode="spline" values="50;0;0;50;50" keyTimes="0;0.4;0.5;0.9;1"
+                        dur="2.2" keySplines="0.3 0 1 0.7;0.3 0 1 0.7;0.3 0 1 0.7;0.3 0 1 0.7" begin="0s"
+                        repeatCount="indefinite"></animate>
+                    </rect>
+                    <rect x="0" y="71.6174" width="100" height="28.3826">
+                      <animate attributeName="y" calcMode="spline" values="100;50;50;50;50" keyTimes="0;0.4;0.5;0.9;1"
+                        dur="2.2" keySplines="0.3 0 1 0.7;0.3 0 1 0.7;0.3 0 1 0.7;0.3 0 1 0.7" begin="0s"
+                        repeatCount="indefinite"></animate>
+                      <animate attributeName="height" calcMode="spline" values="0;50;50;0;0" keyTimes="0;0.4;0.5;0.9;1"
+                        dur="2.2" keySplines="0.3 0 1 0.7;0.3 0 1 0.7;0.3 0 1 0.7;0.3 0 1 0.7" begin="0s"
+                        repeatCount="indefinite"></animate>
+                    </rect>
+                  </clipPath>
+                </defs>
+                <g transform="translate(50,50)">
+                  <g transform="scale(0.9)">
+                    <g transform="translate(-50,-50)">
+                      <g transform="rotate(0)">
+                        <animateTransform attributeName="transform" type="rotate" calcMode="linear"
+                          values="0 50 50;0 50 50;180 50 50;180 50 50;360 50 50" keyTimes="0;0.4;0.5;0.9;1" dur="2.2s"
+                          begin="0s" repeatCount="indefinite"></animateTransform>
+                        <path ng-attr-clip-path="url(#{{config.cpid}})" ng-attr-fill="{{config.sand}}"
+                          d="M54.864,50L54.864,50c0-1.291,0.689-2.412,1.671-2.729c9.624-3.107,17.154-12.911,19.347-25.296 c0.681-3.844-1.698-7.475-4.791-7.475H28.908c-3.093,0-5.472,3.631-4.791,7.475c2.194,12.385,9.723,22.189,19.347,25.296 c0.982,0.317,1.671,1.438,1.671,2.729v0c0,1.291-0.689,2.412-1.671,2.729C33.84,55.836,26.311,65.64,24.117,78.025 c-0.681,3.844,1.698,7.475,4.791,7.475h42.184c3.093,0,5.472-3.631,4.791-7.475C73.689,65.64,66.16,55.836,56.536,52.729 C55.553,52.412,54.864,51.291,54.864,50z"
+                          clip-path="url(#lds-hourglass-cpid-2378206027203)" fill="#ffdf85"></path>
+                        <path ng-attr-fill="{{config.frame}}"
+                          d="M81,81.5h-2.724l0.091-0.578c0.178-1.122,0.17-2.243-0.022-3.333C76.013,64.42,68.103,54.033,57.703,50.483l-0.339-0.116 v-0.715l0.339-0.135c10.399-3.552,18.31-13.938,20.642-27.107c0.192-1.089,0.2-2.211,0.022-3.333L78.276,18.5H81 c2.481,0,4.5-2.019,4.5-4.5S83.481,9.5,81,9.5H19c-2.481,0-4.5,2.019-4.5,4.5s2.019,4.5,4.5,4.5h2.724l-0.092,0.578 c-0.178,1.122-0.17,2.243,0.023,3.333c2.333,13.168,10.242,23.555,20.642,27.107l0.338,0.116v0.715l-0.338,0.135 c-10.4,3.551-18.31,13.938-20.642,27.106c-0.193,1.09-0.201,2.211-0.023,3.333l0.092,0.578H19c-2.481,0-4.5,2.019-4.5,4.5 s2.019,4.5,4.5,4.5h62c2.481,0,4.5-2.019,4.5-4.5S83.481,81.5,81,81.5z M73.14,81.191L73.012,81.5H26.988l-0.128-0.309 c-0.244-0.588-0.491-1.538-0.28-2.729c2.014-11.375,8.944-20.542,17.654-23.354c2.035-0.658,3.402-2.711,3.402-5.108 c0-2.398-1.368-4.451-3.403-5.108c-8.71-2.812-15.639-11.979-17.653-23.353c-0.211-1.191,0.036-2.143,0.281-2.731l0.128-0.308 h46.024l0.128,0.308c0.244,0.589,0.492,1.541,0.281,2.731c-2.015,11.375-8.944,20.541-17.654,23.353 c-2.035,0.658-3.402,2.71-3.402,5.108c0,2.397,1.368,4.45,3.403,5.108c8.71,2.812,15.64,11.979,17.653,23.354 C73.632,79.651,73.384,80.604,73.14,81.191z"
+                          fill="#e15b64"></path>
+                      </g>
+                    </g>
+                  </g>
+                </g>
+              </svg>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -1019,6 +1148,8 @@
   <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap4.min.js"></script>
 
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+
   <script>
     $(document).ready(function () {
       $.ajax({
@@ -1031,10 +1162,28 @@
           });
         }
       });
+
+      $('#confSlip-btn')
+        .prop('disabled', true);
+
+      document.getElementById("uploadFile").addEventListener('input', function (e) {
+        var file = e.target.files[0];
+
+        if (file) {
+          $('#confSlip-btn')
+            .prop('disabled', false);
+        } else {
+          $('#confSlip-btn')
+            .prop('disabled', true);
+        }
+      })
     });
+
+
   </script>
 
   <script>
+
     function trainingDetails(id) {
       const trainingIDInput = document.getElementById("trainingID");
       trainingIDInput.value = id;
@@ -1083,9 +1232,215 @@
         }
       });
     }
+
+    async function registerParticipant() {
+      if (checkRequiredFields() == "ok") {
+        $("#registerBackdrop").modal("toggle");
+        $("#registrationLoading").modal("toggle");
+        const loadingStatus = document.getElementById("loading-status");
+        loadingStatus.innerHTML = "Checking employee record";
+        const checkEmployee = await checkEmployeeRecord();
+        if (checkEmployee == "ok") {
+          loadingStatus.innerHTML = "Saving registration"
+
+          $("#registrationLoading").modal('toggle');
+
+          const prefix = document.getElementById("prefix").value;
+          const firstName = document.getElementById("firstName").value;
+          const middleInitial = document.getElementById("middleInitial").value.trim().charAt(0);
+          const lastName = document.getElementById("lastName").value;
+          const suffix = document.getElementById("suffix").value;
+          const nickname = document.getElementById("nickname").value;
+          const sex = document.getElementById("sex").value;
+          const age = document.getElementById('age').value;
+          const civilStatus = document.getElementById('civilStatus').value;
+          const phoneNumber = document.getElementById('phoneNumber').value;
+          const personalEmail = document.getElementById("personalEmail").value;
+          const altEmail = document.getElementById("altEmail").value;
+          const position = document.getElementById("position").value;
+          const sector = document.getElementById("sector").value;
+          const agencyName = document.getElementById("agencyName").value;
+          const fo = document.getElementById("fo").value;
+          const foodRestrictions = document.getElementById("foodRestrictions").value;
+
+          document.getElementById("loading-status").innerHTML = "<h3 class='text-align-center'>Checking registration details...</h3>";
+
+          const userID = <?php echo $_SESSION['userID'] ?? "-1"; ?>;
+
+          var registrationFormData = new FormData();
+          registrationFormData.append("prefix", prefix);
+          registrationFormData.append("firstName", firstName);
+          registrationFormData.append("middleInitial", middleInitial);
+          registrationFormData.append("lastName", lastName);
+          registrationFormData.append("suffix", suffix);
+          registrationFormData.append("nickname", nickname);
+          registrationFormData.append("sex", sex);
+          registrationFormData.append("age", age);
+          registrationFormData.append("civilStatus", civilStatus);
+          registrationFormData.append("phoneNumber", phoneNumber);
+          registrationFormData.append("email", personalEmail);
+          registrationFormData.append("altEmail", altEmail);
+          registrationFormData.append("position", position);
+          registrationFormData.append("sector", sector);
+          registrationFormData.append("agencyName", agencyName);
+          registrationFormData.append("fo", fo);
+          registrationFormData.append("foodRestrictions", foodRestrictions);
+          registrationFormData.append("confirmationSlip", document.getElementById("uploadFile").files[0]);
+          registrationFormData.append("trainingID", document.getElementById("trainingID").value);
+          registrationFormData.append("userID", userID);
+
+          $.ajax({
+            url: 'components/processes/registrationProcess.php',
+            type: 'POST',
+            data: registrationFormData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+              switch (response) {
+                case "ok":
+                  console.log("OKAY");
+
+                  break;
+
+                default:
+                  console.log(response);
+                  break;
+              }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+              console.log("failed");
+              console.error('Error in registration data:', textStatus, errorThrown);
+            }
+          });
+        } else {
+          loadingStatus.innerHTML = "Registration details already registered.";
+          document.getElementById("reg-loader").style.display = "none";
+          console.log(checkEmployee);
+        }
+      } else {
+        console.log("not okay");
+
+        // $("#registrationLoading").modal('toggle');
+      }
+    }
+
+    document.getElementById("personalEmail").addEventListener('input', function (event) {
+      var email = event.target.value;
+      console.log(email);
+      $.ajax({
+        url: 'components/processes/checkEmail.php',
+        type: 'POST',
+        data: { email: email },
+        success: function (response) {
+          if (response !== "ok") {
+            console.log("Email exists.");
+            document.getElementById("personalEmail").style.borderColor = "red";
+            document.getElementById("emailNotice").innerHTML = "<i>(email already exists.)</i>";
+            document.querySelectorAll(".register-submit");
+            $('.register-submit')
+              .prop('disabled', true)
+              .css('background-color', 'grey');
+          } else {
+            //#24305E
+            console.log("Email does not exist.");
+            document.getElementById("personalEmail").style.borderColor = "#ced4da";
+            document.getElementById("emailNotice").innerHTML = "";
+            $('.register-submit')
+              .prop('disabled', false)
+              .css('background-color', '#24305E');
+          }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+          console.error('Error in checking email:', textStatus, errorThrown);
+        }
+      });
+    });
+
+    async function checkEmployeeRecord() {
+
+      const prefix = document.getElementById("prefix").value;
+      const firstName = document.getElementById("firstName").value;
+      const middleInitial = document.getElementById("middleInitial").value.trim().charAt(0);
+      const lastName = document.getElementById("lastName").value;
+      const suffix = document.getElementById("suffix").value;
+      const phoneNumber = document.getElementById('phoneNumber').value;
+      const personalEmail = document.getElementById("personalEmail").value;
+      const agencyName = document.getElementById("agencyName").value;
+      const sex = document.getElementById("sex").value;
+
+      return new Promise((resolve, reject) => {
+        $.ajax({
+          url: 'components/processes/checkEmployeeRecord.php',
+          type: 'POST',
+          data: {
+            prefix: prefix,
+            firstName: firstName,
+            middleInitial: middleInitial,
+            lastName: lastName,
+            suffix: suffix,
+            agency: agencyName,
+            phoneNumber: phoneNumber,
+            sex: sex
+          },
+          success: function (response) {
+            const responseType = response.split('::')[0];
+            console.log("respone: " + response);
+            if (responseType == 0) {
+              console.log("responseType: " + responseType);
+              resolve("ok");
+            } else {
+              console.log("responseTypeeeee: " + responseType);
+              console.log("responseeee: " + response);
+              resolve(response);
+            }
+
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            reject('checking employee record error: ', textStatus, errorThrown);
+          }
+        });
+      });
+
+    }
+
+    function checkRequiredFields() {
+
+      const requiredFields = {
+        "firstName": document.getElementById("firstName").value,
+        "lastName": document.getElementById("lastName").value,
+        "nickname": document.getElementById("nickname").value,
+        "sex": document.getElementById("sex").value,
+        "age": document.getElementById('age').value,
+        "civilStatus": document.getElementById('civilStatus').value,
+        "phoneNumber": document.getElementById('phoneNumber').value,
+        "personalEmail": document.getElementById("personalEmail").value,
+        "position": document.getElementById("position").value,
+        "sector": document.getElementById("sector").value,
+        "agencyName": document.getElementById("agencyName").value,
+        "fo": document.getElementById("fo").value
+      };
+
+      let status = "ok";
+
+      for (const key in requiredFields) {
+        const value = requiredFields[key];
+
+        if (!value) {
+          document.getElementById(key).style.borderColor = "red";
+          status = "not okay";
+        }
+      }
+      if (status == "not okay") {
+        alert("Please fill out all required fields!");
+      }
+      return status;
+
+
+    }
+
+
   </script>
 
-  <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
 
 </body>

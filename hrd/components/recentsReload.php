@@ -1,5 +1,5 @@
 <?php
-include '../components/processes/db_connection.php';
+include '../../components/processes/db_connection.php';
 
 $recentStmt = $conn->prepare("
   SELECT 
@@ -26,6 +26,7 @@ if ($recentStmt->execute()) {
   $recentResult = $recentStmt->get_result();
   if ($recentResult->num_rows > 0) {
     while ($recentData = $recentResult->fetch_assoc()) {
+      $trainingID = $recentData['trainingID'];
       $userInitial = $recentData['initials'];
       $trainingName = $recentData['trainingName'];
 
@@ -77,8 +78,9 @@ if ($recentStmt->execute()) {
         $recentAgeContent = "{$recentAge->s} seconds ago.";
       }
 
+
       echo "
-        <div class='recent-act'>
+        <a class='recent-act' href='index.php?t=$trainingID'>
           <div class='recent-img'><img src='assets/images/default-profile.png' alt=''></div>
           <div class='recent-body'>
             <div class='recent-act-content'>
@@ -86,10 +88,12 @@ if ($recentStmt->execute()) {
             </div>
             <div class='recent-age'>$recentAgeContent</div>
           </div>
-        </div>
+        </a>
       ";
     }
   } else {
-    echo "<i>No recent activities</i>";
+    echo "<i class='text-align: center;>No recent activities</i>";
   }
+} else {
+  echo "{$recentStmt->error}";
 }

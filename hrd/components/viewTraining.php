@@ -16,107 +16,77 @@
         if ($getTrainingDataResult->num_rows > 0) {
           $trainingData = $getTrainingDataResult->fetch_assoc();
 
-          $trainingName = $trainingData['trainingName'];
-          $trainingDetails = $trainingData['details'];
-          $trainingStartDate = new DateTime($trainingData['startDate']);
-          $trainingEndDate = new DateTime($trainingData['endDate']);
-          $trainingMode = $trainingData['mode'];
-          $trainingVenue = $trainingData['venue'];
-          $trainingHours = $trainingData['trainingHours'];
-          $trainingFee = $trainingData['fee'];
-          $trainingAdmin = $trainingData['training_admin'];
-          $trainingPax = $trainingData['targetPax'];
-          $trainingArea = $trainingData['currArea'];
-          $trainingDocs = $trainingData['requiredDocs'];
-          $trainingType = $trainingData['trainingType'];
-          $trainingOpenReg = $trainingData['openReg'];
+          $trainingNameView = $trainingData['trainingName'];
+          $trainingDetailsView = $trainingData['details'];
+          $trainingStartDateView = new DateTime($trainingData['startDate']);
+          $trainingEndDateView = new DateTime($trainingData['endDate']);
+          $trainingModeView = $trainingData['mode'];
+          $trainingVenueView = $trainingData['venue'];
+          $trainingHoursView = $trainingData['trainingHours'];
+          $trainingFeeView = $trainingData['fee'];
+          $trainingAdminView = $trainingData['training_admin'];
+          $trainingPaxView = $trainingData['targetPax'];
+          $trainingAreaView = $trainingData['currArea'];
+          $trainingDocsView = $trainingData['requiredDocs'];
+          $trainingTypeView = $trainingData['trainingType'];
+          $trainingOpenRegView = $trainingData['openReg'];
 
-          $trainingDate = $trainingStartDate == $trainingEndDate ? $trainingStartDate->format("F d, Y") : $trainingStartDate->format("F d") . '-' . $trainingEndDate->format("d, Y");
+          $trainingDateView = $trainingStartDateView == $trainingEndDateView ? $trainingStartDateView->format("F d, Y") : $trainingStartDateView->format("F d") . '-' . $trainingEndDateView->format("d, Y");
 
-        }
-      }
-
-      if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $trainingName = $_POST['trainingName'];
-        $trainingVenue = $_POST['trainingVenue'];
-        $trainingStart = new DateTime($_POST['trainingStart']);
-        $trainingEnd = new DateTime($_POST['trainingEnd']);
-        $trainingAdmin = $_POST['trainingAdmin'];
-        $trainingFee = $_POST['trainingFee'];
-        $trainingHours = $_POST['trainingHours'];
-        $totalPax = $_POST['totalPax'];
-        $trainingMode = $_POST['trainingMode'];
-        $currArea = $_POST['currArea'];
-        $docs = isset($_POST['docs']) ? '1' : '0';
-        $trainingType = $_POST['trainingType'];
-        $trainingDetails = $_POST['trainingDetails'];
-
-        $startString = $trainingStart->format("Y-m-d");
-        $endString = $trainingEnd->format("Y-m-d");
-
-        // echo "$trainingName, $trainingVenue, $startString, $endString, $trainingAdmin, $trainingFee, $trainingHours, $totalPax, $trainingMode, $currArea, $docs, $trainingType, $trainingDetails";
-      
-
-        $addTrainingStmt = $conn->prepare("UPDATE training_details SET trainingName = ?, training_admin = ?, startDate = ?, endDate = ?, venue = ?, mode = ?, fee = ?, trainingHours = ?, targetPax = ?, details = ?, currArea = ?, requiredDocs = ?, trainingType = ? WHERE trainingID = ?");
-        $addTrainingStmt->bind_param("ssssssssssssss", $trainingName, $trainingAdmin, $startString, $endString, $trainingVenue, $trainingMode, $trainingFee, $trainingHours, $totalPax, $trainingDetails, $currArea, $docs, $trainingType, $id);
-
-        if ($addTrainingStmt->execute()) {
-          // echo "Training added successfully";
-        } else {
-          echo (string) $addTrainingStmt->error;
         }
       }
       ?>
 
-      <h4 class="viewTraining-title"><?php echo $trainingName; ?></h4>
+      <h4 class="viewTraining-title"><?php echo $trainingNameView; ?></h4>
       <div class="viewTraining-info">
         <div class="viewTraining-detail">
           <p class="viewTraining-info-title" style="margin: 0;">Training Detail:</p>
-          <p class="viewTraining-info-content" style="margin: 2px;"><?php echo $trainingDetails; ?></p>
+          <p class="viewTraining-info-content" style="margin: 2px;"><?php echo $trainingDetailsView; ?></p>
         </div>
         <div class=" viewTraining-item">
           <p class="viewTraining-info-title">Training Date:</p>
-          <p class="viewTraining-info-content"><?php echo $trainingDate; ?></p>
+          <p class="viewTraining-info-content"><?php echo $trainingDateView; ?></p>
         </div>
         <div class=" viewTraining-item">
           <p class="viewTraining-info-title">Training Mode:</p>
-          <p class="viewTraining-info-content"><?php echo $trainingMode; ?></p>
+          <p class="viewTraining-info-content"><?php echo $trainingModeView; ?></p>
         </div>
         <div class=" viewTraining-item">
           <p class="viewTraining-info-title">Training Venue:</p>
-          <p class="viewTraining-info-content"><?php echo $trainingVenue; ?></p>
+          <p class="viewTraining-info-content"><?php echo $trainingVenueView; ?></p>
         </div>
         <div class=" viewTraining-item">
           <p class="viewTraining-info-title">Training Hours:</p>
-          <p class="viewTraining-info-content"><?php echo $trainingHours; ?> Hours</p>
+          <p class="viewTraining-info-content"><?php echo $trainingHoursView; ?> Hours</p>
         </div>
         <div class=" viewTraining-item">
           <p class="viewTraining-info-title">Registration Fee:</p>
-          <p class="viewTraining-info-content">Php <?php echo $trainingFee; ?>.00</p>
+          <p class="viewTraining-info-content">Php <?php echo $trainingFeeView; ?>.00</p>
         </div>
         <div class=" viewTraining-item">
           <p class="viewTraining-info-title">Training Admin:</p>
-          <p class="viewTraining-info-content"><?php echo $trainingAdmin; ?></p>
+          <p class="viewTraining-info-content"><?php echo $trainingAdminView; ?></p>
         </div>
         <div class=" viewTraining-item">
           <p class="viewTraining-info-title">Expected Pax:</p>
-          <p class="viewTraining-info-content"><?php echo $trainingPax; ?></p>
+          <p class="viewTraining-info-content"><?php echo $trainingPaxView; ?></p>
         </div>
         <div class=" viewTraining-item">
           <p class="viewTraining-info-title">Requires Output:</p>
-          <p class="viewTraining-info-content"><?php echo $trainingDocs == 1 ? "Required" : "Not required"; ?></p>
+          <p class="viewTraining-info-content"><?php echo $trainingDocsView == 1 ? "Required" : "Not required"; ?></p>
         </div>
         <div class=" viewTraining-item">
           <p class="viewTraining-info-title">Training Type:</p>
-          <p class="viewTraining-info-content"><?php echo $trainingType; ?></p>
+          <p class="viewTraining-info-content"><?php echo $trainingTypeView; ?></p>
         </div>
         <div class=" viewTraining-item">
           <p class="viewTraining-info-title">Registration:</p>
           <p class="viewTraining-info-content">
-            <a href="components/changeRegistrationStatus.php?id=<?php echo $id ?>&status=<?php echo $trainingOpenReg ?>"
+            <a href="components/changeRegistrationStatus.php?id=<?php echo $id ?>&status=<?php echo $trainingOpenRegView ?>"
               class="openReg-btn"
-              style="background-color: <?php echo $trainingOpenReg == 0 ? "#CE2F2F;" : "#049B01;"; ?>"><?php echo $trainingOpenReg == 0 ? "Close" : "Open"; ?></a>
-            <small style="font-size: 10px;">(Click to <?php echo $trainingOpenReg == 0 ? "open" : "close"; ?>)</small>
+              style="background-color: <?php echo $trainingOpenRegView == 0 ? "#CE2F2F;" : "#049B01;"; ?>"><?php echo $trainingOpenRegView == 0 ? "Close" : "Open"; ?></a>
+            <small style="font-size: 10px;">(Click to
+              <?php echo $trainingOpenRegView == 0 ? "open" : "close"; ?>)</small>
 
           </p>
         </div>
@@ -132,9 +102,12 @@
           </div>
         </div>
       </div>
+      <div class="vieTraining-participants">
+        <?php include "components/viewTraining-participants.php"; ?>
+      </div>
     </div>
     <div class='col-md-3 right-side'>
-      <?php include 'components/recents.php'; ?>
+      <?php include 'components/trainingRecents.php'; ?>
     </div>
   </div>
 </div>
@@ -143,22 +116,24 @@
   <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content register-modal">
       <div class="modal-header">
-        <h4 class="modal-title fs-5" id="registerBackdropLabel">EDIT - <small><?php echo $trainingName; ?></small></h4>
+        <h4 class="modal-title fs-5" id="registerBackdropLabel">EDIT - <small><?php echo $trainingNameView; ?></small>
+        </h4>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
             class="bi bi-x-lg"></i></button>
       </div>
       <div class="modal-body">
-        <form method="POST">
+        <form method="POST" action="components/editTraining.php">
           <div class="mb-1 row">
             <div class="mb-3 col-md-6">
               <label for="" class="form-label">Name:</label>
               <input type="text" class="form-control" id="trainingName" name="trainingName"
-                value="<?php echo $trainingName; ?>" required>
+                value="<?php echo $trainingNameView; ?>" required>
+              <input type="hidden" name="trainingID" id="trainingID" value="<?php echo $id; ?>">
             </div>
             <div class="mb-3 col-md-6">
               <label for="" class="form-label">Venue:</label>
               <input type="text" class="form-control" id="trainingVenue" name="trainingVenue"
-                value="<?php echo $trainingVenue; ?>" required>
+                value="<?php echo $trainingVenueView; ?>" required>
             </div>
           </div>
           <div class="mb-1 row">
@@ -167,7 +142,7 @@
                 <div style="width:40%;">
                   <label for="" class="form-label">Start Date:</label>
                   <input type="date" class="form-control" id="trainingStart" name="trainingStart"
-                    value="<?php echo $trainingStartDate->format("Y-m-d"); ?>" required>
+                    value="<?php echo $trainingStartDateView->format("Y-m-d"); ?>" required>
                 </div>
                 <div style="width:10%;">
                   <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
@@ -179,55 +154,57 @@
                 <div style="width:40%;">
                   <label for="" class="form-label">End Date:</label>
                   <input type="date" class="form-control" id="trainingEnd" name="trainingEnd"
-                    value="<?php echo $trainingEndDate->format("Y-m-d"); ?>" required>
+                    value="<?php echo $trainingEndDateView->format("Y-m-d"); ?>" required>
                 </div>
               </div>
             </div>
             <div class="mb-3 col-md-6">
               <label for="" class="form-label">Training Admin:</label>
               <input type="text" class="form-control" id="trainingAdmin" name="trainingAdmin"
-                value="<?php echo $trainingAdmin; ?>" required>
+                value="<?php echo $trainingAdminView; ?>" required>
             </div>
           </div>
           <div class="mb-1 row">
             <div class="mb-3 col-md-6">
               <label for="" class="form-label">Training Fee:</label>
               <input type="number" class="form-control" id="trainingFee" name="trainingFee"
-                value="<?php echo $trainingFee; ?>" required>
+                value="<?php echo $trainingFeeView; ?>" required>
             </div>
             <div class="mb-3 col-md-6">
               <label for="" class="form-label">Training Hours:</label>
               <input type="number" class="form-control" id="trainingHours" name="trainingHours"
-                value="<?php echo $trainingHours; ?>" required>
+                value="<?php echo $trainingHoursView; ?>" required>
             </div>
           </div>
           <div class="mb-1 row">
             <div class="mb-3 col-md-6">
               <label for="" class="form-label">Total Pax:</label>
               <input type="number" class="form-control" id="totalPax" name="totalPax"
-                value="<?php echo $trainingPax; ?>" required>
+                value="<?php echo $trainingPaxView; ?>" required>
             </div>
             <div class="mb-3 col-md-6">
               <label for="" class="form-label">Training Mode:</label>
               <input type="text" class="form-control" id="trainingMode" name="trainingMode"
-                value="<?php echo $trainingMode; ?>" required>
+                value="<?php echo $trainingModeView; ?>" required>
             </div>
           </div>
           <div class="mb-1 row">
             <div class="mb-3 col-md-6">
               <label for="" class="form-label">Curriculum Area:</label>
-              <input type="text" class="form-control" id="currArea" name="currArea" value="<?php echo $trainingArea; ?>"
-                required>
+              <input type="text" class="form-control" id="currArea" name="currArea"
+                value="<?php echo $trainingAreaView; ?>" required>
             </div>
             <div class="mb-3 col-md-6 d-flex flex-column justify-content-end align-items-start gap-2">
               <div class="d-flex gap-2">
-                <label for="docs">Required documents</label><input type="checkbox" id="docs" name="docs" <?php echo $trainingDocs == 1 ? "checked" : ""; ?>>
+                <label for="docs">Required documents</label><input type="checkbox" id="docs" name="docs" <?php echo $trainingDocsView == 1 ? "checked" : ""; ?>>
               </div>
               <div>
                 <label for="trainingType">Type of training: </label>
                 <select name="trainingType" id="trainingType">
-                  <option value="external" <?php echo $trainingType == "external" ? "selected" : ""; ?>>External</option>
-                  <option value="internal" <?php echo $trainingType == "internal" ? "selected" : ""; ?>>Internal</option>
+                  <option value="external" <?php echo $trainingTypeView == "external" ? "selected" : ""; ?>>External
+                  </option>
+                  <option value="internal" <?php echo $trainingTypeView == "internal" ? "selected" : ""; ?>>Internal
+                  </option>
                   <option value="both">Both</option>
                 </select>
               </div>
@@ -237,7 +214,7 @@
             <div class="mb-3 col-md-12">
               <label for="trainingDetails" class="form-label">Training Details:</label>
               <textarea name="trainingDetails" id="trainingDetails" class="form-control"
-                requireds><?php echo htmlspecialchars($trainingDetails); ?></textarea>
+                requireds><?php echo htmlspecialchars($trainingDetailsView); ?></textarea>
             </div>
           </div>
           <center><button type="submit" class="btn addTraining-btn col-md-3">Save</button></center>

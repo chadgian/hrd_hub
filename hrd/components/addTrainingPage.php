@@ -39,8 +39,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   // echo "$trainingName, $trainingVenue, $startString, $endString, $trainingAdmin, $trainingFee, $trainingHours, $totalPax, $trainingMode, $currArea, $docs, $trainingType, $trainingDetails";
 
 
-  $addTrainingStmt = $conn->prepare("INSERT INTO training_details (trainingName, training_admin, startDate, endDate, venue, mode, fee, trainingHours, targetPax, details, currArea, requiredDocs, trainingType) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-  $addTrainingStmt->bind_param("sssssssssssss", $trainingName, $trainingAdmin, $startString, $endString, $trainingVenue, $trainingMode, $trainingFee, $trainingHours, $totalPax, $trainingDetails, $currArea, $docs, $trainingType);
+  $addTrainingStmt = $conn->prepare("INSERT INTO training_details (trainingName, training_admin, startDate, endDate, venue, mode, fee, trainingHours, targetPax, details, currArea, requiredDocs, trainingType, lastUpdateBy) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+  $addTrainingStmt->bind_param("ssssssssssssss", $trainingName, $trainingAdmin, $startString, $endString, $trainingVenue, $trainingMode, $trainingFee, $trainingHours, $totalPax, $trainingDetails, $currArea, $docs, $trainingType, $_SESSION['userID']);
 
   if ($addTrainingStmt->execute()) {
     // echo "Training added successfully";

@@ -1,3 +1,26 @@
+<?php
+include "../components/processes/db_connection.php";
+session_start();
+
+if (isset($_SESSION['username'])) {
+  $username = $_SESSION['username'];
+  $userID = $_SESSION['userID'];
+
+  $checkLoginStmt = $conn->prepare("SELECT * FROM user WHERE username = ? and userID = ?");
+  $checkLoginStmt->bind_param("ss", $username, $userID);
+
+  if ($checkLoginStmt->execute()) {
+    $checkLoginResult = $checkLoginStmt->get_result();
+    if ($checkLoginResult->num_rows < 1) {
+      header("Location: ../");
+    }
+  }
+} else {
+  header("Location: ../");
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,6 +35,7 @@
   <!-- Favicons -->
   <link href="assets/images/icon/favicon.ico" rel="icon">
   <link href="assets/images/icon/apple-touch-icon.png" rel="apple-touch-icon">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
@@ -44,7 +68,6 @@
     ?>
   </div>
 
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
     integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
     crossorigin="anonymous"></script>
@@ -64,6 +87,8 @@
       element.style.backgroundColor = "#24305E";
       element.style.color = "#fff";
     })
+
+
 
   </script>
 </body>

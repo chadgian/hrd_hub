@@ -3,7 +3,7 @@
 include 'db_connection.php';
 
 $username = $_POST['username'];
-$password = md5($_POST['password']);
+$password = $_POST['password'];
 
 $loginStmt = $conn->prepare("SELECT * FROM user WHERE username = ? AND password = ?");
 $loginStmt->bind_param("ss", $username, $password);
@@ -23,8 +23,9 @@ if ($loginStmt->execute()) {
     $_SESSION['initials'] = $loginData['initials'];
     $_SESSION['role'] = $loginData['role'];
 
-
-    header('Location: /hrd_hub/hrd');
+    if ($loginData['role'] == "admin") {
+      header('Location: /hrd_hub/hrd');
+    }
   } else {
     echo "No user found";
   }

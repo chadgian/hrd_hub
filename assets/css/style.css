@@ -1049,8 +1049,8 @@ section {
 ------------------------------------ */
 
 .modal-header {
-  background-color: #DC3636;
-  color: white;
+  background-color: #7FA1C3;
+  color: #212529;
   padding-left: 2em;
   display: flex;
   justify-content: space-between;
@@ -1073,7 +1073,7 @@ section {
 }
 
 .register-modal {
-  border: #DC3636 solid 2px;
+  border: #7FA1C3 solid 2px;
   border-radius: 10px;
   width: 200%;
 }
@@ -1085,12 +1085,13 @@ section {
 }
 
 .modal-footer {
-  background-color: #DC3636;
-  color: white;
+  background-color: #7FA1C3;
+  color: black;
   font-style: italic;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 5px;
 }
 
 .proceed-btn {

@@ -1,0 +1,93 @@
+body, html {
+  height: 100%;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: url('assets/img/login-bg.png') no-repeat center center fixed; 
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+  width: 100%;
+}
+
+.logo {
+  width: 200px;
+  margin-top: 30px;
+}
+
+.login-container {
+  background-color: white;
+  border-radius: 5px;
+  max-width: 350px;
+  padding: 10px;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  text-align: center;
+}
+
+.title {
+  font-size: large;
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #093980;
+}
+
+.subtitle {
+  font-size: small;
+}
+
+.login-form {
+  padding-top: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+}
+
+.inputIcon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #84AEFF;
+  color: #093980;
+  padding: 8px;
+  border-radius: 5px 0px 0px 5px;
+  border: 1px solid grey;
+  border-right: none;
+}
+
+.inputGroup {
+  display: flex;
+  justify-content: center;
+}
+
+#username, #password {
+  border-radius: 0px 5px 5px 0px;
+  border: 1px solid grey;
+  font-size: small;
+  padding: 5px;
+  padding-left: 10px;
+}
+
+#username::placeholder {
+  color: #696969;
+}
+
+.submit-btn {
+  width: 30%;
+  font-size: small;
+  border: none;
+  background-color: #CE2F2F;
+  padding: 5px;
+  color: white;
+  border-radius: 5px;
+}
+
+.submit-btn:hover {
+  background-color: #991a1a;
+}

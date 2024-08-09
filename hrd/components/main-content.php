@@ -12,7 +12,7 @@ $today = $date->format('Y-m-d');
 <div class='training-list'>
   <?php
 
-  $recentTrainingStmt = $conn->prepare("SELECT * FROM training_details WHERE endDate < ? ORDER BY endDate DESC LIMIT 2");
+  $recentTrainingStmt = $conn->prepare("SELECT * FROM training_details WHERE endDate <= ? ORDER BY endDate DESC LIMIT 2");
   $recentTrainingStmt->bind_param("s", $today);
 
   if ($recentTrainingStmt->execute()) {
@@ -38,7 +38,7 @@ $today = $date->format('Y-m-d');
             break;
         }
 
-        $recentRegistrationStmt = $conn->prepare("SELECT * FROM registration_details WHERE trainingID = ? AND accepted = 0");
+        $recentRegistrationStmt = $conn->prepare("SELECT * FROM training_activities WHERE trainingID = ? AND activityRead = 0");
         $recentRegistrationStmt->bind_param("s", $trainingID);
 
         if ($recentRegistrationStmt->execute()) {
@@ -105,7 +105,7 @@ $today = $date->format('Y-m-d');
             break;
         }
 
-        $upcomingRecent = $conn->prepare("SELECT * FROM registration_details WHERE trainingID = ? AND accepted = 0");
+        $upcomingRecent = $conn->prepare("SELECT * FROM training_activities WHERE trainingID = ? AND activityRead = 0");
         $upcomingRecent->bind_param("i", $upcomingTrainingID);
         if ($upcomingRecent->execute()) {
           $upcomingRecentResult = $upcomingRecent->get_result();
