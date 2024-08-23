@@ -16,15 +16,22 @@ if ($loginStmt->execute()) {
     session_start();
     $_SESSION['username'] = $loginData['username'];
     $_SESSION['userID'] = $loginData['userID'];
+    $_SESSION['prefix'] = $loginData['prefix'];
     $_SESSION['firstName'] = $loginData['firstName'];
     $_SESSION['lastName'] = $loginData['lastName'];
     $_SESSION['middleInitial'] = $loginData['middleInitial'];
+    $_SESSION['suffix'] = $loginData['suffix'];
     $_SESSION['position'] = $loginData['position'];
     $_SESSION['initials'] = $loginData['initials'];
     $_SESSION['role'] = $loginData['role'];
+    $_SESSION['agency'] = $loginData['agency'];
 
     if ($loginData['role'] == "admin") {
       header('Location: /hrd_hub/hrd');
+    } else if ($loginData['role'] == "general") {
+      header('Location: /hrd_hub/employeeHome.php');
+    } else {
+      header('Location: /hrd_hub');
     }
   } else {
     echo "No user found";

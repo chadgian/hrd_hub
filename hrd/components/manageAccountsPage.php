@@ -4,7 +4,7 @@
       <?php include 'components/navbar.php'; ?>
     </div>
     <div class='col-md-7 middle-content'>
-      Manage Accounts
+      Manage Employees
     </div>
     <div class='col-md-3 right-side'>
       <?php include 'components/recents.php'; ?>

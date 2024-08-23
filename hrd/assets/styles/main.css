@@ -517,7 +517,7 @@ input[type="date"]{
   color: #570000;
 }
 
-.participantTable-container {
+.participantTable-container, .attendanceTable-container {
   background-color: white;
   display: flex;
   flex-direction: column;
@@ -526,37 +526,37 @@ input[type="date"]{
   border-radius: 5px;
 }
 
-#participantTable {
+#participantTable, #attendanceTable {
   text-align: center;
   font-size: small;
   color: #24305E;
   border: 1px solid #093980;
 }
 
-#participantTable thead {
+#participantTable thead, #attendanceTable thead {
   background-color: #CE2F2F;
   color: white;
   text-align: center;
   box-shadow: 0 2px 2px grey;
 }
 
-#participantTable thead tr th {
+#participantTable thead tr th, #attendanceTable thead tr th {
   padding: 10px;
   font-size: small;
 }
 
-#participantTable tbody tr td {
+#participantTable tbody tr td, #attendanceTable tbody tr td {
   padding: 10px;
   font-size: small;
   font-weight: 500;
   cursor: pointer;
 }
 
-#participantTable tbody tr:nth-child(odd){
+#participantTable tbody tr:nth-child(odd), #attendanceTable tbody tr:nth-child(odd){
   background-color: #f2f2f2;
 }
 
-#participantTable tbody tr:hover {
+#participantTable tbody tr:hover, #attendanceTable tbody tr:hover {
   background-color: #cccccc;
 }
 
@@ -566,10 +566,24 @@ input[type="date"]{
 }
 
 .participantTable-menu {
+  display: flex;
   margin-bottom: 10px;
   margin-top: 20px;
   display: flex;
   gap: 10px;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.switchParticipantView {
+  background-color: #093980;
+  color: #fff;
+  padding: 3px;
+  padding-left: 20px;
+  padding-right: 20px;
+  border-radius: 20px;
+  cursor: pointer;
 }
 
 .addParticipantBtn {
@@ -585,9 +599,10 @@ input[type="date"]{
   align-items: center;
   gap: 5px;
   font-size: small;
+  cursor: pointer;
 }
 
-.searchParticipant {
+.searchParticipant, .searchAttendance {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -598,12 +613,20 @@ input[type="date"]{
   padding-left: 10px;
 }
 
-.searchParticipant::placeholder {
+.searchParticipant::placeholder, .searchAttendance::placeholder {
   padding-left: 10px;
   font-weight: 500;
   font-size: small;
   box-shadow: none;
 } 
+
+.updateStatusModal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  justify-content: center;
+  align-items: center;
+}
 
 .status-content {
   display: flex;
@@ -613,52 +636,114 @@ input[type="date"]{
   align-items: center;
 }
 
-.status-list-title {
-  color: #CE2F2F;
-  font-weight: bold;
-  flex: 1;
-  text-align: start;
-  padding: 5px;
-  margin-bottom: 5px;
-}
-
-.update-status .dropdown-menu {
-  padding: 10px;
-  border-radius: 5px;
-  width: max-content;
-  border: 1px solid #0f226e;
-  background-color: #f2f4ff;
-}
-
-.update-status .dropdown-menu .status-list {
+.status-list {
   display: flex;
-  gap: 10px;
-  align-items: center;
-  border-bottom: 1px solid grey;
+  width: 100%;
+  justify-content: space-between;
+  border-bottom: 1px solid #dee2e6;
+  padding-bottom: 5px;
+}
+
+.status-list-title {
+  flex: 1;
+  font-weight: bold;
+  color: #CE2F2F;
 }
 
 .status-list-toggle {
+  display: flex; 
+  flex: 2; 
+  width: 100%;
+}
+
+.status-list-toggle div {
   display: flex;
-  flex-direction: row;
-  flex: 2;
-  gap: 5px;
+  flex: 1;
 }
 
-.status-list-toggle input[type='radio'] {
-  box-shadow: none;
+.status-list-toggle div input[type='radio']{
+  display: none;
 }
 
-.orNumber {
-  /* box-shadow: none; */
-  /* border-radius: 5px; */
-  /* padding: 5px; */
+.status-list-toggle div label {
+  font-weight: 400;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.orNumber-btn {
-  border: none;
-  background-color: none;
-  background: none;
+.attendance-radio input[type="radio"]:checked + label {
+  background-color: #093980;
+  color: white;
 }
+
+.attendance-radio input[type="radio"]:not(:checked) + label {
+  background-color: #DDEBFF;
+  color: #575757;
+}
+
+.payment-radio input[type="radio"]:checked + label {
+  background-color: #093980;
+  color: white;
+}
+
+.payment-radio input[type="radio"]:not(:checked) + label {
+  background-color: #DDEBFF;
+  color: #575757;
+}
+
+.output-radio input[type="radio"]:checked + label {
+  background-color: #093980;
+  color: white;
+}
+
+.output-radio input[type="radio"]:not(:checked) + label {
+  background-color: #DDEBFF;
+  color: #575757;
+}
+
+.payment-details {
+  width: 95%;
+  border: 1px solid grey;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: all 0.1s ease;
+}
+
+.payment-details .row {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.payment-details .row div {
+  display: flex;
+  flex-direction: column;
+}
+
+.payment-details button {
+  width: max-content;
+}
+
+.attendanceDay {
+  font-size: medium;
+  font-weight: 600;
+  border-bottom: 1px solid grey;
+  cursor: pointer;
+}
+
 /*--------------------------------- media ---------------------------------*/
 
 @media (max-width: 1200px) {

@@ -64,6 +64,7 @@ body, html {
 .inputGroup {
   display: flex;
   justify-content: center;
+  /* align-items: center; */
 }
 
 #username, #password {
@@ -90,4 +91,10 @@ body, html {
 
 .submit-btn:hover {
   background-color: #991a1a;
+}
+
+.showPassword {
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: small;
 }

@@ -1,3 +1,65 @@
+<?php
+session_start();
+
+$username = $_SESSION['username'];
+$prefix = $_SESSION['prefix'];
+$firstName = $_SESSION['firstName'];
+$middleInitial = $_SESSION['middleInitial'];
+$lastName = $_SESSION['lastName'];
+$suffix = $_SESSION['suffix'];
+$agency = $_SESSION['agency'];
+$position = $_SESSION['position'];
+$userID = $_SESSION['userID'];
+$username = $_SESSION['username'];
+
+include 'components/processes/db_connection.php';
+
+$getEmployeeDetailStmt = $conn->prepare("SELECT * FROM employee WHERE userID = ?");
+$getEmployeeDetailStmt->bind_param("i", $userID);
+
+if ($getEmployeeDetailStmt->execute()) {
+  $getEmployeeDetailResult = $getEmployeeDetailStmt->get_result();
+
+  if ($getEmployeeDetailResult->num_rows > 0) {
+    while ($getEmployeeDetailData = $getEmployeeDetailResult->fetch_assoc()) {
+
+      $employeeID = $getEmployeeDetailData['employeeID'];
+
+      // personal information
+      $prefixDetail = $getEmployeeDetailData['prefix'];
+      $firstNameDetail = $getEmployeeDetailData['firstName'];
+      $middleInitialDetail = $getEmployeeDetailData['middleInitial'];
+      $lastNameDetail = $getEmployeeDetailData['lastName'];
+      $suffixDetail = $getEmployeeDetailData['suffix'];
+      $nicknameDetail = $getEmployeeDetailData['nickname'];
+      $ageDetail = $getEmployeeDetailData['age'];
+      $sexDetail = $getEmployeeDetailData['sex'];
+      $civilStatusDetail = $getEmployeeDetailData['civilStatus'];
+
+      // contact information
+      $phoneNumberDetail = $getEmployeeDetailData['phoneNumber'];
+      $emailDetail = $getEmployeeDetailData['email'];
+      $altEmailDetail = $getEmployeeDetailData['altEmail'];
+
+      //agency information
+
+      $sectorDetail = $getEmployeeDetailData['sector'];
+
+      $agencyDetail = $getEmployeeDetailData['agencyName'];
+      $positionDetail = $getEmployeeDetailData['position'];
+      $foDetail = $getEmployeeDetailData['fo'];
+
+      //food restriction
+      $foodRestrictionDetail = $getEmployeeDetailData['foodRestriction'];
+    }
+  } else {
+    echo "No employee record found";
+  }
+} else {
+  echo $getEmployeeDetailStmt->error;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -63,7 +125,7 @@
           <li><a class="nav-link scrollto" href="#faq">FAQs</a></li>
           <li><a class="nav-link scrollto" href="#team">About</a></li>
           <li><a class="nav-link scrollto " href="#contact">Contact Us</a></li>
-          <li><a class="nav-link scrollto " href="login.php">Login</a></li>
+          <li><a class="nav-link scrollto " href="profile.php">Profile</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
@@ -866,13 +928,12 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-bs-toggle="modal"
             data-bs-target="#staticBackdrop">Back</button>
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registerBackdrop"
-            id="confSlip-btn">Register</button>
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#regReviewModal"
+            id="confSlip-btn" onclick="toReviewDetails()">Register</button>
         </div>
       </div>
     </div>
   </div>
-
 
   <!-- Registration Modal -->
   <div class="modal fade" id="registerBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -893,61 +954,51 @@
             <div class="form-row">
               <div class="form-group col-md-2">
                 <label for="prefix">Prefix <small><i>(optional)</i></small></label>
-                <input type="text" class="form-control" id="prefix" name="prefix" placeholder="e.g. Atty.">
+                <input type="text" class="form-control" id="prefix" name="prefix" placeholder="e.g. Atty."
+                  value="<?php echo $prefixDetail; ?>">
               </div>
               <div class="form-group col-md-3">
                 <label for="firstName">First Name <small>*</small></label>
                 <input type="text" class="form-control" id="firstName" name="firstName" placeholder="e.g. Juan"
-                  required>
+                  value="<?php echo $firstNameDetail; ?>" required>
               </div>
               <div class="form-group col-md-2">
                 <label for="middleInitial">Middle Initial <small>*</small></label>
-                <input type="text" class="form-control" id="middleInitial" name="middleInitial" placeholder="e.g. B">
+                <input type="text" class="form-control" id="middleInitial" name="middleInitial" placeholder="e.g. B"
+                  value="<?php echo $middleInitialDetail; ?>">>
               </div>
               <div class="form-group col-md-3">
                 <label for="lastName">Last Name <small>*</small></label>
                 <input type="text" class="form-control" id="lastName" name="lastName" placeholder="e.g. Dela Cruz"
-                  required>
+                  value="<?php echo $lastNameDetail; ?>">
+                required>
               </div>
               <div class="form-group col-md-2">
                 <label for="suffix">Suffix <small>*</small></label>
-                <select class="form-control" id="suffix" name="suffix" required>
-                  <option value="">None</option>
-                  <option value=" Jr. ">Jr.</option>
-                  <option value=" Sr. ">Sr.</option>
-                  <option value=" I ">I</option>
-                  <option value=" II ">II</option>
-                  <option value=" III ">III</option>
-                  <option value=" IV ">IV</option>
-                  <option value=" V ">V</option>
-                  <option value=" VI ">VI</option>
-                </select>
+                <input type="text" class="form-control" id="suffix" name="suffix" value="<?php echo $suffixDetail; ?>"
+                  required>
               </div>
             </div>
             <div class="form-row">
               <div class="form-group col-md-4">
                 <label for="age">Nickname <small><u>(to be shown in your training ID)</u></small>
                   <small>*</small></label>
-                <input type="text" class="form-control" id="nickname" name="nickname" placeholder="e.g. Juan" required>
+                <input type="text" class="form-control" id="nickname" name="nickname" placeholder="e.g. Juan"
+                  value="<?php echo $nicknameDetail; ?>" required>
               </div>
               <div class="form-group col-md-2">
                 <label for="gender">Sex <small>*</small></label>
-                <select class="form-control" id="sex" name="sex" required>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                </select>
+                <input type="text" class="form-control" id="sex" name="sex" value="<?php echo $sexDetail; ?>" required>
               </div>
               <div class="form-group col-md-2">
                 <label for="age">Age <small>*</small></label>
-                <input type="number" class="form-control" id="age" name="age" required>
+                <input type="number" class="form-control" id="age" name="age" value="<?php echo $ageDetail; ?>"
+                  required>
               </div>
               <div class="form-group col-md-4">
                 <label for="civilStatus">Civil Status <small>*</small></label>
-                <select class="form-control" name="civilStatus" id="civilStatus" name="civilStatus" required>
-                  <option value="single">Single</option>
-                  <option value="married">Married</option>
-                  <option value="widow">Widow</option>
-                </select>
+                <input type="text" class="form-control" name="civilStatus" id="civilStatus" name="civilStatus"
+                  value="<?php echo $civilStatusDetail; ?>" required>
               </div>
             </div>
 
@@ -957,17 +1008,17 @@
               <div class="form-group col-md-4">
                 <label for="phoneNumber">Phone Number <small>*</small></label>
                 <input type="text" class="form-control" id="phoneNumber" name="phoneNumber"
-                  placeholder="e.g. 09123456789" required>
+                  placeholder="e.g. 09123456789" value="<?php echo $phoneNumberDetail; ?>" required>
               </div>
               <div class="form-group col-md-4">
                 <label for="personalEmail">Email Address <small>*</small><small id='emailNotice'></small></label>
                 <input type="email" class="form-control" id="personalEmail" name="personalEmail"
-                  placeholder="e.g. juandelacruz@gmail.com" required>
+                  placeholder="e.g. juandelacruz@gmail.com" value="<?php echo $emailDetail; ?>" required>
               </div>
               <div class="form-group col-md-4">
                 <label for="altEmail">Alternative Email Address <small><i>(optional)</i></small></label>
                 <input type="email" class="form-control" id="altEmail" name="altEmail"
-                  placeholder="e.g. juandelacruz@gmail.com">
+                  placeholder="e.g. juandelacruz@gmail.com" value="<?php echo $altEmailDetail; ?>">
               </div>
             </div>
 
@@ -976,37 +1027,25 @@
             <div class="form-row">
               <div class="form-group col-md-6">
                 <label for="sector">Sector <small>*</small></label>
-                <select class="form-control" id="sector" name="sector">
-                  <option value="lgu">LGU (Local Government Unit)</option>
-                  <option value="suc">SUC/LUC (State University and College/Local University and College)</option>
-                  <option value="gocc">GOCC (Government-Owned and Controlled Corporation)</option>
-                  <option value="nga">NGA (National Government Agency)</option>
-                  <option value="others">Other</option>
-                </select>
+                <input type="text" class="form-control" id="sector" name="sector" value="<?php echo $sectorDetail; ?>">
               </div>
               <div class="form-group col-md-6">
                 <label for="agencyName">Name of Agency / Organization <small><u>(please don't
                       abbreviate)</u></small> <small>*</small></label>
                 <input type="text" class="form-control" id="agencyName" name="agencyName"
-                  placeholder="e.g. Civil Service Commission Regional Office No. 6" required>
+                  placeholder="e.g. Civil Service Commission Regional Office No. 6" value="<?php echo $agencyDetail; ?>"
+                  required>
               </div>
             </div>
             <div class="form-row">
               <div class="form-group col-md-6">
                 <label for="position">Position <small>*</small></label>
                 <input type="text" class="form-control" id="position" name="position"
-                  placeholder="Human Resource Specialist I" required>
+                  placeholder="Human Resource Specialist I" value="<?php echo $positionDetail; ?>" required>
               </div>
               <div class="form-group col-md-6">
                 <label for="location">CSC Field Office that has jurisdiction in your area <small>*</small></label>
-                <select name="fo" id="fo" class="form-control">
-                  <option value="iloilo">FO Iloilo</option>
-                  <option value="guimaras">FO Guimaras</option>
-                  <option value="antique">FO Antique</option>
-                  <option value="capiz">FO Capiz</option>
-                  <option value="negros">FO Negros Occidental</option>
-                  <option value="aklan">FO Aklan</option>
-                </select>
+                <input type="text" name="fo" id="fo" class="form-control" value="<?php echo $foDetail; ?>">
               </div>
             </div>
 
@@ -1014,7 +1053,7 @@
             <h6 class="mb-3 form-title">FOOD RESTRICTIONS <small>(leave blank if none)</small></h6>
             <div class="form-group">
               <input type="text" class="form-control" id="foodRestrictions" name="foodRestrictions"
-                placeholder="If any, please specify.">
+                placeholder="If any, please specify." value="<?php echo $foodRestrictionDetail; ?>">
             </div>
           </form><!-- Register Button -->
           <div class="d-flex justify-content-center">
@@ -1187,7 +1226,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-bs-toggle="modal"
-            data-bs-target="#registerBackdrop">Back</button>
+            data-bs-target="#conSlipModal">Back</button>
           <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registrationLoading"
             id="regReview-btn" onclick="registerParticipant()">Register</button>
           <!-- onclick="registerParticipant()" -->
@@ -1206,9 +1245,7 @@
             <div id="reg-loader" style="display: flex; justify-content: center; width: 25%;">
               <img src="assets/img/reg-loading.svg" alt="">
             </div>
-            <div id="loading-status" style="text-align: center; font-weight: 500; font-size: large;">
-
-            </div>
+            <div id="loading-status" style="text-align: center; font-weight: 500; font-size: large;"></div>
             <button type="button" class="btn btn-secondary mt-3" data-bs-dismiss="modal" id="regisrationLoadingBack-btn"
               style="width: 25%;">Close</button>
           </div>
@@ -1234,29 +1271,6 @@
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 
   <script>
-    function simulateRegistration() {
-      $("#regisrationLoadingBack-btn").hide();
-      $("#reg-loader").html("<img src='assets/img/reg-loading.svg' >");
-
-      $("#loading-status").html("<div style='font-size: large;'>Checking registration details...</div>");
-      const checkEmployee = checkEmployeeRecord();
-
-      console.log("simulateRegistratoon: " + checkEmployee.PromiseResult);
-
-      setTimeout(() => {
-        $("#loading-status").html("<div style='font-size: large;'>Saving registration...</div>");
-      }, 1000);
-
-      setTimeout(() => {
-        $("#loading-status").html("<div style='font-size: large ;'>Creating account...</div>");
-      }, 2000);
-
-      setTimeout(() => {
-
-
-      }, 3000);
-    }
-
     $(document).ready(function () {
       $.ajax({
         url: 'components/processes/fetchTrainings.php',
@@ -1290,80 +1304,6 @@
 
   <script>
 
-    function toReviewDetails() {
-      const status = checkRequiredFields();
-
-      if (status == "ok") {
-        $("#registerBackdrop").modal("toggle");
-
-        const prefix = document.getElementById("prefix").value == "" ? "N/A" : document.getElementById("prefix").value;
-        const firstName = document.getElementById("firstName").value;
-        const middleInitial = document.getElementById("middleInitial").value == "" ? "N/A" : document.getElementById("middleInitial").value;
-        const lastName = document.getElementById("lastName").value;
-        const suffix = document.getElementById("suffix").value == "" ? "N/A" : document.getElementById("suffix").value;
-        const nickname = document.getElementById("nickname").value;
-        const sex = document.getElementById("sex").value;
-        const age = document.getElementById('age').value;
-        const civilStatus = document.getElementById('civilStatus').value;
-        const phoneNumber = document.getElementById('phoneNumber').value;
-        const personalEmail = document.getElementById("personalEmail").value;
-        const altEmail = document.getElementById("altEmail").value == "" ? "N/A" : document.getElementById("altEmail").value;
-        const position = document.getElementById("position").value;
-        // const sector = document.getElementById("sector").value;
-        const agencyName = document.getElementById("agencyName").value;
-        const fo = document.getElementById("fo").value;
-        const foodRestrictions = document.getElementById("foodRestrictions").value == "" ? "N/A" : document.getElementById("foodRestrictions").value;
-
-        const confSlipName = document.getElementById("uploadFile").files[0].name;
-
-        let sector = "";
-
-        switch (document.getElementById("sector").value) {
-          case "lgu":
-            sector = "Local Government Unit";
-            break;
-
-          case "suc":
-            sector = "State University and College";
-            break;
-
-          case "gocc":
-            sector = "Government Owned or Controlled Corporation";
-            break;
-
-          case "nga":
-            sector = "National Government Agency";
-            break;
-
-          default:
-            sector = "Others";
-            break;
-        };
-
-        $("#reviewFirstName").html(firstName);
-        $("#reviewPrefix").html(prefix);
-        $("#reviewSuffix").html(suffix);
-        $("#reviewMiddleInitial").html(middleInitial);
-        $("#reviewSex").html(sex);
-        $("#reviewAge").html(age);
-        $("#reviewLastName").html(lastName);
-        $("#reviewNickname").html(nickname);
-        $("#reviewCivilStatus").html(civilStatus);
-        $("#reviewNumber").html(phoneNumber);
-        $("#reviewEmail").html(personalEmail);
-        $("#reviewAltEmail").html(altEmail);
-        $("#reviewSector").html(sector);
-        $("#reviewAgencyName").html(agencyName);
-        $("#reviewPosition").html(position);
-        $("#reviewFO").html(fo);
-        $("#reviewFoodRestrictions").html(foodRestrictions);
-        $("#reviewConfSlip").html(confSlipName);
-
-        $("#regReviewModal").modal("toggle");
-      }
-
-    }
-
     function trainingDetails(id) {
       const trainingIDInput = document.getElementById("trainingID");
       trainingIDInput.value = id;
@@ -1392,7 +1332,6 @@
 
           $('#trainingName').text(trainingName);
           $('#trainingNameRegForm').text(trainingName);
-          $('#trainingNameReview').text(trainingName);
           $('#trainingDetails').text(trainingDescription);
           $('#trainingCurrArea').text(currArea);
           $('#trainingDate').text(date);
@@ -1419,239 +1358,187 @@
       });
     }
 
-
-    document.getElementById("personalEmail").addEventListener('input', function (event) {
-      var email = event.target.value;
-      console.log(email);
-      $.ajax({
-        url: 'components/processes/checkEmail.php',
-        type: 'POST',
-        data: { email: email },
-        success: function (response) {
-          if (response !== "ok") {
-            console.log("Email exists.");
-            document.getElementById("personalEmail").style.borderColor = "red";
-            document.getElementById("emailNotice").innerHTML = "<i>(email already exists.)</i>";
-            document.querySelectorAll(".register-submit");
-            $('.register-submit')
-              .prop('disabled', true)
-              .css('background-color', 'grey');
-          } else {
-            //#24305E
-            console.log("Email does not exist.");
-            document.getElementById("personalEmail").style.borderColor = "#ced4da";
-            document.getElementById("emailNotice").innerHTML = "";
-            $('.register-submit')
-              .prop('disabled', false)
-              .css('background-color', '#24305E');
-          }
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-          console.error('Error in checking email:', textStatus, errorThrown);
-        }
-      });
-    });
-
-
     async function registerParticipant() {
-      const trainingID = document.getElementById("trainingID").value;
-
-
-      if (checkRequiredFields() == "ok") {
-        $("#regisrationLoadingBack-btn").hide();
-        $("#reg-loader").html("<img src='assets/img/reg-loading.svg' >");
-        $("#loading-status").html("<div style='font-size: large;'>Checking registration details...</div>");
-        const checkEmployee = await checkEmployeeRecord();
-        if (checkEmployee == "ok") {
-          $("#loading-status").html("<div style='font-size: large;'>Saving registration...</div>");
-
-          const prefix = document.getElementById("prefix").value;
-          const firstName = document.getElementById("firstName").value;
-          const middleInitial = document.getElementById("middleInitial").value.trim().charAt(0);
-          const lastName = document.getElementById("lastName").value;
-          const suffix = document.getElementById("suffix").value;
-          const nickname = document.getElementById("nickname").value;
-          const sex = document.getElementById("sex").value;
-          const age = document.getElementById('age').value;
-          const civilStatus = document.getElementById('civilStatus').value;
-          const phoneNumber = document.getElementById('phoneNumber').value;
-          const personalEmail = document.getElementById("personalEmail").value;
-          const altEmail = document.getElementById("altEmail").value;
-          const position = document.getElementById("position").value;
-          const sector = document.getElementById("sector").value;
-          const agencyName = document.getElementById("agencyName").value;
-          const fo = document.getElementById("fo").value;
-          const foodRestrictions = document.getElementById("foodRestrictions").value;
-
-          const userID = <?php echo $_SESSION['userID'] ?? "-1"; ?>;
-
-          var registrationFormData = new FormData();
-          registrationFormData.append("prefix", prefix);
-          registrationFormData.append("firstName", firstName);
-          registrationFormData.append("middleInitial", middleInitial);
-          registrationFormData.append("lastName", lastName);
-          registrationFormData.append("suffix", suffix);
-          registrationFormData.append("nickname", nickname);
-          registrationFormData.append("sex", sex);
-          registrationFormData.append("age", age);
-          registrationFormData.append("civilStatus", civilStatus);
-          registrationFormData.append("phoneNumber", phoneNumber);
-          registrationFormData.append("email", personalEmail);
-          registrationFormData.append("altEmail", altEmail);
-          registrationFormData.append("position", position);
-          registrationFormData.append("sector", sector);
-          registrationFormData.append("agencyName", agencyName);
-          registrationFormData.append("fo", fo);
-          registrationFormData.append("foodRestrictions", foodRestrictions);
-          registrationFormData.append("confirmationSlip", document.getElementById("uploadFile").files[0]);
-          registrationFormData.append("trainingID", trainingID);
-          registrationFormData.append("userID", userID);
-
-          $.ajax({
-            url: 'components/processes/registrationProcess.php',
-            type: 'POST',
-            data: registrationFormData,
-            processData: false,
-            contentType: false,
-            success: function (response) {
-
-              const responseData = response.split("::");
-
-              switch (responseData[0]) {
-                case "ok":
-                  console.log("OKAY");
-                  const loadingStatus = `
-                    <b style='color: #00A52E;'>You have been registered to the training.</b>
-                    <div style='font-size: small; line-height: 1.5; margin: 10px;'>You can now login to this website using these credentials:
-                      <div class='registration-login-credential'>
-                        <div><b>Username:</b> <u>${personalEmail}</u></div>
-                        <div><b>Password:</b> <u>${responseData[1]}</u></div>
-                      </div>
-                    </div>
-                    <div style='font-size: small;'>If you want to login, please <a href='login.php' style='text-decoration: underline; color: blue; cursor: pointer;'>click here</a>.</div>`;
-
-                  $("#loading-status").html(loadingStatus);
-                  $("#regisrationLoadingBack-btn").show();
-                  $("#reg-loader").html("<img src='assets/img/reg-done.svg' >");
-                  break;
-
-                default:
-                  console.log(response);
-                  $("#loading-status").html(response);
-                  break;
-              }
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-              console.log("failed");
-              console.error('Error in registration data:', textStatus, errorThrown);
-            }
-          });
-        } else {
-          const loadingStatus = "<b style='color: #7E1717;'>These registration details are already linked to an existing account.</b><div style='font-size: small; line-height: 1.5;     margin-top: 10px;'>Please login first before registration.</div><div style='margin: 10px;'><a href='login.php' class='registration-login'>Login</a></div><div style='font-size: small;'>If you have any questions, please <span style='text-decoration: underline; color: blue; cursor: pointer;'>click here</span>.</div>";
-
-          $("#loading-status").html(loadingStatus);
-          $("#regisrationLoadingBack-btn").show();
-          $("#reg-loader").html("<img src='assets/img/reg-failed.svg' >");
-          console.log(checkEmployee);
-        }
-      } else {
-        console.log("not okay");
-
-        // $("#registrationLoading").modal('toggle');
-      }
-    }
-
-    async function checkEmployeeRecord() {
+      $("#regisrationLoadingBack-btn").hide();
+      $("#reg-loader").html("<img src='assets/img/reg-loading.svg' >");
+      $("#loading-status").html("<div style='font-size: large;'>Checking registration status...</div>");
 
       const prefix = document.getElementById("prefix").value;
       const firstName = document.getElementById("firstName").value;
       const middleInitial = document.getElementById("middleInitial").value.trim().charAt(0);
       const lastName = document.getElementById("lastName").value;
       const suffix = document.getElementById("suffix").value;
+      const nickname = document.getElementById("nickname").value;
+      const sex = document.getElementById("sex").value;
+      const age = document.getElementById('age').value;
+      const civilStatus = document.getElementById('civilStatus').value;
       const phoneNumber = document.getElementById('phoneNumber').value;
       const personalEmail = document.getElementById("personalEmail").value;
+      const altEmail = document.getElementById("altEmail").value;
+      const position = document.getElementById("position").value;
+      const sector = document.getElementById("sector").value;
       const agencyName = document.getElementById("agencyName").value;
-      const sex = document.getElementById("sex").value;
+      const fo = document.getElementById("fo").value;
+      const foodRestrictions = document.getElementById("foodRestrictions").value;
+
+      const userID = <?php echo $_SESSION['userID'] ?? "-1"; ?>;
+
+      const trainingID = document.getElementById("trainingID").value;
+
+      const alreadyRegistered = await checkDuplicateRegistration(trainingID, <?php echo $employeeID; ?>);
+
+      if (alreadyRegistered == "0") {
+
+        var registrationFormData = new FormData();
+        registrationFormData.append("prefix", prefix);
+        registrationFormData.append("firstName", firstName);
+        registrationFormData.append("middleInitial", middleInitial);
+        registrationFormData.append("lastName", lastName);
+        registrationFormData.append("suffix", suffix);
+        registrationFormData.append("nickname", nickname);
+        registrationFormData.append("sex", sex);
+        registrationFormData.append("age", age);
+        registrationFormData.append("civilStatus", civilStatus);
+        registrationFormData.append("phoneNumber", phoneNumber);
+        registrationFormData.append("email", personalEmail);
+        registrationFormData.append("altEmail", altEmail);
+        registrationFormData.append("position", position);
+        registrationFormData.append("sector", sector);
+        registrationFormData.append("agencyName", agencyName);
+        registrationFormData.append("fo", fo);
+        registrationFormData.append("foodRestrictions", foodRestrictions);
+        registrationFormData.append("confirmationSlip", document.getElementById("uploadFile").files[0]);
+        registrationFormData.append("trainingID", trainingID);
+        registrationFormData.append("userID", userID);
+
+        $("#loading-status").html("<div style='font-size: large;'>Saving registration...</div>");
+
+        $.ajax({
+          url: 'components/processes/registrationProcess.php',
+          type: 'POST',
+          data: registrationFormData,
+          processData: false,
+          contentType: false,
+          success: function (response) {
+            switch (response) {
+              case "ok":
+                console.log("OKAY");
+                const loadingStatus = "<b style='color: #00A52E;'>You have been registered to the training.</b><div style='font-size: small; line-height: 1.5;     margin-top: 10px;'>Your login credentials will be sent to your email within 3 working days including the instructions to login on this website.</div><br><div style='font-size: small;'>If you have any questions, please <span style='text-decoration: underline; color: blue; cursor: pointer;'>click here</span>.</div>";
+
+                $("#loading-status").html(loadingStatus);
+                $("#regisrationLoadingBack-btn").show();
+                $("#reg-loader").html("<img src='assets/img/reg-done.svg' >");
+                break;
+
+              default:
+                console.log(response);
+                $("#loading-status").html(response);
+                break;
+            }
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            console.log("failed");
+            console.error('Error in registration data:', textStatus, errorThrown);
+          }
+        });
+      } else if (alreadyRegistered == "1") {
+        const loadingStatus = "<b style='color: #DC3636;'>You are already registered to this training.</b><div style='font-size: small; line-height: 1.5;     margin-top: 10px;'>Please open your profile to check the trainings you have previously registered.</div><br><div style='font-size: small;'>If you have any questions, please <span style='text-decoration: underline; color: blue; cursor: pointer;'>click here</span>.</div>";
+
+        $("#loading-status").html(loadingStatus);
+        $("#regisrationLoadingBack-btn").show();
+        $("#reg-loader").html("<img src='assets/img/reg-failed.svg' >");
+      } else {
+        console.log(alreadyRegistered);
+      }
+    }
+
+    async function checkDuplicateRegistration(trainingID, employeeID) {
 
       return new Promise((resolve, reject) => {
         $.ajax({
-          url: 'components/processes/checkEmployeeRecord.php',
+          url: 'components/processes/checkDuplicateRegistration.php',
           type: 'POST',
           data: {
-            prefix: prefix,
-            firstName: firstName,
-            middleInitial: middleInitial,
-            lastName: lastName,
-            suffix: suffix,
-            agency: agencyName,
-            phoneNumber: phoneNumber,
-            sex: sex
+            trainingID: trainingID,
+            employeeID: employeeID
           },
           success: function (response) {
-            const responseType = response.split('::')[0];
-            console.log("respone: " + response);
-            if (responseType == 0) {
-              console.log("responseType: " + responseType);
-              resolve("ok");
-            } else {
-              console.log("responseTypeeeee: " + responseType);
-              console.log("responseeee: " + response);
-              resolve(response);
-            }
-
+            resolve(response);
           },
           error: function (jqXHR, textStatus, errorThrown) {
             reject('checking employee record error: ', textStatus, errorThrown);
           }
         });
       });
-
     }
 
-    function checkRequiredFields() {
+    function toReviewDetails() {
+      const prefix = document.getElementById("prefix").value == "" ? "N/A" : document.getElementById("prefix").value;
+      const firstName = document.getElementById("firstName").value;
+      const middleInitial = document.getElementById("middleInitial").value == "" ? "N/A" : document.getElementById("middleInitial").value;
+      const lastName = document.getElementById("lastName").value;
+      const suffix = document.getElementById("suffix").value == "" ? "N/A" : document.getElementById("suffix").value;
+      const nickname = document.getElementById("nickname").value;
+      const sex = document.getElementById("sex").value;
+      const age = document.getElementById('age').value;
+      const civilStatus = document.getElementById('civilStatus').value;
+      const phoneNumber = document.getElementById('phoneNumber').value;
+      const personalEmail = document.getElementById("personalEmail").value;
+      const altEmail = document.getElementById("altEmail").value == "" ? "N/A" : document.getElementById("altEmail").value;
+      const position = document.getElementById("position").value;
+      // const sector = document.getElementById("sector").value;
+      const agencyName = document.getElementById("agencyName").value;
+      const fo = document.getElementById("fo").value;
+      const foodRestrictions = document.getElementById("foodRestrictions").value == "" ? "N/A" : document.getElementById("foodRestrictions").value;
 
-      const requiredFields = {
-        "firstName": document.getElementById("firstName").value,
-        "lastName": document.getElementById("lastName").value,
-        "nickname": document.getElementById("nickname").value,
-        "sex": document.getElementById("sex").value,
-        "age": document.getElementById('age').value,
-        "civilStatus": document.getElementById('civilStatus').value,
-        "phoneNumber": document.getElementById('phoneNumber').value,
-        "personalEmail": document.getElementById("personalEmail").value,
-        "position": document.getElementById("position").value,
-        "sector": document.getElementById("sector").value,
-        "agencyName": document.getElementById("agencyName").value,
-        "fo": document.getElementById("fo").value
+      const confSlipName = document.getElementById("uploadFile").files[0].name;
+
+      let sector = "";
+
+      switch (document.getElementById("sector").value) {
+        case "lgu":
+          sector = "Local Government Unit";
+          break;
+
+        case "suc":
+          sector = "State University and College";
+          break;
+
+        case "gocc":
+          sector = "Government Owned or Controlled Corporation";
+          break;
+
+        case "nga":
+          sector = "National Government Agency";
+          break;
+
+        default:
+          sector = "Others";
+          break;
       };
 
-      let status = "ok";
+      $("#reviewFirstName").html(firstName);
+      $("#reviewPrefix").html(prefix);
+      $("#reviewSuffix").html(suffix);
+      $("#reviewMiddleInitial").html(middleInitial);
+      $("#reviewSex").html(sex);
+      $("#reviewAge").html(age);
+      $("#reviewLastName").html(lastName);
+      $("#reviewNickname").html(nickname);
+      $("#reviewCivilStatus").html(civilStatus);
+      $("#reviewNumber").html(phoneNumber);
+      $("#reviewEmail").html(personalEmail);
+      $("#reviewAltEmail").html(altEmail);
+      $("#reviewSector").html(sector);
+      $("#reviewAgencyName").html(agencyName);
+      $("#reviewPosition").html(position);
+      $("#reviewFO").html(fo);
+      $("#reviewFoodRestrictions").html(foodRestrictions);
+      $("#reviewConfSlip").html(confSlipName);
 
-      for (const key in requiredFields) {
-        const value = requiredFields[key];
-
-        if (!value) {
-          document.getElementById(key).style.borderColor = "red";
-          status = "not okay";
-        }
-      }
-      if (status == "not okay") {
-        alert("Please fill out all required fields!");
-      }
-      return status;
-
+      $("#regReviewModal").modal("toggle");
 
     }
-
-    document.addEventListener('keydown', function (event) {
-      // Check if the Ctrl key is pressed along with 'S'
-      if (event.ctrlKey && (event.key === 'g' || event.key === 'G')) {
-        event.preventDefault();  // Prevent the default browser behavior
-        // alert('Save shortcut triggered!');
-        $("#registrationLoading").modal("toggle");
-        // Call your save function here
-      }
-    });
 
 
   </script>

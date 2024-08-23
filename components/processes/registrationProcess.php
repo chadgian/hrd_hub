@@ -92,7 +92,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     } else {
 
-      $userID = createUserAccount($firstName, $lastName, $suffix, $middleInitial, $position, $agencyName, $email);
+      $userAccount = explode("::", createUserAccount($prefix, $firstName, $lastName, $suffix, $middleInitial, $position, $agencyName, $email));
+
+      $userID = $userAccount[0];
+      $password = $userAccount[1];
 
       $regStmt = $conn->prepare("INSERT INTO employee (userID, prefix, firstName, lastName, middleInitial, suffix, nickname, age, sex, civilStatus, phoneNumber, email, altEmail, position, agencyName, sector, fo, foodRestriction) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
       $regStmt->bind_param("ssssssssssssssssss", $userID, $prefix, $firstName, $lastName, $middleInitial, $suffix, $nickname, $age, $sex, $civilStatus, $phoneNumber, $email, $altEmail, $position, $agencyName, $sector, $fo, $foodRestriction);
@@ -116,7 +119,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $targetFile = "$slipFolder$slipFileName";
 
         if (move_uploaded_file($_FILES["confirmationSlip"]["tmp_name"], $targetFile)) {
-          $status = "ok";
+          $status = "ok::$password";
           echo $status;
         } else {
           $status += ", error_upload";
@@ -147,18 +150,18 @@ function saveRegistration($trainingID, $employeeID, $userID)
   }
 }
 
-function createUserAccount($firstName, $lastName, $suffix, $middleInitial, $position, $agency, $email)
+function createUserAccount($prefix, $firstName, $lastName, $suffix, $middleInitial, $position, $agency, $email)
 {
   include "db_connection.php";
 
   $password = generateRandomPassword();
 
-  $createAccountStmt = $conn->prepare("INSERT INTO user (role, firstname, lastName, suffix, middleInitial, position, agency, username, password) VALUES ('general', ?, ?, ?, ?, ?, ?, ?, ?)");
-  $createAccountStmt->bind_param("ssssssss", $firstName, $lastName, $suffix, $middleInitial, $position, $agency, $email, $password);
+  $createAccountStmt = $conn->prepare("INSERT INTO user (role, prefix, firstname, lastName, suffix, middleInitial, position, agency, username, password) VALUES ('general', ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+  $createAccountStmt->bind_param("sssssssss", $prefix, $firstName, $lastName, $suffix, $middleInitial, $position, $agency, $email, $password);
 
   if ($createAccountStmt->execute()) {
     $userID = $conn->insert_id;
-    return $userID;
+    return "$userID::$password";
   } else {
     echo $createAccountStmt->error;
   }

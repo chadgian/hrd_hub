@@ -22,17 +22,22 @@ try {
       $oldAgency = $checkEmployeeData['agencyName'];
 
       if ($agency == $oldAgency) {
+        //employee exists with the same agency
         echo "2::";
       } else {
+        //employee exists but different agency
         echo "1:: $oldAgency";
       }
     } else {
+      //employee don't exist
       echo "0::";
     }
   } else {
+    //error
     echo "3:: {$checkEmployeeStmt->error}";
   }
 } catch (\Throwable $th) {
+  //error
   echo "3:: $th";
 }
 function trimMiddleInitial($string)

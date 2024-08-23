@@ -1075,7 +1075,7 @@ section {
 .register-modal {
   border: #7FA1C3 solid 2px;
   border-radius: 10px;
-  width: 200%;
+  /* width: 200%; */
 }
 
 .footer-msg {
@@ -1144,7 +1144,359 @@ section {
 }
 
 @media (max-width: 767px) {
-  .register-modal {
+  /* .register-modal {
     width: 100%;
-  }
+  } */
+}
+
+
+/* ---------------------------- user profile ---------------------------- */
+
+header {
+  background-color: #24305E;
+}
+
+.profileTitle {
+  font-size: xx-large;
+  font-weight: bold;
+  text-align: center;
+  margin: 5px;
+  padding-top: 0px;
+  height: inherit;
+  color: black;
+}
+
+.profile-content {
+  /* display: grid;
+  grid-template-columns: 40% auto;
+  grid-template-rows: auto auto auto auto auto;
+  column-gap: 15px;
+  row-gap: 10px; */
+  height: 100%;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin: 10px;
+  /* background-color: #000; */
+  width: inherit;
+}
+
+.profile-content > div {
+  text-align: center;
+  /* width: max-content; */
+  /* background-color: white; */
+
+}
+
+.profile-name {
+  /* grid-area: 1/1/3/1; */
+  border: 4px solid #24305E;
+  padding-top: 20px;
+  padding-bottom: 0px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: white;
+  box-shadow: 1px 1px 3px 1px grey;
+  margin-bottom: 1em;
+}
+
+.profile-agency {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border-top: 4px solid #24305E;
+  width: 100%;
+  color: #24305E;
+  font-weight: bold;
+  font-size: large;
+}
+
+.profile-fullname {
+  width: max-content;
+  font-weight: 600;
+  color: #24305E;
+  font-size: x-large;
+  border-bottom: 2px solid #24305E;
+}
+
+.profile-position {
+  padding-bottom: 20px;
+  color: #24305E;
+  font-size: small;
+}
+
+.profile-details{
+  border: 1px solid rgb(182, 182, 182);
+  /* grid-area: 3/1/6/1; */
+  background-color: white;
+  box-shadow: 1px 1px 3px 1px grey;
+  margin-bottom: 1em;
+}
+
+.profile-details-header {
+  background-color: #005376;
+  color: #fff;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profile-notification {
+  /* grid-area: 1/2/2/2; */
+  background-color: white;
+  box-shadow: 1px 1px 3px 1px grey;
+  margin-bottom: 1em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.profile-trainings {
+  /* grid-area: 2/2/6/2; */
+  background-color: white;
+  box-shadow: 1px 1px 3px 1px grey;
+  margin-bottom: 1em;
+}
+
+.detail-title {
+  text-align: start;
+  font-weight: bold;
+}
+
+.profile-details-content {
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  color: #000;
+  font-size: smaller;
+  gap: 5px;
+}
+
+.detail-data {
+  gap: 2px;
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-name {
+  text-align: start;
+}
+
+.detail-content {
+  display: flex;
+  /* border-bottom: 1px solid black; */
+  padding-left: 5px;
+  padding-right: 5px;
+  align-items: start;
+  justify-content: start;
+  background-color: #e0e0e0;
+  /* overflow-x: hidden; */
+  text-align: start;
+  padding: 2px;
+  padding-left: 10px;
+}
+
+.profile-trainings-header {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 15px;
+  font-size: large;
+  border-bottom: 1px solid #c7c7c7;
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
+.training-header-nav {
+  cursor: pointer;
+  color: #24305E;
+}
+
+.training-detail {
+  border: 1px solid rgb(126, 126, 126);
+  margin-left: 15px;
+  margin-right: 15px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  box-shadow: 1px 1px 2px 1px grey;
+  text-align: start;
+}
+
+.training-detail-header {
+  text-align: start;
+  padding: 20px;
+  background-color: #24305E;
+  color: white;
+  font-weight: bold;
+  /* font-size: small; */
+}
+
+.training-detail-content {
+  padding: 2em;
+  padding-left: 20px;
+  color: #24305E;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: smaller;
+  padding-bottom: 1em;
+}
+
+.training-detail-content > div {
+  padding: 2px;
+}
+
+.profile-training-indicator {
+  /* padding: 2px; */
+  padding-left: 5px;
+  padding-right: 5px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 20%;
+  height: 30%;
+  border-radius: 5px;
+  border: 1px solid rgb(80, 80, 80);
+}
+
+.training-detail-group {
+  display: flex;
+  font-size: small;
+  font-weight: bold;
+}
+
+.training-detail-group-title {
+  color: #000;
+}
+
+.attendance-indicator, .payment-indicator {
+  display: flex; 
+  justify-content: start;
+  align-items: center;
+  gap: 20px;
+  color: black;
+  font-weight: 500;
+}
+
+.attendance-toggle, .payment-toggle {
+  /* flex: 1; */
+  width: 8em;
+  text-align: center;
+  font-weight: 500;
+  color: white;
+  border: 1px solid #757575;
+  border-radius: 10px;
+}
+
+.payment-details-line {
+  display: flex;
+}
+
+.payment-details-line-title {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.payment-details-line-content {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.attendance-remark {
+  width: 100%;
+  border: 1px solid rgb(185, 185, 185);
+  margin-top: 1em;
+  text-align: center;
+  padding: 10px;
+  box-shadow: 2px 2px 4px 1px grey;
+}
+
+.attendance-remark-title {
+  color: grey;
+  margin-bottom: 5px;
+}
+
+.attendance-remark-content {
+  color: black;
+}
+
+.vertical-line {
+  border-right: 2px solid rgb(204, 204, 204);
+}
+
+.profile-trainings-content {
+  padding-bottom: 10px;
+}
+
+.review-information-group {
+  padding: 10px;
+  border: 1px solid #b8b8b8;
+  border-radius: 10px;
+  margin-bottom: 1em;
+  box-shadow: 2px 2px 2px 1px rgb(197, 197, 197);
+}
+
+.review-information-name {
+  flex: 1;
+  color: #24305E;
+  /* border-bottom: 1px solid grey; */
+}
+
+.review-information-content {
+  flex: 1;
+  font-weight: bold;
+  /* border-bottom: 1px solid grey; */
+}
+
+.registration-login {
+  padding: 5px;
+  padding-left: 15px;
+  padding-right: 15px;
+  border-radius: 5px;
+  background-color: #24305E;
+  color: white;
+}
+
+.registration-login-credential {
+  font-size: small; 
+  line-height: 1; 
+  margin: 10px; 
+  display: flex; 
+  flex-direction: column;
+  align-items: start; 
+  gap: 0.5em;
+  padding: 0.5em;
+  padding-left: 1em;
+  border: 1px solid grey;
+}
+
+.viewTrainingHistory {
+  background-color: #24305E;
+  color: white;
+  padding-left: 5px;
+  padding-right: 5px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 20%;
+  height: 30%;
+  border-radius: 5px;
+  border: 1px solid rgb(80, 80, 80);
+  cursor: pointer;
+}
+
+.changePassword-btn {
+  background-color: #005376;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  margin-top: 1em;
+}
+
+.changePassword-btn:hover {
+  background-color: #002a3b;
 }
