@@ -1452,6 +1452,10 @@ header {
   /* border-bottom: 1px solid grey; */
 }
 
+.checkbox-red{
+  color:red;
+}
+
 .registration-login {
   padding: 5px;
   padding-left: 15px;
@@ -1490,13 +1494,16 @@ header {
 }
 
 .changePassword-btn {
-  background-color: #005376;
+  background-color: #24305E;
   color: white;
   border: none;
-  border-radius: 5px;
-  margin-top: 1em;
+  border-radius: 3px;
+  margin-bottom: 0.9em;
+  width: 100%;
+  font-size: small;
+  padding: 0.3em;
 }
 
 .changePassword-btn:hover {
-  background-color: #002a3b;
+  background-color: #111b44;
 }

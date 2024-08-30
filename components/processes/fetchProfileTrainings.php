@@ -54,7 +54,18 @@ if ($type == 0) {
           $paymentDate = $rawPaymentDate == "" ? "N/A" : $rawPaymentDate->format("F d, Y");
         }
 
-        $attendanceRemark = $fetchProfileTrainingsData['attendanceRemarks'] == "" ? "N/A" : $fetchProfileTrainingsData['attendanceRemarks'];
+        $attendanceRemarkRaw = $fetchProfileTrainingsData['attendanceRemarks'] == "" ? "N/A" : $fetchProfileTrainingsData['attendanceRemarks'];
+
+        $attendanceRemark = match (explode("::", $attendanceRemarkRaw)[0]) {
+          "0" => "Replaced",
+          "1" => "Valid Cancellation",
+          "2" => "Invalid Cancellation",
+          "3" => "Lack of training hours",
+          "4" => "Absent/No Show",
+          "5" => "Other: " . explode("::", $attendanceRemarkRaw)[1],
+          "N/A" => "N/A"
+        };
+
         // echo json_encode($fetchProfileTrainingsData);
 
         echo "

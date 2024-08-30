@@ -3,7 +3,7 @@ include '../../components/processes/db_connection.php';
 
 $participantID = $_POST['id'];
 
-$fetchStatusStmt = $conn->prepare("SELECT * FROM training_participants WHERE participantID = ?");
+$fetchStatusStmt = $conn->prepare("SELECT * FROM training_participants as tp INNER JOIN employee as e ON tp.employeeID = e.employeeID WHERE participantID = ?");
 $fetchStatusStmt->bind_param("i", $participantID);
 
 if ($fetchStatusStmt->execute()) {
@@ -12,9 +12,30 @@ if ($fetchStatusStmt->execute()) {
   if ($fetchStatusResult->num_rows > 0) {
     $fetchStatusData = $fetchStatusResult->fetch_assoc();
 
+    $prefix = trim($fetchStatusData['prefix']);
+    $firstName = trim($fetchStatusData['firstName']);
+    $middleInitial = trim($fetchStatusData['middleInitial']);
+    $lastName = trim($fetchStatusData['lastName']);
+    $suffix = trim($fetchStatusData['suffix']);
+
+    if ($prefix !== "") {
+      if ($suffix !== "") {
+        $name = "$prefix $firstName $middleInitial $lastName, $suffix";
+      } else {
+        $name = "$prefix $firstName $middleInitial $lastName";
+      }
+    } else {
+      if ($suffix !== "") {
+        $name = "$firstName $middleInitial $lastName, $suffix";
+      } else {
+        $name = "$firstName $middleInitial $lastName";
+      }
+    }
+
     echo json_encode(
       [
         "participantID" => $fetchStatusData['participantID'],
+        "attendanceRemark" => $fetchStatusData['attendanceRemarks'],
         "remarks" => $fetchStatusData['remarks'],
         "outputs" => $fetchStatusData['outputs'],
         "attendance" => $fetchStatusData['attendance'],
@@ -25,6 +46,8 @@ if ($fetchStatusStmt->execute()) {
         "paymentDate" => date('Y-m-d', strtotime($fetchStatusData['paymentDate'])),
         "amount" => $fetchStatusData['amount'],
         "discount" => $fetchStatusData['discount'],
+        "name" => $name,
+        "agency" => $fetchStatusData['agencyName']
       ]
     );
   } else {

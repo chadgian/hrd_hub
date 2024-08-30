@@ -8,13 +8,20 @@
   </h3>
   <div class="participantTable-menu">
     <div class="d-flex gap-2">
-      <small class="addParticipantBtn"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
-          fill="currentColor" class="bi bi-person-add" viewBox="0 0 16 16">
-          <path
-            d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4" />
-          <path
-            d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z" />
-        </svg> Add</small>
+      <div class="dropdown">
+        <button class="dropdown-toggle addParticipantBtn" data-bs-toggle="dropdown" aria-expanded="false">
+          Menu
+        </button>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="#">Add Participant</a></li>
+          <li><a class="dropdown-item" href="#" onclick="finalizeParticipants(<?php echo $id; ?>)">Finalized
+              Participants</a>
+          </li>
+          <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#generateIDModal" href="#">Generate ID</a>
+          </li>
+          <li><a class="dropdown-item" href="#">Export Attendance</a></li>
+        </ul>
+      </div>
       <div>
         <input type="search" placeholder="Search" class="searchParticipant" id="searchParticipant">
       </div>
@@ -36,6 +43,43 @@
     </tbody>
   </table>
 
+  <!-- genate id modal -->
+  <div class="modal fade" id="generateIDModal" tabindex="-1" aria-labelledby="generateIDModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="generateIDModalLabel">Modal title</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <select name="numberofline" id="numberofline">
+            <option value="1">One Line</option>
+            <option value="2">Two Lines</option>
+            <option value="3">Three Lines</option>
+          </select>
+
+          <div id="line1-container">
+            <label for="line1">First line</label>
+            <input type="text" id="line1" name="line1">
+          </div>
+          <div id="line2-container">
+            <label for="line2">Second Line</label>
+            <input type="text" id="line2" name="line2">
+          </div>
+          <div id="line3-container">
+            <label for="line3">Third Line</label>
+            <input type="text" id="line3" name="line3">
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="generateID(<?php echo $id; ?>)">Generate ID</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Modal -->
   <div class="modal fade" id="updateStatusModal" tabindex="-1" data-bs-backdrop="static"
     aria-labelledby="updateStatusModalLabel" aria-hidden="true">
@@ -50,102 +94,159 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body updateStatusModal-body">
-          <div class="status-list">
-            <div class="status-list-title">
-              ATTENDANCE
-            </div>
-            <div class="status-list-toggle">
-              <div class="attendance-radio">
-                <input type="radio" id="complete" name="attendanceStatus" value="1">
-                <label for="complete" style="border-radius: 10px 0 0 10px;">Complete</label>
+          <div id="updateStatusContent"
+            style= "display: flex;justify-content: center;align-items: center;width: 100%;flex-direction: column;">
+            <div class="status-list">
+              <div class="status-list-title">
+                ATTENDANCE
               </div>
-              <div class="attendance-radio">
-                <input type="radio" id="incomplete" name="attendanceStatus" value="0">
-                <label for="incomplete" style="border-radius: 0 10px 10px 0;">Incomplete</label>
-              </div>
-            </div>
-          </div>
-          <div class="status-list" id="output-status">
-            <div class="status-list-title">
-              OUTPUT
-            </div>
-            <div class="status-list-toggle">
-              <div class="output-radio">
-                <input type="radio" id="submitted" name="outputStatus" value="1">
-                <label for="submitted" style="border-radius: 10px 0 0 10px;">Submitted</label>
-              </div>
-              <div class="output-radio">
-                <input type="radio" id="unsubmitted" name="outputStatus" value="0">
-                <label for="unsubmitted" style="border-radius: 0 10px 10px 0;">Unsubmitted</label>
+              <div class="status-list-toggle">
+                <div class="attendance-radio">
+                  <input type="radio" id="complete" name="attendanceStatus" value="1">
+                  <label for="complete" style="border-radius: 10px 0 0 10px;">Complete</label>
+                </div>
+                <div class="attendance-radio">
+                  <input type="radio" id="incomplete" name="attendanceStatus" value="0">
+                  <label for="incomplete" style="border-radius: 0 10px 10px 0;">Incomplete</label>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="status-list">
-            <div class="status-list-title">
-              PAYMENT
-            </div>
-            <div class="status-list-toggle">
-              <div class="payment-radio">
-                <input type="radio" id="paid" name="paymentStatus" value="1">
-                <label for="paid" style="border-radius: 10px 0 0 10px;" onclick="showPaymentDetails(1)">Paid</label>
-              </div>
-              <div class="payment-radio">
-                <input type="radio" id="unpaid" name="paymentStatus" value="0">
-                <label for="unpaid" style="border-radius: 0 10px 10px 0;" onclick="showPaymentDetails(0)">Unpaid</label>
-              </div>
-            </div>
-          </div>
-          <div class="payment-details">
-            <input type="hidden" id="participantID">
-            <div class="row">
-              <div class="col-md-6">
-                <span>OR Number:</span>
-                <input type="text" name="orNumber" id="orNumber" disabled>
-              </div>
-              <div class="col-md-6">
-                <span>Collecting Officer:</span>
-                <select name="co" id="co" disabled>
-                  <option value="0">Choose collecting officer...</option>
-                  <option value="chad">Chad Gian</option>
-                  <option value="nicca">Nicca Mae</option>
+            <div class="status-list" id="attendanceRemark-container">
+              <div class="status-list-title">Remark:</div>
+              <div class="status-list-toggle d-flex flex-column gap-2">
+                <select name="attendanceRemark" id="attendanceRemark">
+                  <option value="0">Replaced</option>
+                  <option value="1">Valid Cancellation</option>
+                  <option value="2">Invalid Cancellation</option>
+                  <option value="3">Lack of training hours</option>
+                  <option value="4">Absent/No Show</option>
+                  <option value="5">Others</option>
                 </select>
+                <input type="text" name="other-attendanceRemark" id="other-attendanceRemark">
               </div>
             </div>
-            <div class="row">
-              <div class="col-md-6">
-                <span>Field Office:</span>
-                <select name="fo" id="fo" disabled>
-                  <option value="0">Choose field office...</option>
-                  <option value="aklan">FO - Aklan</option>
-                  <option value="antique">FO - Antique</option>
-                  <option value="capiz">FO - Capiz</option>
-                  <option value="guimaras">FO - Guimaras</option>
-                  <option value="iloilo">FO - Iloilo</option>
-                  <option value="negros">FO - Negros Occidental</option>
-                </select>
+
+            <?php
+            $trainingOutputStmt = $conn->prepare("SELECT * FROM training_details WHERE trainingID = ?");
+            $trainingOutputStmt->bind_param("i", $id);
+
+            if ($trainingOutputStmt->execute()) {
+              $trainingOutputResult = $trainingOutputStmt->get_result();
+
+              if ($trainingOutputResult->num_rows > 0) {
+                $trainingOutputData = $trainingOutputResult->fetch_assoc();
+                $requiredOutput = $trainingOutputData['requiredDocs'];
+
+                if ($requiredOutput == "1") {
+                  echo "
+                  <div class='status-list' id='output-status'>
+                    <div class='status-list-title'>
+                      OUTPUT
+                    </div>
+                    <div class='status-list-toggle'>
+                      <div class='output-radio'>
+                        <input type='radio' id='submitted' name='outputStatus' value='1'>
+                        <label for='submitted' style='border-radius: 10px 0 0 10px;'>Submitted</label>
+                      </div>
+                      <div class='output-radio'>
+                        <input type='radio' id='unsubmitted' name='outputStatus' value='0'>
+                        <label for='unsubmitted' style='border-radius: 0 10px 10px 0;'>Unsubmitted</label>
+                      </div>
+                    </div>
+                  </div>
+                ";
+                } else {
+                  echo "";
+                }
+              } else {
+                echo "Training ID not found.";
+              }
+            } else {
+              echo $trainingOutputStmt->error;
+            }
+            ?>
+            <div class="status-list">
+              <div class="status-list-title">
+                PAYMENT
               </div>
-              <div class="col-md-6">
-                <span>Date of Payment:</span>
-                <input type="date" name="paymentDate" id="paymentDate" disabled>
+              <div class="status-list-toggle">
+                <div class="payment-radio">
+                  <input type="radio" id="paid" name="paymentStatus" value="1">
+                  <label for="paid" style="border-radius: 10px 0 0 10px;" onclick="showPaymentDetails(1)">Paid</label>
+                </div>
+                <div class="payment-radio">
+                  <input type="radio" id="unpaid" name="paymentStatus" value="0">
+                  <label for="unpaid" style="border-radius: 0 10px 10px 0;"
+                    onclick="showPaymentDetails(0)">Unpaid</label>
+                </div>
               </div>
             </div>
-            <div class="row">
-              <div class="col-md-6">
-                <span>Amount Paid:</span>
-                <input type="number" name="amount" id="amount" disabled>
+            <div class="payment-details">
+              <input type="hidden" id="participantID">
+              <div class="row">
+                <div class="col-md-6">
+                  <span>OR Number:</span>
+                  <input type="text" name="orNumber" id="orNumber" disabled>
+                </div>
+                <div class="col-md-6">
+                  <span>Date of Payment:</span>
+                  <input type="date" name="paymentDate" id="paymentDate" disabled>
+                </div>
               </div>
-              <div class="col-md-6">
-                <span>Discount:</span>
-                <input type="number" name="discount" id="discount" disabled>
+              <div class="row">
+                <div class="col-md-6">
+                  <span>Field Office:</span>
+                  <select name="fo" id="fo" disabled>
+                    <option value="0">Choose field office...</option>
+                    <option value="csc">Regional Office VI</option>
+                    <option value="aklan">FO - Aklan</option>
+                    <option value="antique">FO - Antique</option>
+                    <option value="capiz">FO - Capiz</option>
+                    <option value="guimaras">FO - Guimaras</option>
+                    <option value="iloilo">FO - Iloilo</option>
+                    <option value="negros">FO - Negros Occidental</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <span>Collecting Officer:</span>
+                  <select name="co" id="co" disabled>
+                    <option value="0">Choose collecting officer...</option>
+                    <option value="chad">Chad Gian</option>
+                    <option value="nicca">Nicca Mae</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <span>Amount Paid:</span>
+                  <input type="number" name="amount" id="amount" disabled>
+                </div>
+                <div class="col-md-6">
+                  <span>Discount:</span>
+                  <input type="number" name="discount" id="discount" disabled>
+                </div>
+              </div>
+              <div class="row" id="editPaymentDetails">
+                <button onclick="editPaymentDetails(1)" class="editPaymentDetails-btn">Edit
+                  Payment Status</button>
+              </div>
+              <div class="row" id="savePaymentDetails" style="display: none; margin-top: 1em;">
+                <button onclick="savePaymentDetails()" class="savePayment-btn">Save Details</button>
+                <button id="paymentDetails-close-btn" class='closePayment-btn'
+                  onclick="editPaymentDetails(0)">Cancel</button>
               </div>
             </div>
-            <div class="row" id="editPaymentDetails">
-              <button onclick="editPaymentDetails(1)">Edit Payment Status</button>
+            <div class="status-list d-flex flex-column gap-2 mt-2" style="width: 100%;">
+              <div class="status-list-title">
+                REMARKS
+              </div>
+              <div class="status-list-toggle">
+                <textarea name="participantRemarks" id="participantRemarks" style="width: 100%;"></textarea>
+              </div>
             </div>
-            <div class="row" id="savePaymentDetails" style="display: none;">
-              <button onclick="savePaymentDetails()">Save Details</button>
-              <button id="paymentDetails-close-btn" onclick="editPaymentDetails(0)">Cancel</button>
-            </div>
+          </div>
+          <div id="updateStatusLoading" class="d-flex align-items-center justify-content-center">
+            <img src="assets/images/loading2.gif" alt="" width="50%">
           </div>
         </div>
         <div class="modal-footer">
@@ -169,13 +270,15 @@
   </h3>
   <div class="participantTable-menu">
     <div class="d-flex gap-2">
-      <small class="addParticipantBtn"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
-          fill="currentColor" class="bi bi-person-add" viewBox="0 0 16 16">
-          <path
-            d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4" />
-          <path
-            d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z" />
-        </svg> Add</small>
+      <div>
+        <label for="sortAttendance">Sort by:</label>
+        <select name="sortAttendance" id="sortAttendance">
+          <option value="2">No.</option>
+          <option value="3">Name</option>
+          <option value="4">Login</option>
+          <option value="5">Logout</option>
+        </select>
+      </div>
       <div>
         <input type="search" placeholder="Search" class="searchAttendance" id="searchAttendance">
       </div>
@@ -199,7 +302,7 @@
 
             for ($i = 1; $i <= $numberOfDays; $i++) {
               echo "
-              <div class='attendanceDay' id='attendanceDay$i' onclick='populateAttendanceTable($i)'>Day $i</div>
+              <div class='attendanceDay' id='attendanceDay-$i'>Day $i</div>
               ";
             }
           }
@@ -224,7 +327,21 @@
     </tbody>
   </table>
 
-  
+
+</div>
+
+<!-- Generating ID Modal -->
+<div class="modal fade" id="generatingIDModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="generatingIDModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h5>Generating ID</h5>
+        <div id="response"></div>
+        <button data-bs-dismiss="modal" aria-label="Close" id="generateID-close">Close</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script> -->
@@ -233,9 +350,42 @@
 <script>
   $(document).ready(function () {
     populateParticipantTable();
-    populateAttendanceTable('1');
+    populateAttendanceTable('0', '1', '');
     $(".attendanceTable-container").hide();
 
+    const day1 = document.getElementById("attendanceDay-1");
+
+    day1.classList.add("selected");
+    day1.style.borderBottom = '2px solid black';
+
+    let selectedElement = document.getElementById("attendanceDay-1");
+
+    // Get all elements with the class 'item'
+    const items = document.querySelectorAll('.attendanceDay');
+
+    // Add event listener to each item
+    items.forEach(item => {
+      item.addEventListener('click', function () {
+        // If there's a previously selected element, reset its border
+        if (selectedElement) {
+          selectedElement.classList.remove('selected');
+          selectedElement.style.borderBottom = '1px solid grey';
+        }
+
+        // Set the new selected element's border to 2px
+        this.classList.add('selected');
+        this.style.borderBottom = '2px solid black';
+
+        // Update the selectedElement variable
+        selectedElement = this;
+
+        const currentID = this.id.split("-")[1];
+
+        const searchQuery = $("#searchAttendance").val();
+
+        populateAttendanceTable($("#sortAttendance").val(), currentID, searchQuery);
+      });
+    });
   });
 
   document.getElementById("searchParticipant").addEventListener("input", function (e) {
@@ -286,8 +436,10 @@
   function fillStatusField(parsedData) {
     if (parsedData.attendance == 1) {
       $("#complete").prop('checked', true);
+      $("#attendanceRemark-container").hide();
     } else {
       $("#incomplete").prop('checked', true);
+      $("#attendanceRemark-container").show();
     }
 
     if (parsedData.outputs == 1) {
@@ -304,6 +456,16 @@
       $('.payment-details').hide();
     }
 
+    let attendanceRemark = parsedData.attendanceRemark.split("::")[0];
+    if (attendanceRemark == "5") {
+      $("#other-attendanceRemark").val(parsedData.attendanceRemark.split("::")[1]);
+      $("#other-attendanceRemark").show();
+    } else {
+      $("#other-attendanceRemark").hide();
+    }
+
+    $("#attendanceRemark").val(attendanceRemark);
+
     $('#orNumber').prop('value', parsedData.receiptNumber);
     $('#co').prop('value', parsedData.co);
     $('#fo').prop('value', parsedData.fo);
@@ -311,10 +473,34 @@
     $('#amount').prop('value', parsedData.amount);
     $('#discount').prop('value', parsedData.discount);
     $('#participantID').prop('value', parsedData.participantID);
+    $("#participantRemarks").html(parsedData.remarks);
+
+    $("#attendanceRemark").change(function () {
+      if ($("#attendanceRemark").val() == "5") {
+        $("#other-attendanceRemark").show();
+      } else {
+        $("#other-attendanceRemark").val('');
+        $("#other-attendanceRemark").hide();
+      }
+    });
+
+    $("input[name='attendanceStatus']").change(function () {
+      if ($(this).val() == "0") {
+        $("#attendanceRemark-container").show();
+      } else {
+        $("#attendanceRemark-container").hide();
+      }
+    });
+
+    $("#updateStatus-name").html(parsedData.name);
+    $("#updateStatus-agency").html(parsedData.agency);
+
   }
 
   function showStatusDetails(participantID) {
     console.log(participantID);
+    $("#updateStatusContent").hide();
+    $("#updateStatusLoading").removeClass("d-none");
 
     $.ajax({
       url: 'components/fetchParticipantStatus.php',
@@ -325,7 +511,9 @@
 
           const parsedData = JSON.parse(data);
           paymentDetailsValue = {};
+          $("#updateStatusLoading").addClass("d-none");
           fillStatusField(parsedData);
+          $("#updateStatusContent").show();
 
         } catch (e) {
           console.error(e);
@@ -415,34 +603,16 @@
     });
   }
 
-  function populateAttendanceTable(day) {
-    let selectedElement = null;
-
-    // Get all elements with the class 'item'
-    const items = document.querySelectorAll('.attendanceDay');
-
-    // Add event listener to each item
-    items.forEach(item => {
-      item.addEventListener('click', function () {
-        // If there's a previously selected element, reset its border
-        if (selectedElement) {
-          selectedElement.classList.remove('selected');
-          selectedElement.style.borderBottom = '1px solid grey';
-        }
-
-        // Set the new selected element's border to 2px
-        this.classList.add('selected');
-        this.style.borderBottom = '2px solid black';
-
-        // Update the selectedElement variable
-        selectedElement = this;
-      });
-    });
-
+  function populateAttendanceTable(type, day, search) {
     $.ajax({
       url: 'components/fetchAttendanceTable.php',
       type: 'POST',
-      data: { id: <?php echo $id; ?>, day: day },
+      data: {
+        id: <?php echo $id; ?>,
+        day: day,
+        type: type,
+        search: search
+      },
       success: function (data) {
         $("#attendanceTable-body").html(data);
       },
@@ -456,6 +626,9 @@
 
   function editPaymentDetails(toggle) {
     if (toggle == 1) {
+      $("#payment-details").css("background-color", "#effaf2");
+      $(".payment-details").css("border", "1px solid #00A52E")
+      $(".payment-details").css("border-top", "2em solid #00A52E");
       $('#savePaymentDetails').show();
       $('#editPaymentDetails').hide();
 
@@ -473,6 +646,9 @@
       $("#amount").prop('disabled', false);
       $("#discount").prop('disabled', false);
     } else {
+      $("#payment-details").css("background-color", "#eff5ff");
+      $(".payment-details").css("border", "1px solid #093980")
+      $(".payment-details").css("border-top", "2em solid #093980");
       $('#savePaymentDetails').hide();
       $('#editPaymentDetails').show();
 
@@ -569,6 +745,14 @@
       }
     }
 
+    let attendanceRemark;
+    if (attendance == "0") {
+      attendanceRemark = ($("#attendanceRemark").val() == "5") ? "5::" + $("#other-attendanceRemark").val() : $("#attendanceRemark").val();
+    } else {
+      attendanceRemark = "";
+    }
+
+
     console.log("id: " + participantID + ", attendance: " + attendance + ", outputs: " + outputs + ", payment: " + payment);
 
     $.ajax({
@@ -577,8 +761,10 @@
       data: {
         participantID: participantID,
         attendance: attendance,
+        attendanceRemark: attendanceRemark,
         outputs: outputs,
-        payment: payment
+        payment: payment,
+        remarks: $("#participantRemarks").val()
       },
       success: function (data) {
         if (data !== "ok") {
@@ -594,16 +780,188 @@
     });
   }
 
+  function editAttendance(attendanceID, login, logout) {
+    $("#attendance-edit-" + attendanceID).hide();
+    $("#attendance-save-" + attendanceID).show();
+    $("#attendance-close-" + attendanceID).show();
+
+    $("#login-" + attendanceID).html(`<input type='time' id='newLogin-${attendanceID}' value='${login}' class='attendance-time-input'>`);
+    $("#logout-" + attendanceID).html(`<input type='time' id='newLogout-${attendanceID}' value='${logout}' class='attendance-time-input'>`);
+
+    $(".attendance-time-input").on("keydown", function (e) {
+      const attendanceID = this.id.split("-")[1];
+      if (e.key === "Enter") {
+        updateAttendance(attendanceID, getCurrentDay());
+      } else if (e.key === "Escape") {
+        cancelUpdateAttendance(attendanceID);
+      }
+    });
+  }
+
   function updateAttendance(attendanceID, day) {
+    $("#attendance-edit-" + attendanceID).show();
+    $("#attendance-save-" + attendanceID).hide();
+    $("#attendance-close-" + attendanceID).hide();
+
+    const newLogin = ($("#newLogin-" + attendanceID).val() == "00:00") ? "" : $("#newLogin-" + attendanceID).val();
+    const newLogout = ($("#newLogout-" + attendanceID).val() == "00:00") ? "" : $("#newLogout-" + attendanceID).val();
+
     $.ajax({
-      url: 'components/editAttendance.php',
+      url: 'components/updateAttendance.php',
       type: 'POST',
-      data: { attendanceID: attendanceID },
+      data: {
+        attendanceID: attendanceID,
+        newLogin: newLogin,
+        newLogout: newLogout
+      },
       success: function (data) {
         if (data == "ok") {
-          populateAttendanceTable(day);
+          if (newLogin == '') {
+            $("#login-" + attendanceID).html("-----------");
+          } else {
+            $("#login-" + attendanceID).html(newLogin);
+          }
+
+          if (newLogout == '') {
+            $("#logout-" + attendanceID).html("-----------");
+          } else {
+            $("#logout-" + attendanceID).html(newLogout);
+          }
+
+          $("#attendance-edit-" + attendanceID).attr("onclick", `editAttendance(${attendanceID}, '${newLogin}', '${newLogout}')`);
+        } else {
+          alert(data);
         }
       }
     });
+  }
+
+  function cancelUpdateAttendance(attendanceID) {
+    $("#attendance-edit-" + attendanceID).show();
+    $("#attendance-save-" + attendanceID).hide();
+    $("#attendance-close-" + attendanceID).hide();
+
+    const login = ($("#newLogin-" + attendanceID).val() == "00:00") ? "" : $("#newLogin-" + attendanceID).val();
+    const logout = ($("#newLogout-" + attendanceID).val() == "00:00") ? "" : $("#newLogout-" + attendanceID).val();
+
+    if (login == '') {
+      $("#login-" + attendanceID).html("-----------");
+    } else {
+      $("#login-" + attendanceID).html(login);
+    }
+
+    if (logout == '') {
+      $("#logout-" + attendanceID).html("-----------");
+    } else {
+      $("#logout-" + attendanceID).html(logout);
+    }
+  }
+
+  $("#searchAttendance").on("input", function (e) {
+    // Get all elements with the class 'item'
+
+
+    populateAttendanceTable("1", getCurrentDay(), this.value);
+  })
+
+  function getCurrentDay() {
+    const items = document.querySelectorAll('.attendanceDay');
+
+    let day = 1;
+    // Add event listener to each item
+    items.forEach(item => {
+      // If there's a previously selected element, reset its border
+      if (item.classList.contains('selected')) {
+        day = item.id.split("-")[1];
+      }
+    });
+
+    return day;
+  }
+
+  $("#sortAttendance").change(function () {
+    populateAttendanceTable(this.value, getCurrentDay(), $("#searchAttendance").val());
+  });
+
+  function generateID(trainingID) {
+    $("#generatingIDModal").modal("show");
+    $("#generateIDModal").modal("toggle");
+    $("#generateID-close").hide();
+    $("#response").hide();
+
+    let trainingName = "";
+
+    switch ($("#numberofline").val()) {
+      case "1":
+        trainingName = $("#line1").val();
+        break;
+
+      case "2":
+        trainingName = $("#line1").val() + "//" + $("#line2").val();
+        break;
+
+      case "3":
+        trainingName = $("#line1").val() + "//" + $("#line2").val() + "//" + $("#line3").val();
+        break;
+    }
+    console.log(trainingName);
+    $.ajax({
+      url: 'components/generateID.php',
+      type: 'POST',
+      data: { trainingID: trainingID, trainingName: trainingName },
+      success: function (response) {
+        if (response == "ok") {
+          $("#generatingIDModal").modal("hide");
+        } else {
+          $("#generateID-close").show();
+          $("#response").show();
+          $("#response").html(response);
+        }
+      }
+    })
+  }
+
+  $("#numberofline").change(displayTrainingNameLine);
+  displayTrainingNameLine();
+
+  function displayTrainingNameLine() {
+    const lines = $("#numberofline").val();
+    console.log(lines);
+    switch (lines) {
+      case "1":
+        $("#line1-container").show();
+        $("#line2-container").hide();
+        $("#line3-container").hide();
+        break;
+
+      case "2":
+        $("#line1-container").show();
+        $("#line2-container").show();
+        $("#line3-container").hide();
+        break;
+
+      case "3":
+        $("#line1-container").show();
+        $("#line2-container").show();
+        $("#line3-container").show();
+        break;
+    }
+  }
+
+  function finalizeParticipants(trainingID) {
+    console.log("Finalizing partiicpats");
+    $.ajax({
+      url: 'components/finalizeParticipants.php',
+      type: 'POST',
+      data: { id: trainingID },
+      success: function (response) {
+        if (response == "ok") {
+          alert("Done Finalizing Participants");
+          populateParticipantTable();
+        } else {
+          alert(response);
+        }
+      }
+    })
   }
 </script>

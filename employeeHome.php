@@ -1202,14 +1202,14 @@ if ($getEmployeeDetailStmt->execute()) {
           <!-- Agreement -->
           <h6 class="mb-3 form-title">AGREEMENT</h6>
           <div class="form-check mb-2">
-            <input class="form-check-input" type="checkbox" id="privacyPolicy" required>
+            <input class="agreementCheckbox form-check-input" type="checkbox" id="privacyPolicy" required>
             <label class="form-check-label info-text" for="privacyPolicy">
               I hereby agree and consent for the processing of my personal data information in regards of the Data
               Privacy Act.
             </label>
           </div>
           <div class="form-check mb-2">
-            <input class="form-check-input" type="checkbox" id="paymentAgreement" required>
+            <input class="agreementCheckbox form-check-input" type="checkbox" id="paymentAgreement" required>
             <label class="form-check-label info-text" for="paymentAgreement">
               I hereby agree that by registering for this seminar, I will be charged with the amount corresponding to
               the training fee as stated in the guidelines, and that I will be responsible for any expenses in case of
@@ -1217,7 +1217,7 @@ if ($getEmployeeDetailStmt->execute()) {
             </label>
           </div>
           <div class="form-check mb-2">
-            <input class="form-check-input" type="checkbox" id="certificateAgreement" required>
+            <input class="agreementCheckbox form-check-input" type="checkbox" id="certificateAgreement" required>
             <label class="form-check-label info-text" for="certificateAgreement">
               I agree that the Certificate of Completion shall only be issued to me if I pay the registration fee and
               completely submit all the accomplished outputs.
@@ -1297,6 +1297,8 @@ if ($getEmployeeDetailStmt->execute()) {
             .prop('disabled', true);
         }
       })
+
+      checkAgreement();
     });
 
 
@@ -1358,7 +1360,28 @@ if ($getEmployeeDetailStmt->execute()) {
       });
     }
 
+    function checkAgreement() {
+      $("#regReview-btn").prop('disabled', true);
+
+      $(".agreementCheckbox").change(function () {
+        const allChecked = $(".agreementCheckbox").length === $(".agreementCheckbox:checked").length;
+
+        console.log($(".agreementCheckbox:checked").length);
+
+        if (allChecked) {
+          $("#regReview-btn").prop('disabled', false);
+        } else {
+          $("#regReview-btn").prop('disabled', true);
+        }
+
+
+      });
+    }
+
     async function registerParticipant() {
+
+
+
       $("#regisrationLoadingBack-btn").hide();
       $("#reg-loader").html("<img src='assets/img/reg-loading.svg' >");
       $("#loading-status").html("<div style='font-size: large;'>Checking registration status...</div>");

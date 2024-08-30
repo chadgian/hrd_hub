@@ -182,6 +182,8 @@ if (isset($_SESSION['userID'])) {
               <?php echo $agency; ?>
             </div>
           </div>
+          <button class="changePassword-btn" data-bs-toggle="modal" data-bs-target="#changePasswordModal">Change
+            Password</button>
           <div class="profile-details">
             <div class="profile-details-header">
               <span style="font-weight: 500; font-size: large;">Registration Details</span>
@@ -288,8 +290,6 @@ if (isset($_SESSION['userID'])) {
               <div class="col-md-12 d-flex detail-data">
                 <div class="detail-content"><?php echo $foodRestrictionDetail; ?></div>
               </div>
-              <button class="changePassword-btn" data-bs-toggle="modal" data-bs-target="#changePasswordModal">Change
-                Password</button>
             </div>
           </div>
         </div>
@@ -812,6 +812,38 @@ if (isset($_SESSION['userID'])) {
         success: function (response) {
           const data = JSON.parse(response);
 
+          const attendanceRemark = data.attendanceRemark;
+
+          switch (attendanceRemark.split("::")[0]) {
+            case "0":
+              $("#modalAttendanceRemarks").html("Replaced");
+              break;
+
+            case "1":
+              $("#modalAttendanceRemarks").html("Valid Cancellation");
+              break;
+
+            case "2":
+              $("#modalAttendanceRemarks").html("Invalid Cancellation");
+              break;
+
+            case "3":
+              $("#modalAttendanceRemarks").html("Lack of training hours");
+              break;
+
+            case "4":
+              $("#modalAttendanceRemarks").html("Absent/No show");
+              break;
+
+            case "5":
+              $("#modalAttendanceRemarks").html("Other: " + attendanceRemark.split("::")[1]);
+              break;
+
+            default:
+              $("#modalAttendanceRemarks").html(attendanceRemark);
+              break;
+          }
+
           $("#modalTrainingName").html(data.trainingName);
           $("#modalTrainingDate").html(data.trainingDate);
           $("#modalTrainingVenue").html(data.trainingVenue);
@@ -823,7 +855,6 @@ if (isset($_SESSION['userID'])) {
           $("#modalPaymentContent").html(data.paymentContent);
           $("#modalAttendanceContent").html(data.attendanceContent);
           $("#modalAttendanceContent").css("background-color", data.attendanceColor);
-          $("#modalAttendanceRemarks").html(data.attendanceRemark);
           $("#modalPaymentContent").css("background-color", data.paymentColor);
 
           if (data.paymentContent == "Unpaid") {

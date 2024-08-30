@@ -134,7 +134,7 @@ header {
   padding-left: 20px;
   padding-right: 20px;
   overflow-y: scroll;
-  overflow-x: hidden;
+  overflow-x: scroll;
 }
 
 .training-list {
@@ -484,18 +484,16 @@ input[type="date"]{
 }
 
 .openReg-btn {
-  background-color: #0e183f;
   padding: 10px;
   padding-top: 3px;
   padding-bottom: 3px;
   text-decoration: none;
   color: white;
   border-radius: 5px;
-  box-shadow: 0 1px 3px 1px grey;
 }
 
 .openReg-btn:hover {
-  background-color: #0f226e;
+  box-shadow: 1px 1px 3px 1px rgb(0, 0, 0);
 }
 
 .regDetails-modal {
@@ -531,6 +529,7 @@ input[type="date"]{
   font-size: small;
   color: #24305E;
   border: 1px solid #093980;
+  overflow: scroll;
 }
 
 #participantTable thead, #attendanceTable thead {
@@ -580,9 +579,9 @@ input[type="date"]{
   background-color: #093980;
   color: #fff;
   padding: 3px;
-  padding-left: 20px;
-  padding-right: 20px;
-  border-radius: 20px;
+  padding-left: 1em;
+  padding-right: 1em;
+  border-radius: 1em;
   cursor: pointer;
 }
 
@@ -600,7 +599,28 @@ input[type="date"]{
   gap: 5px;
   font-size: small;
   cursor: pointer;
+  border: none;
 }
+
+.addParticipantBtn:hover{
+  background-color: #002152;
+  color: white;
+}
+
+/* .participantMenu {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #093980;
+  box-shadow: 3px 3px 6px 0px #093980;
+  padding: 0.5em;
+  gap: 10px;
+} */
+/* 
+.participantMenu li {
+  border-left: 1px solid #002152;
+  margin-left: 0.2em;
+  padding-left: 0.2em;
+} */
 
 .searchParticipant, .searchAttendance {
   display: flex;
@@ -641,7 +661,8 @@ input[type="date"]{
   width: 100%;
   justify-content: space-between;
   border-bottom: 1px solid #dee2e6;
-  padding-bottom: 5px;
+  padding-bottom: 10px;
+  padding-top: 10px;
 }
 
 .status-list-title {
@@ -717,6 +738,48 @@ input[type="date"]{
   flex-direction: column;
   gap: 10px;
   transition: all 0.1s ease;
+  border: 1px solid #093980;
+  border-top: 2em solid #093980;
+  padding: 0.5em;
+  margin-top: 1em;
+  color: black;
+  background-color: #eff5ff;
+}
+
+.editPaymentDetails-btn {
+  background-color: #ce2f2f; 
+  color:  white; 
+  border: none; 
+  border-radius: 10px; 
+  margin-top: 1em;
+}
+
+.editPaymentDetails-btn:hover {
+  box-shadow: 0px 1px 3px 1px black;
+}
+
+.savePayment-btn {
+  background-color: #649563;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  margin-right: 5px;
+}
+
+.closePayment-btn {
+  background-color: #CE2F2F;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  margin-left: 5px;
+}
+
+.closePayment-btn:hover, .savePayment-btn:hover {
+  box-shadow: 0px 1px 3px 1px black;
+}
+
+.payment-details input, .payment-details select {
+  box-shadow: none;
 }
 
 .payment-details .row {
@@ -743,6 +806,52 @@ input[type="date"]{
   border-bottom: 1px solid grey;
   cursor: pointer;
 }
+
+.attendance-action-button {
+  background-color: #24305E;
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.attendance-close-edit{
+  background-color: #9c1d1d;
+  color: white;
+  font-weight: bold;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.attendance-time-input {
+  /* General styling */
+  padding: 3px;
+  font-family: Arial, sans-serif;
+  color: #333;
+  background-color: #f9f9f9;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  
+  /* Custom arrow (if supported by the browser) */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.attendance-time-input::-webkit-calendar-picker-indicator {
+  display: none;
+  background-color: #007bff;
+  padding: 5px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.attendance-time-input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  outline: none;
+}
+
 
 /*--------------------------------- media ---------------------------------*/
 
@@ -804,5 +913,9 @@ input[type="date"]{
   .middle-content {
     max-height: 500px;
     border-bottom: 1px solid grey;
+  }
+
+  .participantTable-container, .attendanceTable-container{
+    /* scale: 95%; */
   }
 }
