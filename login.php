@@ -1,3 +1,8 @@
+<?php
+include_once 'components/functions/checkLogin.php';
+checkLogin();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 

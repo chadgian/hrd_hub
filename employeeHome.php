@@ -1,5 +1,9 @@
 <?php
-session_start();
+include 'components/functions/checkLogin.php';
+checkLogin();
+if (session_status() == PHP_SESSION_NONE) {
+  session_start();
+}
 
 $username = $_SESSION['username'];
 $prefix = $_SESSION['prefix'];

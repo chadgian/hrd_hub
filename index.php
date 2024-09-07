@@ -1,3 +1,8 @@
+<?php
+include_once 'components/functions/checkLogin.php';
+checkLogin();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -1006,6 +1011,7 @@
                   <option value="capiz">FO Capiz</option>
                   <option value="negros">FO Negros Occidental</option>
                   <option value="aklan">FO Aklan</option>
+                  <option value="other">Others</option>
                 </select>
               </div>
             </div>

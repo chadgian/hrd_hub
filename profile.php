@@ -1,4 +1,7 @@
 <?php
+
+include_once 'components/functions/checkLogin.php';
+checkLogin();
 session_start();
 
 if (isset($_SESSION['userID'])) {
@@ -879,7 +882,6 @@ if (isset($_SESSION['userID'])) {
     }
 
     function saveEditProfile(userID) {
-
       $.ajax({
         url: 'components/processes/updateProfile.php',
         type: 'POST',
@@ -900,13 +902,13 @@ if (isset($_SESSION['userID'])) {
           agencyName: document.getElementById("agencyName").value,
           position: document.getElementById("position").value,
           fo: document.getElementById("fo").value,
-          foodRestriction: document.getElementById("foodRestrictions").value,
-          userID: userID
+          foodRestriction: document.getElementById("foodRestrictions").value
         },
         success: function (response) {
           console.log(response);
           if (response == "ok") {
             location.reload();
+            $("#editRegistrationDetails").modal("toggle");
             $("#updateProfileToast").show();
           } else {
             console.error(response);

@@ -1,9 +1,11 @@
 <?php
 
-session_start();
+include '../classes/userSession.php';
 
-$_SESSION = [];
-
-session_destroy();
-
-header("Location: ../../");
+$userSession = new UserSession();
+$result = $userSession->logout();
+if ($result) {
+  header("Location: ../../");
+} else {
+  echo $result;
+}

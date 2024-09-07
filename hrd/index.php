@@ -13,10 +13,12 @@ if (isset($_SESSION['username'])) {
     $checkLoginResult = $checkLoginStmt->get_result();
     if ($checkLoginResult->num_rows < 1) {
       header("Location: ../");
+      exit();
     }
   }
 } else {
   header("Location: ../");
+  exit();
 }
 
 ?>
@@ -57,6 +59,11 @@ if (isset($_SESSION['username'])) {
     $pageName = ['homePage', 'addTrainingPage', 'noticesPage', 'messagesPage', 'generateIDPage', 'manageAccountsPage', 'scanAttendancePage', 'allTrainingsPage', 'databasePage'];
 
     $page = $_GET['p'] ?? 0;
+    
+    if ($page > 8) {
+      header("Location: index.php");
+      exit();
+    }
 
     if (isset($_GET['t']) && $page == 0) {
       $trainingID = $_GET['t'];
