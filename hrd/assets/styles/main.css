@@ -108,10 +108,11 @@ header {
   color: #24305E;
   /* text-decoration: underline; */
   border-bottom: 1px solid #0e183f;
+  font-size: 1.1vw;
 }
 
 .profile-position {
-  font-size: small;
+  font-size: 0.9vw;
   color: #24305E;
 } 
 
@@ -309,6 +310,7 @@ header {
   overflow-y: scroll;
   border-bottom: 1px #999999 solid;
   gap: 3px;
+  /* font-size: 0.5vw; */
 }
 
 .recent-footer {
@@ -362,7 +364,7 @@ header {
 }
 
 .recent-act-read {
-  color: #6e6e6e;
+  color: #000000;
 }
 
 .recent-duration {
@@ -600,6 +602,26 @@ input[type="date"]{
   font-size: small;
   cursor: pointer;
   border: none;
+}
+
+.generateID-group {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  /* padding-left: 1em;
+  padding-right: 1em; */
+  margin-bottom: 0.5em;
+  width: 80%;
+  gap: 0.5em;
+}
+
+.generateID-group label {
+  flex: 0.5;
+  text-align: end;
+}
+
+.generateID-group input, .generateID-group select {
+  flex: 1;
 }
 
 .addParticipantBtn:hover{
@@ -852,6 +874,179 @@ input[type="date"]{
   outline: none;
 }
 
+/*--------------------------------- scan attendance ---------------------------------*/
+
+.scanTitle {
+  padding: 0.2em;
+  background-color: #002152;
+  color: white;
+  width: 50%;
+  text-align: center;
+  border-radius: 5px;
+}
+
+.scanTrainingTitle {
+  background-color: #4a89ff28;
+  font-weight: bold;
+  font-size: large;
+  border: solid 1px grey;
+}
+
+.scanAttendanceContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+
+.scanAttendanceBtns {
+  padding: 1em;
+  text-align: center;
+  border: 1px solid grey;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  align-items: center
+}
+
+.scanAttendanceSelect {
+  display: flex;
+  gap: 10px;
+}
+
+.scanAttendanceSelect a {
+  text-decoration: none;
+  color: black;
+  border: 1px solid black;
+  padding: 2px;
+  padding-left: 10px;
+  padding-right: 10px;
+  text-align: center;
+}
+
+.scanAttendanceSelect a:hover {
+  border: 1px solid #093980;
+  background-color: #093980;
+  color: white;
+}
+
+/*--------------------------------- all training ---------------------------------*/
+
+.monthTitle {
+  width: 100%;
+  padding: 10px;
+  background-color: #002152;
+  color: white;
+}
+
+.trainingContainer {
+  margin-left: 2vw;
+  background-color: rgb(255, 255, 255);
+  padding: 8px;
+  margin: 2vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 5px;
+}
+
+.allTrainingContent {
+  margin-top: 2vh;
+  display: flex;
+  flex-direction: column;
+  gap: 1vh;
+}
+
+/*--------------------------------- notices ---------------------------------*/
+
+#writeNotice {
+  width: 100%;
+}
+
+.note-editing-area {
+  background-color: #ffffff;
+}
+
+.notice {
+  width: 100%;
+  background-color: white;
+  padding: 1vw;
+  margin-bottom: 1em;
+  box-shadow: 1px 1px 2px 1px grey;
+}
+
+.noticeTitle {
+  font-weight: bold;
+  /* font-size: 2vw; */
+  font-size: 1.5em;
+}
+
+.noticeHeader {
+  border-bottom: 1px solid rgb(221, 221, 221);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1vh;
+  padding-bottom: 0.5em;
+}
+
+.noticeBody {
+  /* font-size: 1.1vw; */
+  border-bottom: 1px solid rgb(221, 221, 221);
+}
+
+.noticeEdit {
+  cursor: pointer;
+}
+
+.noticeFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 10px;
+  color: grey;
+  font-size: small;
+}
+
+.noticeAuthor {
+  font-weight: bold;
+}
+
+.newNoticeTitleCon{
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+#newNoticeTitle {
+  box-shadow: none;
+  padding-left: 0.5em;
+  font-size: large;
+  border: none;
+}
+
+.saveNotice-btn {
+  border: none;
+  background-color: #093980;
+  border-radius: 3px;
+  margin-top: 0.5em;
+  color: white;
+  padding-right: 1em;
+  padding-left: 1em;
+}
+
+.addNotice {
+  background-color: white;
+  padding: 20px;
+  box-shadow: 1px 1px 2px 1px grey;
+}
+
+.saveNotice-btn:hover {
+  background-color: #0e183f;
+}
 
 /*--------------------------------- media ---------------------------------*/
 
@@ -915,7 +1110,7 @@ input[type="date"]{
     border-bottom: 1px solid grey;
   }
 
-  .participantTable-container, .attendanceTable-container{
-    /* scale: 95%; */
-  }
+  /* .participantTable-container, .attendanceTable-container{
+    scale: 95%;
+  } */
 }

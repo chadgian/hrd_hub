@@ -2,7 +2,6 @@
 
 include_once 'components/functions/checkLogin.php';
 checkLogin();
-session_start();
 
 if (isset($_SESSION['userID'])) {
   $username = $_SESSION['username'];
@@ -185,8 +184,6 @@ if (isset($_SESSION['userID'])) {
               <?php echo $agency; ?>
             </div>
           </div>
-          <button class="changePassword-btn" data-bs-toggle="modal" data-bs-target="#changePasswordModal">Change
-            Password</button>
           <div class="profile-details">
             <div class="profile-details-header">
               <span style="font-weight: 500; font-size: large;">Registration Details</span>
@@ -295,6 +292,8 @@ if (isset($_SESSION['userID'])) {
               </div>
             </div>
           </div>
+          <button class="changePassword-btn" data-bs-toggle="modal" data-bs-target="#changePasswordModal">Change
+            Password</button>
         </div>
         <div class="col-md-6">
           <div class="profile-notification">
@@ -564,7 +563,7 @@ if (isset($_SESSION['userID'])) {
               <div class='col-md-6 payment-section'>
                 <div class='payment-indicator my-3'>
                   Payment:
-                  <div class='payment-toggle' style='background-color: $paymentColor;' id="modalPaymentContent"> </div>
+                  <div class='payment-toggle' style='font-weight: bold;' id="modalPaymentContent"> </div>
                 </div>
                 <div class='vertical-line'>
                   <div style='color: #24305E; font-weight: bold; font-size: medium;'>PAYMENT DETAILS:</div>
@@ -598,7 +597,7 @@ if (isset($_SESSION['userID'])) {
               <div class='col-md-6 attendance-section mt-3'>
                 <div class='attendance-indicator'>
                   Attendance:
-                  <div class='attendance-toggle' id="modalAttendanceContent"></div>
+                  <div class='attendance-toggle' style='font-weight: bold;' id="modalAttendanceContent"></div>
                 </div>
                 <div class='attendance-remark'>
                   <div class='attendance-remark-title'>Attendance Remark:</div>
@@ -857,8 +856,8 @@ if (isset($_SESSION['userID'])) {
           $("#modalTrainingDescription").html(data.trainingDescription);
           $("#modalPaymentContent").html(data.paymentContent);
           $("#modalAttendanceContent").html(data.attendanceContent);
-          $("#modalAttendanceContent").css("background-color", data.attendanceColor);
-          $("#modalPaymentContent").css("background-color", data.paymentColor);
+          $("#modalAttendanceContent").css("color", data.attendanceColor);
+          $("#modalPaymentContent").css("color", data.paymentColor);
 
           if (data.paymentContent == "Unpaid") {
             $("#modalOrNumber").html("N/A");

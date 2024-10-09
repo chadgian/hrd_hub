@@ -132,7 +132,7 @@ if ($type == 0) {
               <div class='col-md-6 payment-section'>
                 <div class='payment-indicator my-3'>
                   Payment:
-                  <div class='payment-toggle' style='background-color: $paymentColor;'>$paymentContent</div>
+                  <div class='payment-toggle' style='color: $paymentColor; font-weight: bold;'>$paymentContent</div>
                 </div>
                 <div class='vertical-line'>
                   <div style='color: #24305E; font-weight: bold; font-size: medium;'>PAYMENT DETAILS:</div>
@@ -165,7 +165,7 @@ if ($type == 0) {
               <div class='col-md-6 attendance-section mt-3'>
                 <div class='attendance-indicator'>
                   Attendance:
-                  <div class='attendance-toggle' style='background-color: $attendanceColor;'>$attendanceContent</div>
+                  <div class='attendance-toggle' style='color: $attendanceColor; font-weight: bold;'>$attendanceContent</div>
                 </div>
                 <div class='attendance-remark'>
                   <div class='attendance-remark-title'>Attendance Remark:</div>
@@ -231,7 +231,7 @@ if ($type == 0) {
                   style='border-bottom: 2px solid #24305E; width: max-content; font-size: small; padding-bottom: 5px;'>
                   <b style='font-size: medium;'>$trainingDate</b>
                 </div>
-                <div class='profile-training-indicator' style='background-color: $attendanceColor; color: white;'>
+                <div class='profile-training-indicator' style='color: $attendanceColor; font-weight: bold;'>
                   Attendance
                   <svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='currentColor'
                     class='bi bi-calendar-check-fill' viewBox='0 0 16 16'>
@@ -242,7 +242,7 @@ if ($type == 0) {
               </div>
               <div class='d-flex justify-content-between'>
                 <div><b>{$fetchProfileTrainingsData['trainingHours']}</b> training hours</div>
-                <div class='profile-training-indicator' style='background-color: $paymentColor; color: white;'>
+                <div class='profile-training-indicator' style='color: $paymentColor; font-weight: bold;'>
                   Payment
                   <svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='currentColor'
                     class='bi bi-currency-exchange' viewBox='0 0 16 16'>

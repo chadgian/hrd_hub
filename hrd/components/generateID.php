@@ -321,16 +321,16 @@ if (isset($_POST['trainingID'])) {
           $qrCodeOptions = new QROptions([
             'eccLevel' => QRCode::ECC_L,
             'outputType' => QRCode::OUTPUT_IMAGE_PNG,
-            'version' => 5,
-            'scale' => 10,
+            'version' => 2,
+            'scale' => 13,
             'quietzoneSize' => 1,
             'color' => [255, 0, 0],
             // 'imageTransparent' => true,
             'transparencyColor' => [0, 0, 0],
           ]);
-          $qrCodeText = $id . ":" . $participantID . ":" . $text;
+          $qrCodeText = "$id:$participantID";
           $qrCodeGenerator = new QRCode($qrCodeOptions);
-          $qrCodeImageData = $qrCodeGenerator->render(encryptText($qrCodeText));
+          $qrCodeImageData = $qrCodeGenerator->render($qrCodeText);
 
           try {
             $qrImageData = file_get_contents($qrCodeImageData);

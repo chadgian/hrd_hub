@@ -117,8 +117,10 @@ if (isset($_GET['trainingID'])) {
             $trainingRecentAgeContent = "{$recentAge->s} seconds ago.";
           }
 
+          $activityRead = $trainingRecentData['activityRead'] == 0 ? "style='color: #0e183f;'" : "style='color: #0e183fa2;'";
+
           echo "
-          <div class='recent-act'>
+          <div class='recent-act' $activityRead>
             <div class='recent-img'><img src='assets/images/default-profile.png' alt=''></div>
             <div class='recent-body'>
               <div class='recent-act-content'>
@@ -145,6 +147,7 @@ if (isset($_GET['trainingID'])) {
             date_default_timezone_set('Asia/Manila');
             $today = new DateTime();
             $recentDate = new DateTime($trainingRecentData['timestamp']);
+            $activityRead = $trainingRecentData['activityRead'] == "0" ? "style='color: #0e183f;'" : "style='color: #0e183fa2;'";
 
             $recentAge = $today->diff($recentDate);
 
@@ -167,9 +170,9 @@ if (isset($_GET['trainingID'])) {
             }
 
             if ($trainingActivityType == "0") {
-              $adminActivityContent = "<u style='color: #570000;'>New registration</u> from the agency <b>$registrationAgency</b>";
+              $adminActivityContent = "<u>New registration</u> from the agency <b>$registrationAgency</b>";
               echo "
-                <div class='recent-act' onclick='getRegDetails($registrationID)' data-bs-toggle='modal' data-bs-target='#regDetailModal'l>
+                <div class='recent-act' onclick='getRegDetails($registrationID)' $activityRead>
                   <div class='recent-img'><img src='assets/images/default-profile.png' alt=''></div>
                   <div class='recent-body'>
                     <div class='recent-act-content'>

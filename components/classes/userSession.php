@@ -8,6 +8,7 @@ class UserSession
   public function __construct()
   {
     session_start();
+    date_default_timezone_set('Asia/Manila');
 
     include __DIR__ . '/../processes/db_connection.php';
     $this->conn = $conn;
@@ -61,15 +62,15 @@ class UserSession
               $this->rememberme();
               return true;  // Successfully logged in
             } else {
-              return "hmmm";
+              return false;
             }
 
           } else {
-            return "idk";
+            return false;
           }
         }
       } else {
-        return "ok";
+        return false;
       }
 
     } catch (\Throwable $th) {
@@ -88,7 +89,6 @@ class UserSession
       $row = $result->fetch_assoc();
       $this->userID = $row['userID'];
       $this->saveSessionData();
-      $this->rememberme();
       return true;
     } else {
       return false;
@@ -150,7 +150,6 @@ class UserSession
   public function logout()
   {
     try {
-      session_unset();
       session_destroy();
       $this->userID = null;
       $_SESSION = [];

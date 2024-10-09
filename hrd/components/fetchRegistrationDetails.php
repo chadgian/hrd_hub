@@ -5,8 +5,8 @@ $trainingID = $_GET['trainingID'];
 
 include "../../components/processes/db_connection.php";
 
-$fetchRegDetailStmt = $conn->prepare("SELECT rd.*, e.* FROM registration_details AS rd INNER JOIN employee AS e ON rd.employeeID = e.employeeID WHERE rd.registrationID = ?");
-$fetchRegDetailStmt->bind_param("s", $registrationID);
+$fetchRegDetailStmt = $conn->prepare("SELECT rd.*, e.*, ta.activityRead FROM registration_details AS rd INNER JOIN employee AS e ON rd.employeeID = e.employeeID INNER JOIN training_activities as ta ON rd.registrationID = ta.relationID WHERE rd.registrationID = ? AND ta.relationID = ?");
+$fetchRegDetailStmt->bind_param("ss", $registrationID, $registrationID);
 
 if ($fetchRegDetailStmt->execute()) {
   $fetchRegDetailResult = $fetchRegDetailStmt->get_result();
@@ -32,7 +32,8 @@ if ($fetchRegDetailStmt->execute()) {
         "fo" => "FO-" . ucwords($fetchRegDetailData['fo']),
         "foodRestriction" => $fetchRegDetailData['foodRestriction'],
         "timeDate" => $date->format("h:iA | F j, Y"),
-        "confirmationSlip" => "../assets/conf_slips/$trainingID/$fileName"
+        "confirmationSlip" => "../assets/conf_slips/$trainingID/$fileName",
+        "activityRead" => $fetchRegDetailData['activityRead']
       ];
     }
   } else {

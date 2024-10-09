@@ -103,15 +103,33 @@
         </div>
       </div>
       <div class="modal-footer">
+        <input type="hidden" id="registrationID">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ignore</button>
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Done</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="registrationBtn"></button>
       </div>
     </div>
   </div>
 </div>
 
+
+<!-- Modal -->
+<div class="modal fade" id="loadingModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="loadingModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center align-items-center">
+    <img src="assets/images/loading.svg" alt="">
+  </div>
+</div>
+
 <script>
   $(document).ready(function () {
+    setTrainingRecent();
+
+    setInterval(() => {
+      setTrainingRecent();
+    }, 10000);
+  });
+
+  function setTrainingRecent() {
     $.ajax({
       url: 'components/trainingRecentsReload.php',
       method: 'GET',
@@ -125,49 +143,79 @@
         console.error('Error fetching content');
       }
     });
-
-    setInterval(() => {
-      $.ajax({
-        url: 'components/trainingRecentsReload.php',
-        method: 'GET',
-        data: { trainingID: <?php echo $id; ?> },
-        success: function (response) {
-          // Insert the HTML content into the div
-          $('#recentLoader').hide();
-          $('.recent-content').html(response);
-        },
-        error: function () {
-          console.error('Error fetching content');
-        }
-      });
-    }, 10000);
-  });
+  }
 
   function getRegDetails(id) {
+    // Show the loading modal
+    // $("#loadingModal").modal("show");
+
+    const bodyDom = document.querySelector('body')
+    bodyDom.style.cursor = "wait";
+
+    // Set the registration ID value
+    $("#registrationID").val(id);
+
     $.ajax({
       url: 'components/fetchRegistrationDetails.php',
       type: 'GET',
       data: { registrationID: id, trainingID: <?php echo $id; ?> },
       success: function (data) {
-        console.log(data);
-        const details = JSON.parse(data);
-        $('#participantName').val(details.name);
-        $('#participantSex').val(details.sex);
-        $('#participantAge').val(details.age);
-        $('#participantCivilStatus').val(details.civilStatus);
-        $('#participantNumber').val(details.phoneNumber);
-        $('#participantEmail').val(details.email);
-        $('#participantPosition').val(details.position);
-        $('#participantSector').val(details.sector);
-        $('#participantAgency').val(details.agency);
-        $('#participantFO').val(details.fo);
-        $('#participantDate').val(details.timeDate);
-        $('#participantFoodRestrictions').val(details.foodRestriction);
-        $('#participantComfirmationSlip').attr('href', details.confirmationSlip);
+        try {
+          // Parse the JSON data
+          const details = JSON.parse(data);
+
+          // Populate the form with fetched details
+          $('#participantName').val(details.name);
+          $('#participantSex').val(details.sex);
+          $('#participantAge').val(details.age);
+          $('#participantCivilStatus').val(details.civilStatus);
+          $('#participantNumber').val(details.phoneNumber);
+          $('#participantEmail').val(details.email);
+          $('#participantPosition').val(details.position);
+          $('#participantSector').val(details.sector);
+          $('#participantAgency').val(details.agency);
+          $('#participantFO').val(details.fo);
+          $('#participantDate').val(details.timeDate);
+          $('#participantFoodRestrictions').val(details.foodRestriction);
+          $('#participantComfirmationSlip').attr('href', details.confirmationSlip);
+
+          // Determine the current state of activityRead and update the button accordingly
+          const currentState = details.activityRead === 0;
+          const newState = !currentState;
+          $("#registrationBtn")
+            .attr("onclick", `readActivity(${newState ? 0 : 1})`)
+            .text(currentState ? "Read" : "Unread");
+
+          $("#regDetailModal").modal("show");
+        } catch (e) {
+          console.error('Error parsing data:', e);
+        }
+        bodyDom.style.cursor = "default";
+        // Hide the loading modal
+        // $("#loadingModal").modal("hide");
       },
       error: function () {
         console.error('Error fetching content.');
+        // $("#loadingModal").modal("hide");
       }
     });
+  }
+
+
+  function readActivity(read) {
+    const registrationID = $("#registrationID").val();
+
+    $.ajax({
+      url: 'components/changeTrainingActivityRead.php',
+      type: 'GET',
+      data: { registrationID: registrationID, read: read },
+      success: function (data) {
+        if (data != 'ok') {
+          console.log(data);
+        } else {
+          setTrainingRecent();
+        }
+      }
+    })
   }
 </script>

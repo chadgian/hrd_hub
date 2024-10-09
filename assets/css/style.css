@@ -1491,17 +1491,22 @@ header {
   border-radius: 5px;
   border: 1px solid rgb(80, 80, 80);
   cursor: pointer;
+  box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.63);;
+}
+
+.viewTrainingHistory:hover {
+  background-color: #0a1236;
 }
 
 .changePassword-btn {
-  background-color: #24305E;
+  background-color: #253161e1;
   color: white;
   border: none;
   border-radius: 3px;
-  margin-bottom: 0.9em;
   width: 100%;
   font-size: small;
   padding: 0.3em;
+  box-shadow: 1px 1px 2px 0px rgba(0, 0, 0, 0.63);
 }
 
 .changePassword-btn:hover {

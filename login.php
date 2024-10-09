@@ -20,7 +20,10 @@ checkLogin();
 
   <div class="container login-container">
     <span class="title">WELCOME TO CSC RO VI<br>LEARNING & DEVELOPMENT HUB</span>
-    <span class="subtitle">Login your username and password</span>
+    <span class="subtitle">Login your username and password</span><br>
+    <?php if (isset($_GET['e'])) {
+      echo '<div style="color: red; width: 100%; text-align: center; font-size: small;">Invalid login</div>';
+    } ?>
     <form action="components/processes/loginProcess.php" method="post" class="login-form">
       <div class="inputGroup">
         <div class="inputIcon">

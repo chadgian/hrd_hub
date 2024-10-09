@@ -1,6 +1,11 @@
 <?php
+include_once '../components/functions/checkLogin.php';
+checkLogin();
 include "../components/processes/db_connection.php";
-session_start();
+include "../components/classes/trainingDetails.php";
+if (session_status() == PHP_SESSION_NONE) {
+  session_start();
+}
 
 if (isset($_SESSION['username'])) {
   $username = $_SESSION['username'];
@@ -16,9 +21,6 @@ if (isset($_SESSION['username'])) {
       exit();
     }
   }
-} else {
-  header("Location: ../");
-  exit();
 }
 
 ?>
@@ -59,7 +61,7 @@ if (isset($_SESSION['username'])) {
     $pageName = ['homePage', 'addTrainingPage', 'noticesPage', 'messagesPage', 'generateIDPage', 'manageAccountsPage', 'scanAttendancePage', 'allTrainingsPage', 'databasePage'];
 
     $page = $_GET['p'] ?? 0;
-    
+
     if ($page > 8) {
       header("Location: index.php");
       exit();

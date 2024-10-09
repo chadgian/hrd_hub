@@ -48,29 +48,36 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="generateIDModalLabel">Modal title</h1>
+          <h1 class="modal-title fs-5" id="generateIDModalLabel">Generate ID</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <select name="numberofline" id="numberofline">
-            <option value="1">One Line</option>
-            <option value="2">Two Lines</option>
-            <option value="3">Three Lines</option>
-          </select>
-
-          <div id="line1-container">
-            <label for="line1">First line</label>
+          <div class="generateID-group mb-2">
+            <label for="numberofline">Training Name:</label>
+            <select name="numberofline" id="numberofline">
+              <option value="1">One Line</option>
+              <option value="2">Two Lines</option>
+            </select>
+          </div>
+          <div id="line1-container" class="generateID-group">
+            <label for="line1">First Line:</label>
             <input type="text" id="line1" name="line1">
           </div>
-          <div id="line2-container">
-            <label for="line2">Second Line</label>
+          <div id="line2-container" class="generateID-group">
+            <label for="line2">Second Line:</label>
             <input type="text" id="line2" name="line2">
           </div>
-          <div id="line3-container">
-            <label for="line3">Third Line</label>
-            <input type="text" id="line3" name="line3">
-          </div>
+          <span style="text-align: center; width: 100%;">
+            <?php
+            $generatedID = "assets/generated_ids/training-$id.docx";
 
+            if (file_exists($generatedID)) {
+              echo "<a href='$generatedID' download>Download all generated IDs.</a>";
+            } else {
+              echo "No generated ID yet.";
+            }
+            ?>
+          </span>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -95,7 +102,7 @@
         </div>
         <div class="modal-body updateStatusModal-body">
           <div id="updateStatusContent"
-            style= "display: flex;justify-content: center;align-items: center;width: 100%;flex-direction: column;">
+            style="display: flex;justify-content: center;align-items: center;width: 100%;flex-direction: column;">
             <div class="status-list">
               <div class="status-list-title">
                 ATTENDANCE

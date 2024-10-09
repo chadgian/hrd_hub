@@ -15,10 +15,12 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
       case "general":
         header('Location: /hrd_hub/employeeHome.php');
         break;
+      case "payment":
+        header("Location: /hrd_hub/co");
       default:
         echo $result;
     }
   } else {
-    echo "not okayyyy - " . $result;
+    header("Location: ../../login.php?e=1");
   }
 }

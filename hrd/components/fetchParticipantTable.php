@@ -105,8 +105,8 @@ function executeQuery($participantTableStmt)
         echo "
             <tr style='padding: 5px;'>
               <td class='tableNumber'>$idNum</td>
-              <td onclick='getRegDetails($registrationID)' data-bs-toggle='modal' data-bs-target='#regDetailModal'>$fullname</td>
-              <td onclick='getRegDetails($registrationID)' data-bs-toggle='modal' data-bs-target='#regDetailModal'>$agency</td>
+              <td onclick='getRegDetails($registrationID)'>$fullname</td>
+              <td onclick='getRegDetails($registrationID)'>$agency</td>
               <td class='status-content'>$statusContent</td>
             </tr>
             ";
