@@ -23,103 +23,70 @@ if (isset($_GET['id']) && isset($_GET['d']) && isset($_GET['log'])) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Training Attendance</title>
   <!-- Bootstrap CSS and Javascript-->
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
   <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <style>
+    #reader,
+    #reader__scan_region {
+      max-width: 75vw !important;
+      max-height: 90vh !important;
+    }
+
+    /* #reader__dashboard_section {
+  opacity: 50%;
+} */
+
+    #html5-qrcode-button-camera-stop,
     #html5-qrcode-button-camera-start {
-      background-color: #EF4B4C;
-      color: #E6FFFF;
-    }
+      --bs-btn-color: #fff;
+      --bs-btn-bg: #0d6efd;
+      --bs-btn-border-color: #0d6efd;
+      --bs-btn-hover-color: #fff;
+      --bs-btn-hover-bg: #0b5ed7;
+      --bs-btn-hover-border-color: #0a58ca;
+      --bs-btn-focus-shadow-rgb: 49, 132, 253;
+      --bs-btn-active-color: #fff;
+      --bs-btn-active-bg: #0a58ca;
+      --bs-btn-active-border-color: #0a53be;
+      --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+      --bs-btn-disabled-color: #fff;
+      --bs-btn-disabled-bg: #0d6efd;
+      --bs-btn-disabled-border-color: #0d6efd;
 
-    #html5-qrcode-anchor-scan-type-change {
-      color: #E6FFFF;
-    }
-
-    .container {
-      width: 100%;
-    }
-
-    .container h1 {
-      color: #2e2c2d;
+      --bs-btn-padding-x: 0.75rem;
+      --bs-btn-padding-y: 0.375rem;
+      --bs-btn-font-family: ;
+      --bs-btn-font-size: 1rem;
+      --bs-btn-font-weight: 400;
+      --bs-btn-line-height: 1.5;
+      --bs-btn-border-width: var(--bs-border-width);
+      --bs-btn-border-radius: var(--bs-border-radius);
+      --bs-btn-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(0, 0, 0, 0.075);
+      --bs-btn-disabled-opacity: 0.65;
+      --bs-btn-focus-box-shadow: 0 0 0 0.25rem rgba(var(--bs-btn-focus-shadow-rgb), .5);
+      display: inline-block;
+      padding: var(--bs-btn-padding-y) var(--bs-btn-padding-x);
+      font-family: var(--bs-btn-font-family);
+      font-size: var(--bs-btn-font-size);
+      font-weight: var(--bs-btn-font-weight);
+      line-height: var(--bs-btn-line-height);
+      color: var(--bs-btn-color);
       text-align: center;
-    }
-
-    .section {
-      background-color: #ffffff;
-      padding: 10px 30px;
-      border: 1.5px solid #b2b2b2;
-      border-radius: 0.25em;
-      box-shadow: 0 20px 25px rgba(0, 0, 0, 0.25);
-    }
-
-    #my-qr-reader {
-      padding: 20px !important;
-      border: 1.5px solid #b2b2b2 !important;
-      border-radius: 8px;
-      background-color: #3D619B;
-    }
-
-    #my-qr-reader img[alt="Info icon"] {
-      display: none;
-    }
-
-    #my-qr-reader img[alt="Camera based scan"] {
-      width: 100px !important;
-      height: 100px !important;
-    }
-
-    #my-qr-reader video {
-      width: 50% !important;
-      /* Set the width to 50% of the parent container */
-      /* height: 50% !important; */
-      /* Set the height to 50% of the viewport height */
-      max-width: 400px !important;
-      /* Set the maximum width to 400px */
-      max-height: 400px !important;
-      /* Set the maximum height to 300px */
-      margin: 0 auto !important;
-      /* Center the video horizontally */
-      aspect-ratio: 1/1 !important;
-      object-fit: cover !important;
-    }
-
-    button {
-      padding: 10px 20px;
-      border: 1px solid #b2b2b2;
-      outline: none;
-      border-radius: 0.25em;
-      color: white;
-      font-size: 15px;
+      text-decoration: none;
+      vertical-align: middle;
       cursor: pointer;
-      margin-top: 15px;
-      margin-bottom: 10px;
-      background-color: #008000ad;
-      transition: 0.3s background-color;
-    }
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+      border: var(--bs-btn-border-width) solid var(--bs-btn-border-color);
+      border-radius: var(--bs-btn-border-radius);
+      background-color: var(--bs-btn-bg);
+      transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 
-    button:hover {
-      background-color: #008000;
-    }
-
-    #html5-qrcode-anchor-scan-type-change {
-      text-decoration: none !important;
-      color: #1d9bf0;
-    }
-
-    video {
-      width: 100% !important;
-      border: 1px solid #b2b2b2 !important;
-      border-radius: 0.25em;
-    }
-
-    td {
-      border: 1px solid black;
-      padding: 10px;
-      cursor: pointer;
-    }
-
-    td:hover {
-      background-color: #f0f0f0;
+      margin-top: 1em;
     }
   </style>
 </head>

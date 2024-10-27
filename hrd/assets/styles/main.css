@@ -34,6 +34,10 @@ header {
   justify-content: end;
 }
 
+.dropdown-toggle::after{
+  display: none !important;
+}
+
 /*--------------------------------- main-body ---------------------------------*/
 
 .main-body {
@@ -872,6 +876,23 @@ input[type="date"]{
   border-color: #007bff;
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
   outline: none;
+}
+
+.pax-btn {
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.pax-btn-replace {
+  background-color: #b1bbe4;
+}
+
+.pax-btn-delete {
+  background-color: #e4b1b1;
+
 }
 
 /*--------------------------------- scan attendance ---------------------------------*/

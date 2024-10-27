@@ -35,6 +35,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   $slipFolder = "../../assets/conf_slips/$trainingID/";
 
+  $agencyID = getAgencyID($agencyName, $sector, $fo);
+
   if (!file_exists($slipFolder)) {
     mkdir($slipFolder, 0777, true); // Create directory with full permissions (0777)
   }
@@ -97,8 +99,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $userID = $userAccount[0];
       $password = $userAccount[1];
 
-      $regStmt = $conn->prepare("INSERT INTO employee (userID, prefix, firstName, lastName, middleInitial, suffix, nickname, age, sex, civilStatus, phoneNumber, email, altEmail, position, agencyName, sector, fo, foodRestriction) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-      $regStmt->bind_param("ssssssssssssssssss", $userID, $prefix, $firstName, $lastName, $middleInitial, $suffix, $nickname, $age, $sex, $civilStatus, $phoneNumber, $email, $altEmail, $position, $agencyName, $sector, $fo, $foodRestriction);
+      $regStmt = $conn->prepare("INSERT INTO employee (userID, prefix, firstName, lastName, middleInitial, suffix, nickname, age, sex, civilStatus, phoneNumber, email, altEmail, position, agency, foodRestriction) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+      $regStmt->bind_param("ssssssssssssssss", $userID, $prefix, $firstName, $lastName, $middleInitial, $suffix, $nickname, $age, $sex, $civilStatus, $phoneNumber, $email, $altEmail, $position, $agencyID, $foodRestriction);
 
 
       if ($regStmt->execute()) {
@@ -138,7 +140,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 function saveRegistration($trainingID, $employeeID, $userID)
 {
-  include "db_connection.php";
+  global $conn;
+
   $regTrainingStmt = $conn->prepare("INSERT INTO registration_details (trainingID, employeeID, userID) VALUES (?, ?, ?)");
   $regTrainingStmt->bind_param("sss", $trainingID, $employeeID, $userID);
 
@@ -152,12 +155,13 @@ function saveRegistration($trainingID, $employeeID, $userID)
 
 function createUserAccount($prefix, $firstName, $lastName, $suffix, $middleInitial, $position, $agency, $email)
 {
-  include "db_connection.php";
+  global $conn;
+  global $agencyID;
 
   $password = generateRandomPassword();
 
   $createAccountStmt = $conn->prepare("INSERT INTO user (role, prefix, firstname, lastName, suffix, middleInitial, position, agency, username, password) VALUES ('general', ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-  $createAccountStmt->bind_param("sssssssss", $prefix, $firstName, $lastName, $suffix, $middleInitial, $position, $agency, $email, $password);
+  $createAccountStmt->bind_param("sssssssss", $prefix, $firstName, $lastName, $suffix, $middleInitial, $position, $agencyID, $email, $password);
 
   if ($createAccountStmt->execute()) {
     $userID = $conn->insert_id;
@@ -185,4 +189,23 @@ function generateRandomPassword()
   }
 
   return $randomPassword;
+}
+
+function getAgencyID($agencyName, $sector, $province)
+{
+  global $conn;
+
+  $getEmployeeID = $conn->prepare("SELECT * FROM agency WHERE agencyName = ?, sector = ?, province = ?");
+  $getEmployeeID->bind_param("sss", $agencyName, $sector, $province);
+  $result = $getEmployeeID->get_result();
+
+  if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    return $row['agencyID'];
+  } else {
+    $saveAgency = $conn->prepare("INSERT INTO agency (agencyName, sector, province) VALUES (?, ?, ?)");
+    $saveAgency->bind_param("sss", $agencyName, $sector, $province);
+    $saveAgency->execute();
+    return $conn->insert_id;
+  }
 }

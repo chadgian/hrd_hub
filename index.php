@@ -846,6 +846,27 @@ checkLogin();
     </div>
   </div>
 
+  <?php
+  $getAllAgencies = $conn->prepare("SELECT * FROM agency");
+  $getAllAgencies->execute();
+  $getAllAgenciesResult = $getAllAgencies->get_result();
+
+  $allAgencies = [];
+  while ($getAllAgenciesData = $getAllAgenciesResult->fetch_assoc()) {
+    $agencyId = $getAllAgenciesData['agencyID'];
+    $agencyName = $getAllAgenciesData['agencyName'];
+    $agencySector = $getAllAgenciesData['sector'];
+    $agencyProvince = $getAllAgenciesData['province'];
+
+    $allAgencies[] = [
+      'agencyID' => $agencyId,
+      'agencyName' => $agencyName,
+      'sector' => $agencySector,
+      'province' => $agencyProvince
+    ];
+  }
+  ?>
+
   <!-- Confirmation Slip Modal -->
   <div class="modal fade" id="conSlipModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="conSlipModalLabel" aria-hidden="true">
@@ -980,29 +1001,6 @@ checkLogin();
             <h6 class="mb-3 form-title">AGENCY INFORMATION</h6>
             <div class="form-row">
               <div class="form-group col-md-6">
-                <label for="sector">Sector <small>*</small></label>
-                <select class="form-control" id="sector" name="sector">
-                  <option value="lgu">LGU (Local Government Unit)</option>
-                  <option value="suc">SUC/LUC (State University and College/Local University and College)</option>
-                  <option value="gocc">GOCC (Government-Owned and Controlled Corporation)</option>
-                  <option value="nga">NGA (National Government Agency)</option>
-                  <option value="others">Other</option>
-                </select>
-              </div>
-              <div class="form-group col-md-6">
-                <label for="agencyName">Name of Agency / Organization <small><u>(please don't
-                      abbreviate)</u></small> <small>*</small></label>
-                <input type="text" class="form-control" id="agencyName" name="agencyName"
-                  placeholder="e.g. Civil Service Commission Regional Office No. 6" required>
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group col-md-6">
-                <label for="position">Position <small>*</small></label>
-                <input type="text" class="form-control" id="position" name="position"
-                  placeholder="Human Resource Specialist I" required>
-              </div>
-              <div class="form-group col-md-6">
                 <label for="location">CSC Field Office that has jurisdiction in your area <small>*</small></label>
                 <select name="fo" id="fo" class="form-control">
                   <option value="iloilo">FO Iloilo</option>
@@ -1013,6 +1011,33 @@ checkLogin();
                   <option value="aklan">FO Aklan</option>
                   <option value="other">Others</option>
                 </select>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="sector">Sector <small>*</small></label>
+                <select class="form-control" id="sector" name="sector">
+                  <option value="lgu">LGU/PGO/CGO (Local Government Unit/Provincial Government Office/City Government
+                    Office)</option>
+                  <option value="suc">SUC/LUC (State University and College/Local University and College)</option>
+                  <option value="gocc">GOCC (Government-Owned and Controlled Corporation)</option>
+                  <option value="nga">NGA (National Government Agency)</option>
+                  <option value="others">Other</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="agencyName">Name of Agency / Organization <small><u>(please don't
+                      abbreviate)</u></small> <small>*</small></label>
+                <input list="agencyList" class="form-control" id="agencyName" name="agencyName"
+                  placeholder="Type or select your agency..." autocomplete="off">
+                <datalist id="agencyList">
+
+                </datalist>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="position">Position <small>*</small></label>
+                <input type="text" class="form-control" id="position" name="position"
+                  placeholder="Human Resource Specialist I" required>
               </div>
             </div>
 
@@ -1036,6 +1061,40 @@ checkLogin();
       </div>
     </div>
   </div>
+
+  <script>
+    updateAgencySelect();
+    document.getElementById("sector").addEventListener("change", updateAgencySelect)
+    document.getElementById("fo").addEventListener("change", updateAgencySelect)
+
+    function updateAgencySelect() {
+      const sector = document.getElementById("sector").value;
+      const province = document.getElementById("fo").value;
+      console.log(<?php echo json_encode($allAgencies); ?>);
+      const agenciesList = <?php echo json_encode($allAgencies); ?>;
+
+      document.getElementById("agencyList").innerHTML = "";
+
+      // const otherAgency = document.createElement("option");
+      // otherAgency.value = "0";
+      // otherAgency.text = "Others";
+      // document.getElementById("agencyList").appendChild(otherAgency);
+
+      agenciesList.forEach(agency => {
+        if (agency.sector.toLowerCase() == sector && agency.province.toLowerCase() == province) {
+          const agencyOption = document.createElement("option");
+          agencyOption.value = agency.agencyName;
+          document.getElementById("agencyList").appendChild(agencyOption);
+
+          console.log(agency.agencyID + " - " + agency.agencyName);
+        } else {
+          console.log(sector + " = " + agency.sector);
+          console.log(province + " = " + agency.province);
+          console.log(agency.agencyID + " - " + agency.agencyName);
+        }
+      });
+    }
+  </script>
 
   <!-- Regitsration form review Modal -->
   <div class="modal fade" id="regReviewModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"

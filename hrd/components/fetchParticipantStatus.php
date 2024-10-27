@@ -43,7 +43,7 @@ if ($fetchStatusStmt->execute()) {
         "receiptNumber" => $fetchStatusData['receiptNumber'],
         "co" => $fetchStatusData['co'],
         "fo" => $fetchStatusData['fo'],
-        "paymentDate" => date('Y-m-d', strtotime($fetchStatusData['paymentDate'])),
+        "paymentDate" => isset($fetchStatusData['paymentDate']) ? (new DateTime($fetchStatusData['paymentDate']))->format('Y-m-d') : null,
         "amount" => $fetchStatusData['amount'],
         "discount" => $fetchStatusData['discount'],
         "name" => $name,

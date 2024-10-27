@@ -7,7 +7,9 @@ class UserSession
   // Constructor to initialize the database connection and userID
   public function __construct()
   {
-    session_start();
+    if (session_status() === PHP_SESSION_NONE) {
+      session_start();
+    }
     date_default_timezone_set('Asia/Manila');
 
     include __DIR__ . '/../processes/db_connection.php';
@@ -17,9 +19,9 @@ class UserSession
   }
 
   // save the user details to session to be used for displaying in the profile of employee
-  private function saveSessionData()
+  public function saveSessionData()
   {
-    $getDetails = $this->conn->prepare("SELECT * FROM user WHERE userID = ?");
+    $getDetails = $this->conn->prepare("SELECT * FROM user as u INNER JOIN agency as a ON a.agencyID = u.agency WHERE u.userID = ?");
     // echo $this->userID;
     $getDetails->bind_param("i", $this->userID);
     $getDetails->execute();
@@ -36,7 +38,7 @@ class UserSession
     $_SESSION['position'] = $user['position'];
     $_SESSION['initials'] = $user['initials'];
     $_SESSION['role'] = $user['role'];
-    $_SESSION['agency'] = $user['agency'];
+    $_SESSION['agency'] = $user['agencyName'];
 
     return true;
   }
@@ -185,6 +187,25 @@ class UserSession
     return null;  // No user found
   }
 
+  private function getAgencyID($agencyName, $sector, $province)
+  {
+    global $conn;
+
+    $getEmployeeID = $conn->prepare("SELECT * FROM agency WHERE agencyName = ?, sector = ?, province = ?");
+    $getEmployeeID->bind_param("sss", $agencyName, $sector, $province);
+    $result = $getEmployeeID->get_result();
+
+    if ($result->num_rows > 0) {
+      $row = $result->fetch_assoc();
+      return $row['agencyID'];
+    } else {
+      $saveAgency = $conn->prepare("INSERT INTO agency (agencyName, sector, province) VALUES (?, ?, ?)");
+      $saveAgency->bind_param("sss", $agencyName, $sector, $province);
+      $saveAgency->execute();
+      return $conn->insert_id;
+    }
+  }
+
   // Method to update user details (e.g., email, full name)
   public function updateDetails($updatedDetails)
   {
@@ -207,6 +228,8 @@ class UserSession
       $fo = $updatedDetails['fo'];
       $foodRestriction = $updatedDetails['foodRestriction'];
 
+      $agencyID = getAgencyID($agencyName, $sector, $fo);
+
       $updateProfileStmt = $this->conn->prepare("
         UPDATE employee 
         SET prefix = ?,
@@ -221,16 +244,14 @@ class UserSession
         phoneNumber = ?,
         email = ?,
         altEmail = ?,
-        sector = ?,
-        agencyName = ?,
+        agency = ?,
         position = ?,
-        fo = ?,
         foodRestriction = ?
         WHERE userID = ?;
       ");
 
       $updateProfileStmt->bind_param(
-        "ssssssssssssssssss",
+        "ssssssssssssssss",
         $prefix,
         $firstName,
         $middleInitial,
@@ -243,10 +264,8 @@ class UserSession
         $phoneNumber,
         $email,
         $altEmail,
-        $sector,
-        $agencyName,
+        $agencyID,
         $position,
-        $fo,
         $foodRestriction,
         $this->userID
       );
@@ -254,7 +273,7 @@ class UserSession
       if ($updateProfileStmt->execute()) {
 
         $updateUserStmt = $this->conn->prepare("UPDATE user SET prefix = ?, firstName = ?, lastName = ?, suffix = ?, middleInitial = ?, position = ?, agency = ? WHERE userID = ?;");
-        $updateUserStmt->bind_param("ssssssss", $prefix, $firstName, $lastName, $suffix, $middleInitial, $position, $agencyName, $this->userID);
+        $updateUserStmt->bind_param("ssssssss", $prefix, $firstName, $lastName, $suffix, $middleInitial, $position, $agencyID, $this->userID);
 
         if ($updateUserStmt->execute()) {
 
@@ -266,6 +285,29 @@ class UserSession
       }
     }
     return false;
+  }
+
+  public function updateAdminProfile($newProfile)
+  {
+    if ($_SESSION['role'] == "admin") {
+      $updateAdmin = $this->conn->prepare("UPDATE user 
+                                            SET prefix = ?, 
+                                                firstName = ?, 
+                                                lastName = ?, 
+                                                suffix = ?,
+                                                middleInitial = ?, 
+                                                position = ?,
+                                                initials = ?,
+                                                username = ? WHERE userID = ? ");
+      $updateAdmin->bind_param("ssssssssi", $newProfile['prefix'], $newProfile['firstName'], $newProfile['lastName'], $newProfile['suffix'], $newProfile['middleInitial'], $newProfile['position'], $newProfile['initials'], $newProfile['username'], $this->userID);
+
+      if ($updateAdmin->execute()) {
+        return $this->saveSessionData();
+      }
+
+    } else {
+      return false;
+    }
   }
 }
 

@@ -33,7 +33,8 @@ if ($fetchRegDetailStmt->execute()) {
         "foodRestriction" => $fetchRegDetailData['foodRestriction'],
         "timeDate" => $date->format("h:iA | F j, Y"),
         "confirmationSlip" => "../assets/conf_slips/$trainingID/$fileName",
-        "activityRead" => $fetchRegDetailData['activityRead']
+        "activityRead" => $fetchRegDetailData['activityRead'],
+        "employeeID" => $fetchRegDetailData['employeeID']
       ];
     }
   } else {
