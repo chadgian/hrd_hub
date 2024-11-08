@@ -79,6 +79,12 @@ if (isset($_GET['trainingID'])) {
               $adminActivityContent = "<b>$trainingRecentUserInitials</b> has <u>updated the participants</u>.";
               break;
 
+            case '3a':
+              $newEmployee = getEmployeeName($trainingRecentData['newData']);
+              $oldEmployee = getEmployeeName($trainingRecentData['oldData']);
+              $adminActivityContent = "<b>$trainingRecentUserInitials</b> has <u>replaced</u> <i>$oldEmployee</i> by <b>$newEmployee</b>.";
+              break;
+
             case '4':
               $regStatus = $trainingRecentData['newData'] == "0" ? "closed" : "opened";
               $adminActivityContent = "<b>$trainingRecentUserInitials</b> has <u>$regStatus the registration</u>.";
@@ -136,7 +142,7 @@ if (isset($_GET['trainingID'])) {
           $trainingActivityType = $trainingRecentData['trainingActivityType'];
           $registrationID = $trainingRecentData['relationID'];
 
-          $registrationDetailStmt = $conn->prepare("SELECT rd.*, e.*, e.agencyName FROM registration_details AS rd INNER JOIN employee as e ON rd.employeeID = e.employeeID WHERE rd.registrationID = ?");
+          $registrationDetailStmt = $conn->prepare("SELECT * FROM registration_details AS rd INNER JOIN employee as e ON rd.employeeID = e.employeeID INNER JOIN agency as a ON e.agency = a.agencyID WHERE rd.registrationID = ?");
           $registrationDetailStmt->bind_param("s", $registrationID);
 
           if ($registrationDetailStmt->execute()) {
@@ -170,18 +176,35 @@ if (isset($_GET['trainingID'])) {
             }
 
             if ($trainingActivityType == "0") {
-              $adminActivityContent = "<u>New registration</u> from the agency <b>$registrationAgency</b>";
-              echo "
-                <div class='recent-act' onclick='getRegDetails($registrationID)' $activityRead>
-                  <div class='recent-img'><img src='assets/images/default-profile.png' alt=''></div>
-                  <div class='recent-body'>
-                    <div class='recent-act-content'>
-                      $adminActivityContent
+              if ($registrationDetailData['manualAdd'] == "0") {
+                $adminActivityContent = "<u>New registration</u> from the agency <b>$registrationAgency</b>";
+                echo "
+                  <div class='recent-act' onclick='getRegDetails($registrationID)' $activityRead>
+                    <div class='recent-img'><img src='assets/images/default-profile.png' alt=''></div>
+                    <div class='recent-body'>
+                      <div class='recent-act-content'>
+                        $adminActivityContent
+                      </div>
+                      <div class='recent-age'>$trainingRecentAgeContent</div>
                     </div>
-                    <div class='recent-age'>$trainingRecentAgeContent</div>
                   </div>
-                </div>
-              ";
+                ";
+              } else {
+                $adminInitials = getAdminInitials($registrationDetailData['manualAdd']);
+                $employeeName = getEmployeeName($registrationDetailData['employeeID']);
+                $adminActivityContent = "<b>$adminInitials</b> has <u>added</u> <b>$employeeName</b> to the training.";
+                echo "
+                  <div class='recent-act' onclick='getRegDetails($registrationID)' $activityRead>
+                    <div class='recent-img'><img src='assets/images/default-profile.png' alt=''></div>
+                    <div class='recent-body'>
+                      <div class='recent-act-content'>
+                        $adminActivityContent
+                      </div>
+                      <div class='recent-age'>$trainingRecentAgeContent</div>
+                    </div>
+                  </div>
+                ";
+              }
             }
           }
         }
@@ -194,4 +217,51 @@ if (isset($_GET['trainingID'])) {
   }
 } else {
   echo "<i>Training ID not found.</i>";
+}
+
+function getEmployeeName($employeeID)
+{
+  global $conn;
+
+  $stmt = $conn->prepare("SELECT * FROM employee WHERE employeeID = ?");
+  $stmt->bind_param("s", $employeeID);
+  $stmt->execute();
+  $result = $stmt->get_result();
+  $data = $result->fetch_assoc();
+
+  $fullname = "";
+
+  if ($data['prefix']) {
+    $fullname .= $data['prefix'] . " ";
+  }
+
+  $fullname .= $data['firstName'] . " ";
+
+  if ($data['middleInitial']) {
+    $fullname .= $data['middleInitial'] . " ";
+  }
+
+  $fullname .= $data['lastName'];
+
+  if ($data['suffix']) {
+    if ($data['suffix'] == "Jr." || $data['suffix'] == "Sr.") {
+      $fullname .= ", " . $data['suffix'];
+    } else {
+      $fullname .= " " . $data['suffix'];
+    }
+  }
+
+  return $fullname;
+}
+
+function getAdminInitials($userID)
+{
+  global $conn;
+
+  $stmt = $conn->prepare("SELECT * FROM user WHERE userID = ?");
+  $stmt->bind_param("s", $userID);
+  $stmt->execute();
+  $result = $stmt->get_result();
+  $data = $result->fetch_assoc();
+  return $data['initials'];
 }

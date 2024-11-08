@@ -31,27 +31,33 @@ if ($recentStmt->execute()) {
       $trainingName = $recentData['trainingName'];
 
       switch ($recentData['activityType']) {
-        case 0:
+        case "0":
           $content = "<b>$userInitial</b> has <u>updated the details</u> of <b>$trainingName</b>";
           break;
-        case 1:
+        case "1":
           $content = "<b>$userInitial</b> has <u>updated the venue</u> of <b>$trainingName</b>";
           break;
-        case 2:
+        case "2":
           $content = "<b>$userInitial</b> has added a <u>new training</u>: <b>$trainingName</b>";
           break;
-        case 3:
+        case "3":
           $content = "<b>$userInitial</b> has <u>updated the participants</u> of <b>$trainingName</b>";
           break;
-        case 4:
+        case "3a":
+          $content = "<b>$userInitial</b> has <u>replaced a participant</u> in the training <b>$trainingName</b>";
+          break;
+        case "4":
           if ($recentData['newData'] == 1) {
             $content = "<b>$userInitial</b> has <u>opened the registration</u> of <b>$trainingName</b>";
           } else {
             $content = "<b>$userInitial</b> has <u>closed the registration</u> of <b>$trainingName</b>";
           }
           break;
-        case 5:
+        case "5":
           $content = "<b>$userInitial</b> has <u>updated the date</u> of <b>$trainingName</b>";
+          break;
+        default:
+          $content = "<i>Unknown content</i>";
           break;
       }
 

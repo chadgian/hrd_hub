@@ -3,7 +3,7 @@ include '../../components/processes/db_connection.php';
 
 $participantID = $_POST['id'];
 
-$fetchStatusStmt = $conn->prepare("SELECT * FROM training_participants as tp INNER JOIN employee as e ON tp.employeeID = e.employeeID WHERE participantID = ?");
+$fetchStatusStmt = $conn->prepare("SELECT * FROM training_participants as tp INNER JOIN employee as e ON tp.employeeID = e.employeeID INNER JOIN agency as a ON e.agency = a.agencyID  WHERE participantID = ?");
 $fetchStatusStmt->bind_param("i", $participantID);
 
 if ($fetchStatusStmt->execute()) {

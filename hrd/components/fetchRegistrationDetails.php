@@ -5,7 +5,7 @@ $trainingID = $_GET['trainingID'];
 
 include "../../components/processes/db_connection.php";
 
-$fetchRegDetailStmt = $conn->prepare("SELECT rd.*, e.*, ta.activityRead FROM registration_details AS rd INNER JOIN employee AS e ON rd.employeeID = e.employeeID INNER JOIN training_activities as ta ON rd.registrationID = ta.relationID WHERE rd.registrationID = ? AND ta.relationID = ?");
+$fetchRegDetailStmt = $conn->prepare("SELECT * FROM registration_details AS rd INNER JOIN employee AS e ON rd.employeeID = e.employeeID INNER JOIN training_activities as ta ON rd.registrationID = ta.relationID INNER JOIN agency as a ON e.agency = a.agencyID WHERE rd.registrationID = ? AND ta.relationID = ?");
 $fetchRegDetailStmt->bind_param("ss", $registrationID, $registrationID);
 
 if ($fetchRegDetailStmt->execute()) {
@@ -29,7 +29,7 @@ if ($fetchRegDetailStmt->execute()) {
         "position" => $fetchRegDetailData['position'],
         "agency" => $fetchRegDetailData['agencyName'],
         "sector" => strtoupper($fetchRegDetailData['sector']),
-        "fo" => "FO-" . ucwords($fetchRegDetailData['fo']),
+        "fo" => "FO-" . ucwords($fetchRegDetailData['province']),
         "foodRestriction" => $fetchRegDetailData['foodRestriction'],
         "timeDate" => $date->format("h:iA | F j, Y"),
         "confirmationSlip" => "../assets/conf_slips/$trainingID/$fileName",

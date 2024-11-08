@@ -18,7 +18,7 @@ $username = $_SESSION['username'];
 
 include 'components/processes/db_connection.php';
 
-$getEmployeeDetailStmt = $conn->prepare("SELECT * FROM employee WHERE userID = ?");
+$getEmployeeDetailStmt = $conn->prepare("SELECT * FROM employee as e INNER JOIN agency as a ON e.agency = a.agencyID WHERE userID = ?");
 $getEmployeeDetailStmt->bind_param("i", $userID);
 
 if ($getEmployeeDetailStmt->execute()) {
@@ -51,7 +51,7 @@ if ($getEmployeeDetailStmt->execute()) {
 
       $agencyDetail = $getEmployeeDetailData['agencyName'];
       $positionDetail = $getEmployeeDetailData['position'];
-      $foDetail = $getEmployeeDetailData['fo'];
+      $foDetail = $getEmployeeDetailData['province'];
 
       //food restriction
       $foodRestrictionDetail = $getEmployeeDetailData['foodRestriction'];

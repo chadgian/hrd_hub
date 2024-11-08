@@ -8,13 +8,13 @@ if (isset($_POST['search'])) {
 
   $search = "%" . $_POST['search'] . "%";
 
-  $participantTableStmt = $conn->prepare("SELECT * FROM training_participants as tp INNER JOIN employee as e ON tp.employeeID = e.employeeID INNER JOIN training_details as td ON tp.trainingID = td.trainingID WHERE tp.trainingID = ? AND (e.firstName LIKE ? OR e.lastName LIKE ? OR e.agencyName LIKE ?)");
+  $participantTableStmt = $conn->prepare("SELECT * FROM training_participants as tp INNER JOIN employee as e ON tp.employeeID = e.employeeID INNER JOIN training_details as td ON tp.trainingID = td.trainingID INNER JOIN agency as a ON e.agency = a.agencyID WHERE tp.trainingID = ? AND (e.firstName LIKE ? OR e.lastName LIKE ? OR a.agencyName LIKE ?)");
   $participantTableStmt->bind_param("isss", $id, $search, $search, $search);
 
   executeQuery($participantTableStmt);
 
 } else {
-  $participantTableStmt = $conn->prepare("SELECT * FROM training_participants as tp INNER JOIN employee as e ON tp.employeeID = e.employeeID INNER JOIN training_details as td ON tp.trainingID = td.trainingID WHERE tp.trainingID = ? ORDER BY tp.idNumber");
+  $participantTableStmt = $conn->prepare("SELECT * FROM training_participants as tp INNER JOIN employee as e ON tp.employeeID = e.employeeID INNER JOIN training_details as td ON tp.trainingID = td.trainingID INNER JOIN agency as a ON e.agency = a.agencyID  WHERE tp.trainingID = ? ORDER BY tp.idNumber");
   $participantTableStmt->bind_param("i", $id);
 
   executeQuery($participantTableStmt);

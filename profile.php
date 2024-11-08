@@ -16,7 +16,7 @@ if (isset($_SESSION['userID'])) {
 
   include "components/processes/db_connection.php";
 
-  $getEmployeeDetailStmt = $conn->prepare("SELECT * FROM employee WHERE userID = ?");
+  $getEmployeeDetailStmt = $conn->prepare("SELECT * FROM employee as e INNER JOIN agency as a ON e.agency = a.agencyID WHERE e.userID = ?");
   $getEmployeeDetailStmt->bind_param("i", $userID);
 
   if ($getEmployeeDetailStmt->execute()) {
@@ -59,14 +59,15 @@ if (isset($_SESSION['userID'])) {
         $agencyDetail = $getEmployeeDetailData['agencyName'];
         $positionDetail = $getEmployeeDetailData['position'];
 
-        $foRaw = $getEmployeeDetailData['fo'];
-        $foDetail = match ($getEmployeeDetailData['fo']) {
+        $foRaw = $getEmployeeDetailData['province'];
+        $foDetail = match ($getEmployeeDetailData['province']) {
           "iloilo" => "FO - Iloilo",
           "antique" => "FO - Antique",
           "capiz" => "FO - Capiz",
           "aklan" => "FO - Aklan",
           "negros" => "FO - Negros Occidental",
-          "guimaras" => "FO - Guimaras"
+          "guimaras" => "FO - Guimaras",
+          "other" => "Others"
         };
 
         //food restriction

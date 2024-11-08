@@ -4,6 +4,12 @@ include_once "db_connection.php";
 date_default_timezone_set('Asia/Manila');
 $currentDayTime = date("Y-m-d H:i:s");
 
+// Disable autocommit
+$conn->autocommit(false);
+
+// Start a transaction
+$conn->begin_transaction();
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   // Saving variables
@@ -84,9 +90,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
       if (move_uploaded_file($_FILES["confirmationSlip"]["tmp_name"], $targetFile)) {
         $status = "ok";
+        $conn->commit();
         echo $status;
       } else {
         $status += ", error_upload";
+        $conn->rollback();
         echo $status;
       }
       $getEmployeeID->close();
@@ -99,7 +107,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $userID = $userAccount[0];
       $password = $userAccount[1];
 
-      $regStmt = $conn->prepare("INSERT INTO employee (userID, prefix, firstName, lastName, middleInitial, suffix, nickname, age, sex, civilStatus, phoneNumber, email, altEmail, position, agency, foodRestriction) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+      $regStmt = $conn->prepare("INSERT INTO employee (userID, prefix, firstName, lastName, middleInitial, suffix, nickname, age, sex, civilStatus, phoneNumber, email, altEmail, position, agency, foodRestriction) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
       $regStmt->bind_param("ssssssssssssssss", $userID, $prefix, $firstName, $lastName, $middleInitial, $suffix, $nickname, $age, $sex, $civilStatus, $phoneNumber, $email, $altEmail, $position, $agencyID, $foodRestriction);
 
 
@@ -112,6 +120,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           $getEmployeeIDResult = $getEmployeeID->get_result();
           $employeeID = $getEmployeeIDResult->fetch_assoc()['employeeID'];
         } else {
+          $conn->rollback();
           echo "Get employee ID error: {$getEmployeeID->error}";
         }
 
@@ -122,9 +131,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if (move_uploaded_file($_FILES["confirmationSlip"]["tmp_name"], $targetFile)) {
           $status = "ok::$password";
+          $conn->commit();
           echo $status;
         } else {
           $status += ", error_upload";
+          $conn->rollback();
           echo $status;
         }
       }
@@ -132,9 +143,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $conn->close();
     }
   } else {
+    $conn->commit();
     echo $status;
   }
 } else {
+  $conn->rollback();
   echo "NOT OKAY";
 }
 
@@ -149,6 +162,7 @@ function saveRegistration($trainingID, $employeeID, $userID)
     $registrationID = $conn->insert_id;
     return $registrationID;
   } else {
+    $conn->rollback();
     echo "err: {$regTrainingStmt->error}";
   }
 }
@@ -167,6 +181,7 @@ function createUserAccount($prefix, $firstName, $lastName, $suffix, $middleIniti
     $userID = $conn->insert_id;
     return "$userID::$password";
   } else {
+    $conn->rollback();
     echo $createAccountStmt->error;
   }
 }
@@ -195,17 +210,22 @@ function getAgencyID($agencyName, $sector, $province)
 {
   global $conn;
 
-  $getEmployeeID = $conn->prepare("SELECT * FROM agency WHERE agencyName = ?, sector = ?, province = ?");
+  $getEmployeeID = $conn->prepare("SELECT * FROM agency WHERE agencyName = ? AND sector = ? AND province = ?");
   $getEmployeeID->bind_param("sss", $agencyName, $sector, $province);
-  $result = $getEmployeeID->get_result();
 
-  if ($result->num_rows > 0) {
-    $row = $result->fetch_assoc();
-    return $row['agencyID'];
+  if ($getEmployeeID->execute()) {
+    $result = $getEmployeeID->get_result();
+
+    if ($result->num_rows > 0) {
+      $row = $result->fetch_assoc();
+      return $row['agencyID'];
+    } else {
+      $saveAgency = $conn->prepare("INSERT INTO agency (agencyName, sector, province) VALUES (?, ?, ?)");
+      $saveAgency->bind_param("sss", $agencyName, $sector, $province);
+      $saveAgency->execute();
+      return $conn->insert_id;
+    }
   } else {
-    $saveAgency = $conn->prepare("INSERT INTO agency (agencyName, sector, province) VALUES (?, ?, ?)");
-    $saveAgency->bind_param("sss", $agencyName, $sector, $province);
-    $saveAgency->execute();
-    return $conn->insert_id;
+    $conn->rollback();
   }
 }

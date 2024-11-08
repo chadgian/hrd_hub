@@ -135,18 +135,20 @@
       <div class="modal-body">
         <div>Replace: <span id="pax-name"></span></div>
         <div><span>Replaced by: </span><input type="text" name="searchReplace" id="searchReplace" />
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th scope="col">Name</th>
-                <th scope="col">Agency</th>
-                <th scope="col">Select</th>
-              </tr>
-            </thead>
-            <tbody id="pax-table-body">
+          <div style="max-height: 300px; overflow-y: scroll; overflow-x: auto;">
+            <table class="table table-striped">
+              <thead style="position: sticky; z-index: 1; top: 0;">
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Agency</th>
+                  <th scope="col">Select</th>
+                </tr>
+              </thead>
+              <tbody id="pax-table-body">
 
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
       <div class="modal-footer">
@@ -159,7 +161,25 @@
 </div>
 
 <!-- Delete Pax Modal -->
-
+<div class="modal fade" id="deletePaxModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="deletePaxModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="deletePaxModalLabel">Delete Participant</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure to delete <b id="deletePaxName"></b> from this training (<i
+          id="deletePaxTrainingName"><?php echo $trainingNameView; ?></i>)?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+        <button type="button" class="btn btn-primary" onclick="executePaxDeletion()">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- Modal -->
 <div class="modal fade" id="loadingModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -213,6 +233,7 @@
       success: function (data) {
         try {
           // Parse the JSON data
+          console.log(data);
           const details = JSON.parse(data);
 
           // Populate the form with fetched details
@@ -231,6 +252,10 @@
           $('#participantFoodRestrictions').val(details.foodRestriction);
           $('#participantComfirmationSlip').attr('href', details.confirmationSlip);
           $('#employeeID').val(details.employeeID);
+
+          // for delete of pax
+
+          $("#deletePaxName").html(details.name);
 
           // Determine the current state of activityRead and update the button accordingly
           const currentState = details.activityRead === 0;
@@ -259,19 +284,32 @@
   function getEmployees() {
     const employeeID = $("#employeeID").val();
     const search = $("#searchReplace").val();
+    const trainingID = <?php echo $id; ?>;
+    console.log("training ID: " + trainingID);
     $.ajax({
       url: 'components/getAllEmployees.php',
       type: 'GET',
-      data: { employeeID: employeeID, search: search },
+      data: { employeeID: employeeID, search: search, trainingID: trainingID },
       success: function (data) {
-        // console.log(data);
-        const employeeList = JSON.parse(data);
 
+        // if (Array.isArray(data)) {
+        //   console.log("OKAY");
+        // } else {
+        //   console.log("NOT OKAY");
+        // }
+
+        console.log(data);
+        const parsedData = JSON.parse(data);
+
+        const employeeList = Object.values(parsedData);
+        // const employeeList = data;
+
+        console.log(employeeList);
         const tbody = document.getElementById("pax-table-body");
         tbody.innerHTML = "";
 
         employeeList.forEach(employee => {
-          // console.log(employee.fullName);
+          console.log(employee.fullName);
 
           const row = document.createElement("tr");
 
@@ -309,16 +347,23 @@
     const oldEmployee = $('#employeeID').val();
     const trainingID = <?php echo $id; ?>;
 
+    console.log(employeeID);
+
     $.ajax({
       type: 'POST',
-      url: 'replaceEmployee.php',
+      url: 'components/replaceEmployee.php',
       data: {
         employeeID: employeeID,
         oldEmployee: oldEmployee,
-        trainingID: trainingID
+        trainingID: trainingID,
+        admin: "<?php echo $_SESSION['userID'] ?>"
       },
       success: function (data) {
         console.log(data);
+        if (data == "ok") {
+          $("#replacePaxModal").modal("toggle");
+          populateParticipantTable();
+        }
       }
     })
 
@@ -337,6 +382,21 @@
         } else {
           setTrainingRecent();
         }
+      }
+    })
+  }
+
+  function execurePaxDeletion() {
+    const registrationID = $("#registrationID").val();
+
+    $.ajax({
+      type: 'POST',
+      url: 'components/deletePax.php',
+      data: {
+        registrationID: registrationID
+      },
+      success: function (data) {
+        console.log(data);
       }
     })
   }

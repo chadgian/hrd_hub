@@ -13,7 +13,8 @@
           Menu
         </button>
         <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="#">Add Participant</a></li>
+          <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#addPaxModal">Add Participant</a>
+          </li>
           <li><a class="dropdown-item" href="#" onclick="finalizeParticipants(<?php echo $id; ?>)">Finalized
               Participants</a>
           </li>
@@ -42,6 +43,60 @@
 
     </tbody>
   </table>
+
+  <!-- add pax modal -->
+  <div class="modal fade" id="addPaxModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="addPaxModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="addPaxModalLabel">Add Participant</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="selectAdd">
+            <button class="newParticipant btn btn-primary" onclick="selectAddEmployee(0)">Register New Employee</button>
+            <button class="oldParticipant btn btn-primary" onclick="selectAddEmployee(1)">Select existing
+              Employee</button>
+          </div>
+          <div class="addNewEmployee">
+            Add New Employee
+            <button class="btn btn-primary" onclick="selectAddEmployee(2)">Back</button>
+          </div>
+          <div class="selectExistingEmployee">
+            <div class="d-flex flex-column">
+              Select Existing Employee
+              <input type="search" id="searchExistingEmployee">
+              <div style="max-height: 300px; overflow-y: scroll; overflow-x: auto;">
+                <table class="table table-striped">
+                  <thead style="position: sticky; z-index: 1; top: 0;">
+                    <tr>
+                      <th scope="col">Name</th>
+                      <th scope="col">Agency</th>
+                      <th scope="col">Select</th>
+                    </tr>
+                  </thead>
+                  <tbody id="selectPaxTableBody">
+
+                  </tbody>
+                </table>
+              </div>
+              <div>
+                <label for="manualAddConfSlip" class="form-label">Confirmation Slip:</label>
+                <input type="file" class="form-control" id="manualAddConfSlip">
+              </div>
+              <button class="btn btn-primary mt-3" onclick="selectAddEmployee(2)">Back</button>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+            onclick="selectAddEmployee(-1)">Cancel</button>
+          <button type="button" id="saveAddPaxBtn" class="btn btn-primary" onclick="addPax()">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- genate id modal -->
   <div class="modal fade" id="generateIDModal" tabindex="-1" aria-labelledby="generateIDModalLabel" aria-hidden="true">
@@ -967,6 +1022,148 @@
           populateParticipantTable();
         } else {
           alert(response);
+        }
+      }
+    })
+  }
+
+  selectAddEmployee(-1);
+  function selectAddEmployee(type) {
+    const sections = {
+      addNewEmployee: $(".addNewEmployee"),
+      selectAdd: $(".selectAdd"),
+      selectExistingEmployee: $(".selectExistingEmployee")
+    };
+
+    // Hide all sections initially
+    Object.values(sections).forEach(section => section.hide());
+
+    switch (type) {
+      case 0:
+        // Display add new employee section
+        sections.addNewEmployee.show();
+        $("#saveAddPaxBtn").prop("disabled", false);
+        break;
+      case 1:
+        // Display existing employee section
+        sections.selectExistingEmployee.show();
+        getEmployeesForSelect();
+        break;
+      case 2:
+        // Display selection section
+        sections.selectAdd.show();
+        $("#saveAddPaxBtn").prop("disabled", true);
+        break;
+      default:
+        // Default to showing the selection section
+        sections.selectAdd.show();
+        $("#saveAddPaxBtn").prop("disabled", true);
+        break;
+    }
+  }
+
+  document.getElementById("searchExistingEmployee").addEventListener("input", getEmployeesForSelect);
+
+  function getEmployeesForSelect() {
+    $("#saveAddPaxBtn").prop("disabled", true);
+    const employeeID = "0";
+    const search = $("#searchExistingEmployee").val();
+    const trainingID = <?php echo $id; ?>;
+    console.log("training ID: " + trainingID);
+    $.ajax({
+      url: 'components/getAllEmployees.php',
+      type: 'GET',
+      data: { employeeID: employeeID, search: search, trainingID: trainingID },
+      success: function (data) {
+
+        // if (Array.isArray(data)) {
+        //   console.log("OKAY");
+        // } else {
+        //   console.log("NOT OKAY");
+        // }
+
+        console.log(data);
+        const parsedData = JSON.parse(data);
+
+        const employeeList = Object.values(parsedData);
+        // const employeeList = data;
+
+        console.log(employeeList);
+        const tbody = document.getElementById("selectPaxTableBody");
+        tbody.innerHTML = "";
+
+        employeeList.forEach(employee => {
+          console.log(employee.fullName);
+
+          const row = document.createElement("tr");
+
+          const cellName = document.createElement("td");
+          cellName.textContent = employee.fullName;
+          row.appendChild(cellName);
+
+          const cellAgency = document.createElement("td");
+          cellAgency.textContent = employee.agency;
+          row.appendChild(cellAgency);
+
+          const cellSelect = document.createElement("td");
+          const radioButton = document.createElement("input");
+          radioButton.type = "radio";
+          radioButton.name = "selectAddEmployee";
+          radioButton.value = employee.employeeID;
+          cellSelect.appendChild(radioButton);
+          row.appendChild(cellSelect);
+
+          row.addEventListener("click", () => {
+            radioButton.checked = true;
+            $("#saveAddPaxBtn").prop("disabled", false);
+          });
+
+          tbody.appendChild(row);
+
+        });
+      }
+    })
+  }
+
+  function addPax() {
+    const sections = {
+      addNewEmployee: $(".addNewEmployee"),
+      selectAdd: $(".selectAdd"),
+      selectExistingEmployee: $(".selectExistingEmployee")
+    };
+
+    var visibleElement;
+
+    for (const [key, section] of Object.entries(sections)) {
+      if (section.is(":visible")) {
+        visibleElement = key;
+      }
+    }
+    const formData = new FormData();
+    // console.log(visibleElement);
+    const selectedEmployee = document.querySelector('input[name="selectAddEmployee"]:checked');
+    const employeeID = selectedEmployee.value;
+    const trainingID = <?php echo $id; ?>;
+    const fileInput = document.getElementById("manualAddConfSlip");
+    const confSlip = fileInput.files[0];
+
+    formData.append('confSlip', confSlip);
+    formData.append('addPaxType', visibleElement);
+    formData.append('employeeID', employeeID);
+    formData.append('trainingID', trainingID);
+    formData.append('admin', "<?php echo $_SESSION['userID'] ?>");
+
+
+    $.ajax({
+      type: "POST",
+      url: "components/addPaxTraining.php",
+      data: formData,
+      processData: false,  // Prevent jQuery from automatically transforming the data into a query string
+      contentType: false,  // Prevent jQuery from setting a content type
+      success: function (data) {
+        console.log(data);
+        if (data == "ok"){
+          
         }
       }
     })
