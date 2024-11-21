@@ -20,7 +20,8 @@
           </li>
           <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#generateIDModal" href="#">Generate ID</a>
           </li>
-          <li><a class="dropdown-item" href="#">Export Attendance</a></li>
+          <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#exportAttendanceModal">Export
+              Attendance</a></li>
         </ul>
       </div>
       <div>
@@ -28,6 +29,38 @@
       </div>
     </div>
     <div class="switchParticipantView" onclick="switchTable('0')">View Attendance</div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="exportAttendanceModal" tabindex="-1" aria-labelledby="exportAttendanceModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exportAttendanceModalLabel">Export Attendance Sheet</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body d-flex flex-column gap-3 align-items-center">
+          <button onclick="exportAttendance()" id="exportAttendanceBtn" class="btn btn-primary">Export
+            Attendance</button>
+          <span id="downloadAttendanceSheetSpan">
+            <?php
+            $attendanceSheetFile = "assets/sources/attendance_sheets/{$id}_attendance_sheet.xlsx";
+
+            if (file_exists($attendanceSheetFile)) {
+              echo "<a href='{$attendanceSheetFile}' target='_blank'>Download Attendance Sheet</a>";
+            } else {
+              echo "<i>No attendance sheet available.</i>";
+            }
+            ?>
+          </span>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <table id="participantTable" style="width: 100%;">
@@ -47,27 +80,23 @@
   <!-- add pax modal -->
   <div class="modal fade" id="addPaxModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="addPaxModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
           <h1 class="modal-title fs-5" id="addPaxModalLabel">Add Participant</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <div class="selectAdd">
+          <div class="selectAdd" style="width: 100%; display: flex; justify-content: center; gap: 10px;">
             <button class="newParticipant btn btn-primary" onclick="selectAddEmployee(0)">Register New Employee</button>
             <button class="oldParticipant btn btn-primary" onclick="selectAddEmployee(1)">Select existing
               Employee</button>
-          </div>
-          <div class="addNewEmployee">
-            Add New Employee
-            <button class="btn btn-primary" onclick="selectAddEmployee(2)">Back</button>
           </div>
           <div class="selectExistingEmployee">
             <div class="d-flex flex-column">
               Select Existing Employee
               <input type="search" id="searchExistingEmployee">
-              <div style="max-height: 300px; overflow-y: scroll; overflow-x: auto;">
+              <div style="max-height: 250px; overflow-y: scroll; overflow-x: auto;">
                 <table class="table table-striped">
                   <thead style="position: sticky; z-index: 1; top: 0;">
                     <tr>
@@ -98,7 +127,163 @@
     </div>
   </div>
 
-  <!-- genate id modal -->
+  <!-- Registration Modal -->
+  <div class="modal fade" id="addNewEmployee" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="addNewEmployeeLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+      <div class="modal-content register-modal">
+        <div class="modal-header">
+          <h4 class="modal-title fs-5" id="addNewEmployeeLabel">REGISTRATION FORM</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" data-bs-toggle="modal"
+            data-bs-target="#conSlipModal" aria-label="Close"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <div class="modal-body">
+          <form class="regForm" enctype="multipart/form-data">
+            <h5 class="mb-4" id="trainingNameRegForm"></h5>
+            <input type="hidden" id="trainingID" name="trainingID">
+            <!-- Personal Information -->
+            <h6 class="mb-3 form-title">PERSONAL INFORMATION</h6>
+            <div class="row mb-3">
+              <div class="form-group col-md-2">
+                <label for="prefix">Prefix <small><i>(optional)</i></small></label>
+                <input type="text" class="form-control" id="prefix" name="prefix" placeholder="e.g. Atty.">
+              </div>
+              <div class="form-group col-md-3">
+                <label for="firstName">First Name <small>*</small></label>
+                <input type="text" class="form-control" id="firstName" name="firstName" placeholder="e.g. Juan"
+                  required>
+              </div>
+              <div class="form-group col-md-2">
+                <label for="middleInitial">Middle Initial <small>*</small></label>
+                <input type="text" class="form-control" id="middleInitial" name="middleInitial" placeholder="e.g. B">
+              </div>
+              <div class="form-group col-md-3">
+                <label for="lastName">Last Name <small>*</small></label>
+                <input type="text" class="form-control" id="lastName" name="lastName" placeholder="e.g. Dela Cruz"
+                  required>
+              </div>
+              <div class="form-group col-md-2">
+                <label for="suffix">Suffix <small>*</small></label>
+                <select class="form-control" id="suffix" name="suffix" required>
+                  <option value="">None</option>
+                  <option value=" Jr. ">Jr.</option>
+                  <option value=" Sr. ">Sr.</option>
+                  <option value=" I ">I</option>
+                  <option value=" II ">II</option>
+                  <option value=" III ">III</option>
+                  <option value=" IV ">IV</option>
+                  <option value=" V ">V</option>
+                  <option value=" VI ">VI</option>
+                </select>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="form-group col-md-4">
+                <label for="age">Nickname <small><u>(to be shown in your training ID)</u></small>
+                  <small>*</small></label>
+                <input type="text" class="form-control" id="nickname" name="nickname" placeholder="e.g. Juan" required>
+              </div>
+              <div class="form-group col-md-2">
+                <label for="gender">Sex <small>*</small></label>
+                <select class="form-control" id="sex" name="sex" required>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
+              </div>
+              <div class="form-group col-md-2">
+                <label for="age">Age <small>*</small></label>
+                <input type="number" class="form-control" id="age" name="age" required>
+              </div>
+              <div class="form-group col-md-4">
+                <label for="civilStatus">Civil Status <small>*</small></label>
+                <select class="form-control" name="civilStatus" id="civilStatus" name="civilStatus" required>
+                  <option value="single">Single</option>
+                  <option value="married">Married</option>
+                  <option value="widow">Widow</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Contact Information -->
+            <h6 class="mb-3 form-title">CONTACT INFORMATION</h6>
+            <div class="row mb-3">
+              <div class="form-group col-md-4">
+                <label for="phoneNumber">Phone Number <small>*</small></label>
+                <input type="text" class="form-control" id="phoneNumber" name="phoneNumber"
+                  placeholder="e.g. 09123456789" required>
+              </div>
+              <div class="form-group col-md-4">
+                <label for="personalEmail">Email Address <small>*</small><small id='emailNotice'></small></label>
+                <input type="email" class="form-control" id="personalEmail" name="personalEmail"
+                  placeholder="e.g. juandelacruz@gmail.com" required>
+              </div>
+              <div class="form-group col-md-4">
+                <label for="altEmail">Alternative Email Address <small><i>(optional)</i></small></label>
+                <input type="email" class="form-control" id="altEmail" name="altEmail"
+                  placeholder="e.g. juandelacruz@gmail.com">
+              </div>
+            </div>
+
+            <!-- Agency Information -->
+            <h6 class="mb-3 form-title">AGENCY INFORMATION</h6>
+            <div class="row mb-3">
+              <div class="form-group col-md-6">
+                <label for="location">CSC Field Office that has jurisdiction in your area <small>*</small></label>
+                <select name="fo" id="fo" class="form-control">
+                  <option value="iloilo">FO Iloilo</option>
+                  <option value="guimaras">FO Guimaras</option>
+                  <option value="antique">FO Antique</option>
+                  <option value="capiz">FO Capiz</option>
+                  <option value="negros">FO Negros Occidental</option>
+                  <option value="aklan">FO Aklan</option>
+                  <option value="other">Others</option>
+                </select>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="sector">Sector <small>*</small></label>
+                <select class="form-control" id="sector" name="sector">
+                  <option value="lgu">LGU (Local Government Unit)</option>
+                  <option value="suc">SUC/LUC (State University and College/Local University and College)</option>
+                  <option value="gocc">GOCC (Government-Owned and Controlled Corporation)</option>
+                  <option value="nga">NGA (National Government Agency)</option>
+                  <option value="others">Other</option>
+                </select>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="form-group col-md-6">
+                <label for="agencyName">Name of Agency / Organization <small><u>(please don't
+                      abbreviate)</u></small> <small>*</small></label>
+                <input list="agencyList" class="form-control" id="agencyName" name="agencyName"
+                  placeholder="Type or select your agency..." autocomplete="off">
+                <datalist id="agencyList">
+
+                </datalist>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="position">Position <small>*</small></label>
+                <input type="text" class="form-control" id="position" name="position"
+                  placeholder="Human Resource Specialist I" required>
+              </div>
+            </div>
+
+            <!-- Food Restrictions -->
+            <h6 class="mb-3 form-title">FOOD RESTRICTIONS <small>(leave blank if none)</small></h6>
+            <div class="form-group">
+              <input type="text" class="form-control" id="foodRestrictions" name="foodRestrictions"
+                placeholder="If any, please specify.">
+            </div>
+          </form><!-- Register Button -->
+          <div class="d-flex justify-content-center mt-3">
+            <button class="btn btn-primary btn-block register-submit" onclick="toReviewDetails()">PROCEED</button>
+            <!-- onclick="registerParticipant()" -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- generate id modal -->
   <div class="modal fade" id="generateIDModal" tabindex="-1" aria-labelledby="generateIDModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -258,7 +443,7 @@
               <div class="row">
                 <div class="col-md-6">
                   <span>Field Office:</span>
-                  <select name="fo" id="fo" disabled>
+                  <select name="fo-payment" id="fo-payment" disabled>
                     <option value="0">Choose field office...</option>
                     <option value="csc">Regional Office VI</option>
                     <option value="aklan">FO - Aklan</option>
@@ -530,7 +715,7 @@
 
     $('#orNumber').prop('value', parsedData.receiptNumber);
     $('#co').prop('value', parsedData.co);
-    $('#fo').prop('value', parsedData.fo);
+    $('#fo-payment').prop('value', parsedData.fo);
     $('#paymentDate').prop('value', parsedData.paymentDate);
     $('#amount').prop('value', parsedData.amount);
     $('#discount').prop('value', parsedData.discount);
@@ -696,14 +881,14 @@
 
       paymentDetailsValue['orNumber'] = $('#orNumber').val();
       paymentDetailsValue['co'] = $('#co').val();
-      paymentDetailsValue['fo'] = $('#fo').val();
+      paymentDetailsValue['fo'] = $('#fo-payment').val();
       paymentDetailsValue['paymentDate'] = $('#paymentDate').val();
       paymentDetailsValue['amount'] = $('#amount').val();
       paymentDetailsValue['discount'] = $('#discount').val();
 
       $("#orNumber").prop('disabled', false);
       $("#co").prop('disabled', false);
-      $("#fo").prop('disabled', false);
+      $("#fo-payment").prop('disabled', false);
       $("#paymentDate").prop('disabled', false);
       $("#amount").prop('disabled', false);
       $("#discount").prop('disabled', false);
@@ -716,14 +901,14 @@
 
       $('#orNumber').prop('value', paymentDetailsValue['orNumber']);
       $('#co').prop('value', paymentDetailsValue['co']);
-      $('#fo').prop('value', paymentDetailsValue['fo']);
+      $('#fo-payment').prop('value', paymentDetailsValue['fo']);
       $('#paymentDate').prop('value', paymentDetailsValue['paymentDate']);
       $('#amount').prop('value', paymentDetailsValue['amount']);
       $('#discount').prop('value', paymentDetailsValue['discount']);
 
       $("#orNumber").prop('disabled', true);
       $("#co").prop('disabled', true);
-      $("#fo").prop('disabled', true);
+      $("#fo-payment").prop('disabled', true);
       $("#paymentDate").prop('disabled', true);
       $("#amount").prop('disabled', true);
       $("#discount").prop('disabled', true);
@@ -738,7 +923,7 @@
     const participantID = $('#participantID').val();
     const orNumber = $('#orNumber').val();
     const co = $('#co').val();
-    const fo = $('#fo').val();
+    const fo = $('#fo-payment').val();
     const paymentDate = $('#paymentDate').val();
     const amount = $('#amount').val();
     const discount = $('#discount').val();
@@ -762,7 +947,7 @@
 
           $("#orNumber").prop('disabled', true);
           $("#co").prop('disabled', true);
-          $("#fo").prop('disabled', true);
+          $("#fo-payment").prop('disabled', true);
           $("#paymentDate").prop('disabled', true);
           $("#amount").prop('disabled', true);
           $("#discount").prop('disabled', true);
@@ -1041,7 +1226,8 @@
     switch (type) {
       case 0:
         // Display add new employee section
-        sections.addNewEmployee.show();
+        $("#addNewEmployee").modal("toggle");
+        $("#addPaxModal").modal("toggle");
         $("#saveAddPaxBtn").prop("disabled", false);
         break;
       case 1:
@@ -1162,10 +1348,61 @@
       contentType: false,  // Prevent jQuery from setting a content type
       success: function (data) {
         console.log(data);
-        if (data == "ok"){
-          
+        if (data == "ok") {
+          $("#addPaxModal").modal("toggle");
+          populateParticipantTable();
         }
       }
     })
+  }
+
+  function exportAttendance() {
+    const trainingID = <?php echo $id; ?>;
+    const exportBtn = document.getElementById("exportAttendanceBtn");
+
+    // Disable the button and change its text to indicate processing
+    exportBtn.disabled = true;
+    exportBtn.textContent = "Generating...";
+
+
+    $.ajax({
+      type: "POST",
+      url: "components/exportAttendance.php",
+      data: { trainingID: trainingID },
+      success: function (data) {
+        if (data == "ok") {
+          alert("Attendance sheet generated.");
+          const downloadAttendanceSheetSpan = document.getElementById("downloadAttendanceSheetSpan");
+
+          // Clear any existing content in the span
+          downloadAttendanceSheetSpan.innerHTML = "";
+
+          // Create a new download link
+          const downloadLink = document.createElement("a");
+          downloadLink.href = `assets/sources/attendance_sheets/${trainingID}_attendance_sheet.xlsx`;
+          downloadLink.target = "_blank";
+          downloadLink.id = "attendanceSheetLink";
+          downloadLink.textContent = "Download Attendance Sheet";
+
+          // Append the link to the span and trigger the download
+          downloadAttendanceSheetSpan.appendChild(downloadLink);
+          downloadLink.click();
+
+          exportBtn.disabled = false;
+          exportBtn.textContent = "Export Attendance";
+        } else {
+          exportBtn.disabled = false;
+          exportBtn.textContent = "Export Attendance";
+          console.log(data);
+        }
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        // Handle AJAX errors
+        exportBtn.disabled = false;
+        exportBtn.textContent = "Export Attendance";
+        console.log("AJAX error: " + textStatus + ': ' + errorThrown);
+        alert("An AJAX error occurred: " + textStatus + '. ' + errorThrown);
+      }
+    });
   }
 </script>

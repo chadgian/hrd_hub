@@ -386,17 +386,24 @@
     })
   }
 
-  function execurePaxDeletion() {
+  function executePaxDeletion() {
     const registrationID = $("#registrationID").val();
 
     $.ajax({
       type: 'POST',
       url: 'components/deletePax.php',
       data: {
-        registrationID: registrationID
+        registrationID: registrationID,
+        admin: "<?php echo $_SESSION['userID'] ?>"
       },
       success: function (data) {
-        console.log(data);
+
+        if (data == "ok") {
+          $("#deletePaxModal").modal("toggle");
+          populateParticipantTable();
+        } else {
+          console.log(data);
+        }
       }
     })
   }

@@ -46,6 +46,9 @@ if ($recentStmt->execute()) {
         case "3a":
           $content = "<b>$userInitial</b> has <u>replaced a participant</u> in the training <b>$trainingName</b>";
           break;
+        case "3b":
+          $content = "<b>$userInitial</b> has <u>deleted a participant</u> in the training <b>$trainingName</b>";
+          break;
         case "4":
           if ($recentData['newData'] == 1) {
             $content = "<b>$userInitial</b> has <u>opened the registration</u> of <b>$trainingName</b>";

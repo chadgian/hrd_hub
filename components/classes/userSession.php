@@ -171,15 +171,18 @@ class UserSession
   }
 
   // Method to fetch user details by userID
-  public function fetchUserDetails()
+  public function fetchUserDetails($userID = null)
   {
-    if ($this->userID) {
-      $stmt = $this->conn->prepare("SELECT * FROM employee WHERE userID = ?");
-      $stmt->bind_param("i", $this->userID);
+    $userID ??= $this->userID;
+
+    if ($userID) {
+      $stmt = $this->conn->prepare("SELECT * FROM employee as e INNER JOIN agency as a ON e.agency = a.agencyID WHERE e.userID = ?");
+      $stmt->bind_param("i", $userID);
 
       if ($stmt->execute()) {
         $result = $stmt->get_result();
         if ($result->num_rows > 0) {
+          $stmt->close();
           return $result->fetch_assoc();  // Return user details
         }
       }

@@ -1,0 +1,384 @@
+body {
+  /* height: 100vh; */
+  background-color: #F0F0F0 !important;
+}
+
+.navbar-brand > img {
+  width: 15vw;
+}
+
+#navbarNavAltMarkup {
+  justify-content: end !important;
+  padding-right: 10vw;
+}
+
+.nav-link {
+  cursor: pointer;
+}
+
+#main-content {
+  padding-top: 1em;
+}
+
+/*------------------------------- homepage -------------------------------*/
+
+.searchHomepage {
+  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 25vw;
+  margin-right: 25vw;
+  padding: 5px;
+  /* padding-top: 10px; */
+  /* gap: 10px; */
+  border-radius: 20px;
+  background-color: #fefefe;
+}
+
+.searchHomepage input {
+  width: 100%;
+  border: none;
+  background-color: #ffffff00;
+}
+
+#searchHomepageInput:focus {
+  border: none;
+  outline: none;
+}
+
+.homepage-recentTrainings {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10vw;
+  margin-right: 10vw;
+  margin-top: 1em;
+  gap: 0.5em;
+}
+
+.homepage-searchResult {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10vw;
+  margin-right: 10vw;
+  margin-top: 1em;
+  gap: 0.5em;
+}
+
+.homepage-recentTrainings-title{
+  margin-bottom: 0.5em;
+  font-weight: 700;
+  font-size: large;
+  color: #24305E;
+}
+
+.homepage-recentTrainings-training {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  border: 1px solid #131F4B;
+  border-left: 1em solid #131F4B;
+  /* padding: 5px; */
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.homepage-recentTrainings-trainingDate {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.homepage-recentTrainings-trainingName {
+  flex: 6;
+  border-left: 1px solid #131F4B;
+  padding-left: 10px;
+  padding-right: 5px;
+}
+.homepage-recentTrainings-action{
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #4A88FF;
+  margin-left: 10px;
+  margin-right: 10px;
+  border-radius: 10px;
+  font-size: small;
+  color: white;
+  cursor: pointer;
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+
+.homepage-recentTrainings-action:hover {
+  background-color: #1e53b4;
+}
+
+/* =============================== View trainings ========================= */
+
+.homepage-viewTraining {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  margin-left: 1em;
+  margin-right: 1em;
+}
+
+.homepage-viewTraining-content {
+  flex: 2.5;
+  background-color: white;
+  padding: 1em;
+}
+
+.homepage-viewTraining-content h3 {
+  color: #093980;
+  font-weight: bold;
+}
+
+.homepage-viewTraining-sidecontent {
+  flex: 1;
+  background-color: white;
+  padding: 0.5em;
+}
+
+.participant-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  font-size: large;
+}
+
+.participant-search {
+  border: 1px solid grey;
+  border-radius: 5px;
+  padding: 3px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  justify-content: center;
+}
+
+#participant-search-input{
+  border: none;
+  font-size: small;
+}
+
+#participant-search-input:focus {
+  border: none;
+  outline: none;
+}
+
+.participant-title {
+  color: #570000;
+  font-weight: 500;
+}
+
+.participant-table {
+  width: 100%;
+  border: 1px solid grey;
+}
+
+.participant-table thead {
+  text-align: center;
+  font-weight: bold;
+}
+
+.participant-table thead tr td {
+  background-color: #131F4B;
+  color: white;
+  border: none;
+}
+
+.participant-table tbody tr:nth-child(odd){
+  background-color: #f2f2f2;
+}
+
+.participant-table tbody tr:hover{
+  background-color: #cacaca;
+}
+
+.participant-table td:first-child {
+  text-align: center;
+  background-color: #131F4B;
+  color: white;
+  border: none;
+  /* font-weight: bold; */
+}
+
+.participant-table td {
+  /* border: 1px solid rgb(224, 224, 224); */
+  padding: 10px;
+}
+
+.participant-table td.participantTableAction{
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  justify-content: center;
+  align-items: center;
+}
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.788);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050; /* Bootstrap's modal z-index is 1050 */
+  display: none;
+}
+
+.homepage-viewTraining-sidecontent .sideContent-main {
+  margin-top: 1em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+.sideContent-title {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.homepage-viewTraining-sidecontent .sideContent-main .item {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  border-bottom: 1.5px solid rgb(235, 235, 235);
+}
+
+.homepage-viewTraining-sidecontent .sideContent-main .item .item-title {
+  flex: 1;
+}
+
+.homepage-viewTraining-sidecontent .sideContent-main .item .item-content {
+  flex: 2;
+}
+
+.paymentSection div {
+  display: flex;
+  /* align-items: center; */
+}
+
+.paymentSection div div {
+  flex: 1;
+}
+
+#payment-checkbox {
+  padding: 1em;
+}
+
+#payment-checkbox {
+  display: none;
+}
+
+#payment-checkbox:checked ~ label {
+  background-color: #053b9e;
+  content: "Paid";
+  color: black;
+}
+
+#payment-checkbox:checked ~ #payment-label,
+#payment-checkbox:not(:checked) ~ #payment-label {
+  position: relative;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 10px;
+  overflow: hidden;
+  color: white;
+}
+
+#payment-checkbox:checked ~ #payment-label::before,
+#payment-checkbox:not(:checked) ~ #payment-label::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(
+    to right, 
+    #02163a 0%, 
+    #02163a 20%, 
+    #326edd 80%, 
+    #326edd 100%
+  );
+  transition: all 0.5s ease-out;
+  z-index: 0;
+}
+
+#payment-checkbox:checked ~ #payment-label::before {
+  left: 0;
+}
+
+#payment-checkbox:not(:checked) ~ #payment-label::before {
+  left: -100%;
+}
+
+#payment-label {
+  position: relative;
+  z-index: 1;
+}
+
+#payment-checkbox:checked ~ #payment-label::after {
+  content: "Paid";
+  animation: slideRight 0.5s forwards;
+}
+
+#payment-checkbox:not(:checked) ~ #payment-label::after {
+  content: "Unpaid";
+  animation: slideLeft 0.5s forwards;
+}
+
+#payment-label::after {
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+
+@keyframes slideRight {
+  0% {
+    transform: translateX(-300%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideLeft {
+  0% {
+    transform: translateX(150%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+#payment-field {
+  display: none;
+  transform: translateY(-100%);
+  overflow: hidden;
+  transition: all ease 1s;
+}

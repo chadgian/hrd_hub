@@ -1015,8 +1015,7 @@ checkLogin();
               <div class="form-group col-md-6">
                 <label for="sector">Sector <small>*</small></label>
                 <select class="form-control" id="sector" name="sector">
-                  <option value="lgu">LGU/PGO/CGO (Local Government Unit/Provincial Government Office/City Government
-                    Office)</option>
+                  <option value="lgu">LGU (Local Government Unit)</option>
                   <option value="suc">SUC/LUC (State University and College/Local University and College)</option>
                   <option value="gocc">GOCC (Government-Owned and Controlled Corporation)</option>
                   <option value="nga">NGA (National Government Agency)</option>

@@ -85,6 +85,11 @@ if (isset($_GET['trainingID'])) {
               $adminActivityContent = "<b>$trainingRecentUserInitials</b> has <u>replaced</u> <i>$oldEmployee</i> by <b>$newEmployee</b>.";
               break;
 
+            case '3b':
+              $employeeName = getEmployeeName($trainingRecentData['oldData']);
+              $adminActivityContent = "<b>$trainingRecentUserInitials</b> has <u>deleted</u> <b>$employeeName</b> from this training";
+              break;
+
             case '4':
               $regStatus = $trainingRecentData['newData'] == "0" ? "closed" : "opened";
               $adminActivityContent = "<b>$trainingRecentUserInitials</b> has <u>$regStatus the registration</u>.";

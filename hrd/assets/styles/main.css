@@ -139,7 +139,7 @@ header {
   padding-left: 20px;
   padding-right: 20px;
   overflow-y: scroll;
-  overflow-x: scroll;
+  /* overflow-x: scroll; */
 }
 
 .training-list {
@@ -1067,6 +1067,294 @@ input[type="date"]{
 
 .saveNotice-btn:hover {
   background-color: #0e183f;
+}
+
+/*--------------------------------- manage account ---------------------------------*/
+
+.ma-registeredEmployees {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5em;
+  width: 100%;
+  color: white;
+  background-color: #13256D;
+  font-size: large;
+  font-weight: bold;
+}
+
+#ma-searchInput {
+  box-shadow: none;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.ma-agencyListHeader {
+  display: flex;
+  font-size: large;
+  font-weight: bold;
+  width: 2em;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  background-color: #FF5B5B;
+  padding: 5px;
+  border: 1px solid black;
+  border-radius: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.ma-agencyListItem {
+  margin-left: 1em;
+  color: white;
+  background-color: #2f66b8;
+  display: flex;
+  justify-content: space-between;
+  font-size: small;
+  padding: 5px;
+}
+
+.ma-viewAgency {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid white;
+  padding-left: 11px;
+  padding-right: 11px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  border-radius: 2px;
+  cursor: pointer;
+  background-color: white;
+  color: #13256D;
+  font-weight: bold;
+}
+
+.ma-viewAgency:hover {
+  background-color: rgb(204, 204, 204);
+  color: black;
+}
+
+.ma-agenctName {
+  font-weight: bold;
+  font-size: medium;
+  padding: 2px;
+}
+
+.ma-body {
+  background-color: #DCDCDC;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ma-agencyListBody {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ma-viewAgency-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5em;
+  width: 100%;
+  color: white;
+  background-color: #13256D;
+  font-size: large;
+  font-weight: bold;
+}
+
+.ma-search {
+  display: flex;
+  justify-content: space-between;
+}
+
+.ma-viewAgency-backbtn {
+  background-color: #293d88;
+  color: white;
+  /* font-weight: bold; */
+}
+
+.ma-viewAgency-backbtn:hover {
+  background-color: #13256D;
+  color: white;
+}
+
+.ma-viewAgency-employeeItem {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  margin-bottom: 5px;
+  padding: 5px;
+  border-bottom: 1px solid #223c9c;
+  color: #131F4B;
+}
+
+.ma-viewAgency-employeeName {
+  border-right: 1px solid #223c9c;
+  font-weight: bold;
+}
+
+.ma-viewAgency-employeePosition {
+  display: flex;
+  border-right: 1px solid #223c9c;
+  justify-content: center;
+  font-size: small;
+}
+.ma-viewAgency-viewBtn {
+  display: flex;
+  justify-content: center;
+}
+
+.ma-viewAgency-viewBtn button {
+  font-size: small;
+}
+
+.ma-manageAccounts-viewProfileBtn {
+  background-color: #131F4B;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.ma-manageAccounts-viewProfileBtn:hover {
+  background-color: #070e29;
+}
+
+.ma-viewAgency-employeeProfile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5em;
+  width: 100%;
+  color: white;
+  background-color: #13256D;
+  font-size: large;
+  font-weight: bold;
+}
+
+.profile-details {
+  border: 1px solid rgb(182, 182, 182);
+  background-color: white;
+  box-shadow: 1px 1px 3px 1px grey;
+  margin-bottom: 1em;
+  width: 50%;
+}
+
+.profile-details-header {
+  background-color: #005376;
+  color: #fff;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profile-details-content {
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  color: #000;
+  font-size: smaller;
+  gap: 5px;
+}
+
+.detail-title {
+  text-align: start;
+  font-weight: bold;
+}
+
+.detail-data {
+  gap: 2px;
+  padding-left: 10px;
+  padding-right: 10px;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: space-between; */
+  /* background-color: rgb(211, 211, 211); */
+}
+
+.detail-name {
+  text-align: start;
+}
+
+.detail-content {
+  display: flex;
+  /* border-bottom: 1px solid black; */
+  align-items: start;
+  justify-content: start;
+  background-color: #e0e0e0;
+  /* overflow-x: hidden; */
+  text-align: start;
+  padding: 2px;
+  padding-left: 1em;
+}
+
+.ma-viewAgency-employeeProfile-body {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+}
+
+.ma-viewAgency-employeeList {
+  background-color: white;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.ma-viewAgency-employeeProfile-trainings {
+  background-color: white;
+  width: 50%;
+  height: fit-content;
+}
+
+.ma-viewAgency-employeeProfile-trainingsHeader{
+  background-color: #005376;
+  text-align: center;
+  color: white;
+  font-weight: bold;
+  padding: 10px;
+}
+
+.ma-viewAgency-employeeProfile-training {
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+  background-color: rgb(202, 202, 202);
+  /* color: white; */
+}
+
+.ma-viewAgency-employeeProfile-trainingName {
+  font-size: small;
+  padding: 5px;
+}
+
+.ma-viewAgency-employeeProfile-trainingDetails {
+  background-color: rgb(95, 95, 95);
+  padding: 5px;
+  font-size: small;
+  text-align: center;
+  cursor: pointer;
+  color: white;
+  text-decoration: none;
+}
+
+.ma-viewAgency-employeeProfile-trainingDetails:hover {
+  background-color: rgb(65, 65, 65);
+}
+
+.participantStatus {
+  background-color: rgb(233, 233, 233);
+  padding: 5px;
+  border: 2px solid rgb(202, 202, 202);
+  font-size: small;
 }
 
 /*--------------------------------- media ---------------------------------*/

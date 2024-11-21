@@ -3,6 +3,7 @@
 include "../../components/processes/db_connection.php";
 
 $registrationID = $_POST['registrationID'];
+$adminID = $_POST['admin'];
 // $id = explode("-", getEmployeeTrainingID($registrationID));
 // $employeeID = $id[0];
 // $trainignID = $id[1];
@@ -14,8 +15,33 @@ $conn->autocommit(false);
 // Start a transaction
 $conn->begin_transaction();
 
-if (deleteParticipant($registrationID) == "ok") {
+$deleteParticipantResult = deleteParticipant($registrationID);
+if ($deleteParticipantResult == "ok") {
+  $deleteActivityResult = deleteActivity($registrationID);
 
+  if ($deleteActivityResult == "ok") {
+    $deleteAttendanceResult = deleteAttendance($employeeID, $trainingID);
+
+    if ($deleteAttendanceResult == "ok") {
+      $addActivity = addActivity($employeeID, $trainingID, $adminID);
+
+      if ($addActivity == "ok") {
+        $conn->commit();
+        echo "ok";
+      } else {
+        echo "Error adding activity: $addActivity";
+      }
+    } else {
+      $conn->rollback();
+      echo "Error deleting attendance: $deleteAttendanceResult";
+    }
+  } else {
+    $conn->rollback();
+    echo "Error deleting activity: $deleteActivityResult";
+  }
+} else {
+  $conn->rollback();
+  echo "Error deleting participant: $deleteParticipantResult";
 }
 
 function getEmployeeTrainingID($registrationID)
@@ -30,6 +56,8 @@ function getEmployeeTrainingID($registrationID)
   $employeeID = $row['employeeID'];
   $trainingID = $row['trainingID'];
 
+  // Close the statement
+  $stmt->close();
   return [$employeeID, $trainingID];
 }
 
@@ -39,7 +67,7 @@ function deleteParticipant($registrationID)
   global $conn;
 
   // Prepare the SQL statement
-  $stmt = $conn->prepare("DELETE FROM participants WHERE registration_id = ?");
+  $stmt = $conn->prepare("DELETE FROM training_participants WHERE registrationID = ?");
 
   // Check if the statement was prepared successfully
   if ($stmt === false) {
@@ -59,7 +87,7 @@ function deleteParticipant($registrationID)
     } else {
       // Close the statement
       $stmt->close();
-      return "no";
+      return "no rows";
     }
   } else {
     // Close the statement
@@ -69,11 +97,52 @@ function deleteParticipant($registrationID)
 
 }
 
-function deleteActivity()
+function deleteActivity($registrationID)
 {
   global $conn;
 
-  
+  $activityType = "0";
+
+  $stmt = $conn->prepare("DELETE FROM training_activities WHERE trainingActivityType = ? AND relationID = ?");
+  $stmt->bind_param("ss", $activityType, $registrationID);
+  if ($stmt->execute()) {
+    // Close the statement
+    $stmt->close();
+    return "ok";
+  } else {
+    // Close the statement
+    $stmt->close();
+    return "error: " . htmlspecialchars($stmt->error);
+  }
+}
+
+function deleteAttendance($employeeID, $trainignID)
+{
+  global $conn;
+
+  $stmt = $conn->prepare("DELETE FROM attendance WHERE employeeID = ? AND trainingID = ?");
+  $stmt->bind_param("ss", $employeeID, $trainingID);
+
+  if ($stmt->execute()) {
+    return "ok";
+  } else {
+    return "error: " . htmlspecialchars($stmt->error);
+  }
+}
+
+function addActivity($employeeID, $trainingID, $adminID)
+{
+  global $conn;
+  $activityType = "3b";
+
+  $stmt = $conn->prepare("INSERT INTO activities (trainingID, userID, oldData, activityType) VALUES (?, ?, ?, ?)");
+  $stmt->bind_param("ssss", $trainingID, $adminID, $employeeID, $activityType);
+
+  if ($stmt->execute()) {
+    return "ok";
+  } else {
+    return "error: " . htmlspecialchars($stmt->error);
+  }
 }
 
 // DELETE PARTICIPANTS

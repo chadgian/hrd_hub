@@ -1,6 +1,9 @@
 <?php
 
 include_once 'components/functions/checkLogin.php';
+// include 'components/classes/userSession.php';
+// $userSession = new UserSession;
+
 checkLogin();
 
 if (isset($_SESSION['userID'])) {
@@ -61,12 +64,12 @@ if (isset($_SESSION['userID'])) {
 
         $foRaw = $getEmployeeDetailData['province'];
         $foDetail = match ($getEmployeeDetailData['province']) {
-          "iloilo" => "FO - Iloilo",
-          "antique" => "FO - Antique",
-          "capiz" => "FO - Capiz",
-          "aklan" => "FO - Aklan",
-          "negros" => "FO - Negros Occidental",
-          "guimaras" => "FO - Guimaras",
+          "Iloilo" => "FO - Iloilo",
+          "Antique" => "FO - Antique",
+          "Capiz" => "FO - Capiz",
+          "Aklan" => "FO - Aklan",
+          "Negros" => "FO - Negros Occidental",
+          "Guimaras" => "FO - Guimaras",
           "other" => "Others"
         };
 

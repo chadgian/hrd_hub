@@ -16,7 +16,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
         header('Location: /hrd_hub/employeeHome.php');
         break;
       case "payment":
-        header("Location: /hrd_hub/co");
+        header("Location: /hrd_hub/pa");
       default:
         echo $result;
     }

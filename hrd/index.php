@@ -58,7 +58,9 @@ if (isset($_SESSION['username'])) {
           <img id="profile-pic" src="assets/images/default-profile.png" alt="">
         </a>
         <ul class="dropdown-menu dropdown-menu-end">
-          <li><a class="dropdown-item" href="#" onclick="editProfile()">Edit Profile</a></li>
+          <li>
+            <div class="dropdown-item" onclick="editProfile()">Edit Profile</div>
+          </li>
           <li><a class="dropdown-item" href="#">Change Password</a></li>
           <li><a class="dropdown-item" href="../components/processes/logoutProcess.php"
               style="border-top: 1px solid #dddddd;">Logout</a></li>
