@@ -219,6 +219,7 @@
   function getRegDetails(id) {
     // Show the loading modal
     // $("#loadingModal").modal("show");
+    toggleLoadingOverlay();
 
     const bodyDom = document.querySelector('body')
     bodyDom.style.cursor = "wait";
@@ -263,7 +264,7 @@
           $("#registrationBtn")
             .attr("onclick", `readActivity(${newState ? 0 : 1})`)
             .text(currentState ? "Read" : "Unread");
-
+          toggleLoadingOverlay();
           $("#regDetailModal").modal("show");
         } catch (e) {
           console.error('Error parsing data:', e);

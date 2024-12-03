@@ -1,3 +1,13 @@
+<?php
+include '../components/classes/userSession.php';
+
+$userSession = new UserSession();
+
+$userSession->validateCookie($_COOKIE['rememberme']);
+
+$trainingID = $_GET['t'] ?? 0;
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -133,38 +143,6 @@
       navLinks.forEach(link => link.addEventListener('click', handleClick));
     }
 
-    // function evaluateScripts(container) {
-    //   const scripts = container.querySelectorAll('script');
-    //   scripts.forEach((script) => {
-    //     const newScript = document.createElement('script');
-    //     newScript.text = script.textContent;
-    //     document.body.appendChild(newScript);
-    //   });
-    // }
-
-    // function evaluateScripts(container) {
-    //   const scripts = container.querySelectorAll('script');
-
-    //   scripts.forEach((script) => {
-    //     // Create a hash of the script content to check if it exists
-    //     const scriptContent = script.textContent.trim();
-
-    //     // Check if a script with the same content already exists in the document
-    //     const existingScripts = document.querySelectorAll('script');
-
-    //     existingScripts.forEach(existingScript => {
-    //       if (existingScript.textContent.trim() === scriptContent) {
-    //         existingScript.remove();
-    //       }
-    //     });
-
-    //     const newScript = document.createElement('script');
-    //     newScript.textContent = scriptContent;
-    //     document.body.appendChild(newScript);
-    //   });
-    // }
-
-
     function viewTrainingDetails(trainingID) {
       setAddress('t', trainingID);
     }
@@ -254,40 +232,110 @@
     }
 
     function forViewTraining(trainingID) {
-      document.getElementById("participant-search-input").addEventListener("input", populateParticipantTable);
 
-      populateParticipantTable();
-      togglePaymentStatus();
+      document.getElementById("participant-search-input").addEventListener("input", () => {
+        let searchTimeout;
+        // Clear any existing timeout
+        clearTimeout(searchTimeout);
 
-      function populateParticipantTable() {
-        $(".participant-content ").html("<div style='display: flex; width: 100%; justify-content: center;'><img src='assets/images/loading.svg' width='20%'></div>");
-        const searchQuery = document.getElementById("participant-search-input").value.trim();
+        // Set a new timeout
+        searchTimeout = setTimeout(() => {
+          // Only make the API call after 300ms of no typing
+          populateParticipantTable(trainingID);
+        }, 300);
+      });
 
-        $.ajax({
-          type: "GET",
-          url: "components/processes/searchParticipant.php",
-          data: {
-            searchQuery: searchQuery,
-            trainingID: trainingID
-          },
-          success: function (data) {
-            $(".participant-content").html(data);
-          }
-        });
-      }
+      populateParticipantTable(trainingID);
+      togglePaymentField();
+      togglePaymentStatus(2);
 
-      document.getElementById("payment-checkbox").addEventListener("click", togglePaymentStatus);
+      document.getElementById("payment-checkbox").addEventListener("click", togglePaymentField);
 
-      function togglePaymentStatus() {
-        const paymentButton = document.getElementById("payment-checkbox");
-        const paymentField = document.getElementById("payment-field");
+      document.getElementById("editPayment-btn").addEventListener("click", () => { togglePaymentStatus(0) });
+      document.getElementById("savePayment-btn").addEventListener("click", savePaymentDetails);
+      document.getElementById("cancelPayment-btn").addEventListener("click", () => { togglePaymentStatus(2) });
+    }
 
-        if (paymentButton.checked) {
-          paymentField.style.display = "flex";
-        } else {
-          paymentField.style.display = "none";
+    function populateParticipantTable(trainingID) {
+      $(".participant-content ").html("<div style='display: flex; width: 100%; justify-content: center;'><img src='assets/images/loading.svg' width='20%'></div>");
+      const searchQuery = document.getElementById("participant-search-input").value.trim();
+
+      $.ajax({
+        type: "GET",
+        url: "components/processes/searchParticipant.php",
+        data: {
+          searchQuery: searchQuery,
+          trainingID: trainingID
+        },
+        success: function (data) {
+          $(".participant-content").html(data);
         }
+      });
+    }
+
+    function togglePaymentField() {
+      const paymentButton = document.getElementById("payment-checkbox");
+      const paymentField = document.getElementById("payment-field");
+
+      if (paymentButton.checked) {
+        paymentField.style.display = "flex";
+      } else {
+        paymentField.style.display = "none";
       }
+    }
+
+    function togglePaymentStatus(toggle) {
+
+      const orNumber = document.getElementById("orNumber");
+      const paymentDate = document.getElementById("paymentDate");
+      const fieldOffice = document.getElementById("fieldOffice");
+      const collectingOfficer = document.getElementById("collectingOfficer");
+      const amount = document.getElementById("amount");
+      const discount = document.getElementById("discount");
+
+
+      const editPayment = document.querySelector(".editPayment");
+      const savePayment = document.querySelector(".savePayment");
+
+      switch (toggle) {
+        case 0:
+          savePayment.style.display = "flex";
+          editPayment.style.display = "none";
+
+          orNumber.disabled = false;
+          paymentDate.disabled = false;
+          fieldOffice.disabled = false;
+          collectingOfficer.disabled = false;
+          amount.disabled = false;
+          discount.disabled = false;
+          break;
+        case 1:
+          savePayment.style.display = "none";
+          editPayment.style.display = "flex";
+
+          orNumber.disabled = true;
+          paymentDate.disabled = true;
+          fieldOffice.disabled = true;
+          collectingOfficer.disabled = true;
+          amount.disabled = true;
+          discount.disabled = true;
+          break;
+        case 2:
+          savePayment.style.display = "none";
+          editPayment.style.display = "flex";
+
+          orNumber.disabled = true;
+          paymentDate.disabled = true;
+          fieldOffice.disabled = true;
+          collectingOfficer.disabled = true;
+          amount.disabled = true;
+          discount.disabled = true;
+          break;
+      }
+    }
+
+    function backButton() {
+      window.history.back();
     }
 
     function viewParticipantStatus(participantID) {
@@ -303,8 +351,115 @@
         url: "components/processes/getParticipantStatus.php",
         data: { participantID: participantID },
         success: function (data) {
+          const parsedData = JSON.parse(data);
           toggleLoadingOverlay();
           $("#viewParticipantStatusModal").modal("toggle");
+          // console.log(parsedData);
+
+          $("#participantID").val(parsedData.participantID);
+
+          if (parsedData.payment == "0") {
+            $("#payment-checkbox").prop("checked", false);
+            togglePaymentField();
+          } else {
+            $("#payment-checkbox").prop("checked", true);
+            togglePaymentField();
+          }
+
+          if (parsedData.attendance == "0") {
+            $("#attendance-status-content").html("Incomplete");
+            $("#attendance-status-content").css("color", "red")
+          } else {
+            $("#attendance-status-content").html("Complete");
+            $("#attendance-status-content").css("color", "blue")
+          }
+
+          const attendanceRemarks = parsedData.attendanceRemarks.split("::");
+
+          switch (attendanceRemarks[0]) {
+            case '0':
+              $("#attendance-status-remark").html("Replaced");
+              break;
+            case '1':
+              $("#attendance-status-remark").html("Valid Cancellation");
+              break;
+            case '2':
+              $("#attendance-status-remark").html("Invalid Cancellation");
+              break;
+            case '3':
+              $("#attendance-status-remark").html("Lack of training hours");
+              break;
+            case '4':
+              $("#attendance-status-remark").html("Absent/No Show");
+              break;
+            case '5':
+              $("#attendance-status-remark").html("Others: " + attendanceRemarks[1]);
+              break;
+
+            default:
+              $("#attendance-status-remark").html("N/A");
+              break;
+          }
+
+          // Convert the date string to a Date object
+          var date = new Date(parsedData.paymentDate);
+
+          // Extract year, month, and day
+          var year = date.getFullYear();
+          var month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+          var day = String(date.getDate()).padStart(2, '0');
+
+          // Format the date as YYYY-MM-DD
+          var paymentDate = `${year}-${month}-${day}`;
+
+          $("#orNumber").val(parsedData.receiptNumber);
+          $("#paymentDate").val(paymentDate);
+          $("#fieldOffice").val(parsedData.fo);
+          $("#collectingOfficer").val(parsedData.co);
+          $("#amount").val(parsedData.amount);
+          $("#discount").val(parsedData.discount);
+        }
+      });
+    }
+
+    function savePaymentDetails() {
+      const participantID = $("#participantID").val();
+      const payment = $("#payment-checkbox").is(":checked") ? "1" : "0";
+      let receiptNo = $("#orNumber").val();
+      let paymentDate = $("#paymentDate").val();
+      let fieldOffice = $("#fieldOffice").val();
+      let collectingOfficer = $("#collectingOfficer").val();
+      let amount = $("#amount").val();
+      let discount = $("#discount").val();
+
+
+      if (payment == "0") {
+        receiptNo = "";
+        paymentDate = "";
+        fieldOffice = "";
+        collectingOfficer = "";
+        amount = "";
+        discount = "";
+      }
+
+      $.ajax({
+        type: "POST",
+        url: "components/processes/savePaymentDetails.php",
+        data: {
+          participantID: participantID,
+          payment: payment,
+          receiptNo: receiptNo,
+          paymentDate: paymentDate,
+          fieldOffice: fieldOffice,
+          collectingOfficer: collectingOfficer,
+          amount: amount,
+          discount: discount,
+          lastEditedBy: "<?php echo $_SESSION['userID']; ?>"
+        },
+        success: function (data) {
+          // console.log(data);
+          togglePaymentStatus(1);
+          populateParticipantTable(<?php echo $trainingID; ?>);
         }
       });
     }

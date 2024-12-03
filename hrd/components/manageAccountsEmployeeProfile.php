@@ -14,7 +14,18 @@ $fullname = getFullName($employee);
 $prefix = trim($employee['prefix']) == null ? "N/A" : trim($employee['prefix']);
 $suffix = trim($employee['suffix']) == null ? "N/A" : trim($employee['suffix']);
 
-echo "<div class='ma-viewAgency-employeeProfile-header'><span style='font-weight: normal; font-size: small; cursor: pointer;' onclick='goBackMAHome()'>Back</span><span>$fullname</span><span style='font-weight: normal; font-size: small; cursor: pointer;'>Settings</span></div>";
+echo "<div class='ma-viewAgency-employeeProfile-header'><span style='font-weight: normal; font-size: small; cursor: pointer;' onclick='goBackMAHome()'>Back</span><span>$fullname</span>
+      <div class='dropdown'>
+        <div data-bs-toggle='dropdown' aria-expanded='false' style='font-size: small; font-weight: normal; cursor: pointer;'>
+          Dropdown button
+        </div>
+        <ul class='dropdown-menu'>
+          <li><a class='dropdown-item' href='#'>Action</a></li>
+          <li><a class='dropdown-item' href='#'>Another action</a></li>
+          <li><a class='dropdown-item' href='#'>Something else here</a></li>
+        </ul>
+      </div>
+    </div>";
 
 echo "
 <div class='ma-viewAgency-employeeProfile-body'>

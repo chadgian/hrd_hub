@@ -1,5 +1,14 @@
 <div class="homepage-viewTraining">
   <div class="homepage-viewTraining-content">
+    <div class="back-header">
+      <div class="back-button" onclick="backButton()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+          class="bi bi-arrow-return-left" viewBox="0 0 16 16">
+          <path fill-rule="evenodd"
+            d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5" />
+        </svg>
+      </div>
+    </div>
     <?php
     include __DIR__ . "/../../../components/processes/db_connection.php";
 
@@ -98,20 +107,24 @@
 <!-- Participant Status Modal -->
 <div class="modal fade" id="viewParticipantStatusModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
   aria-labelledby="viewParticipantStatusModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="viewParticipantStatusModalLabel">Participant Status</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <div class="attendance-status mb-3">
-          <span>Attendance:</span>
-          <span id="attendance-status-content"></span>
+        <div class="attendance-status mb-3 d-flex">
+          <div style="flex: 1;">Attendance:</div>
+          <div id="attendance-status-content" style="flex: 1;">
+            Complete
+          </div>
         </div>
-        <div class="attendance-status-remark mb-3">
-          <span>Attendance Remark:</span>
-          <span id="attendance-status-remark"></span>
+        <div class="attendance-status-remark mb-3 d-flex">
+          <div style="flex: 1;">Attendance Remark:</div>
+          <div id="attendance-status-remark" style="flex: 1;">
+            N/A
+          </div>
         </div>
         <div class="paymentSection">
           <div>
@@ -122,12 +135,61 @@
             </div>
           </div>
           <div id="payment-field">
-            <h4 class="text-center" style="width: 100%;">Payment field</h4>
+            <input type="hidden" id="participantID">
+            <div class="row mb-3">
+              <div class="col-md-6 d-flex flex-column">
+                <label class="form-label" for="orNumber">OR Number</label>
+                <input class="form-control" type="text" id="orNumber" name="orNumber">
+              </div>
+              <div class="col-md-6 d-flex flex-column">
+                <label class="form-label" for="paymentDate">Date of Payment</label>
+                <input class="form-control" type="date" id="paymentDate" name="paymentDate">
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-6 d-flex flex-column">
+                <label class="form-label" for="fieldOffice">Field Office</label>
+                <select name="fieldOffice" id="fieldOffice" class="form-control">
+                  <option value="0">Select field office...</option>
+                  <option value="csc">Regional Office</option>
+                  <option value="aklan">FO - Aklan</option>
+                  <option value="antique">FO - Antique</option>
+                  <option value="guimaras">FO - Guimaras</option>
+                  <option value="iloilo">FO - Iloilo</option>
+                  <option value="negros">FO - Negros Occidental</option>
+                </select>
+              </div>
+              <div class="col-md-6 d-flex flex-column">
+                <label class="form-label" for="collectingOfficer">Collecting Officer</label>
+                <input class="form-control" type="text" id="collectingOfficer" name="collectingOfficer">
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-6 d-flex flex-column">
+                <label class="form-label" for="amount">Amount</label>
+                <input class="form-control" type="number" id="amount" name="amount">
+              </div>
+              <div class="col-md-6 d-flex flex-column">
+                <label class="form-label" for="discount">Discount</label>
+                <input class="form-control" type="text" id="discount" name="discount">
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="editPayment justify-content-center align-items-center">
+                <button id="editPayment-btn">Edit payment status</button>
+              </div>
+              <div class="savePayment justify-content-center align-items-center" style="display: none;">
+                <button id="savePayment-btn">Save payment status</button>
+                <button id="cancelPayment-btn">Cancel</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="savePaymentDetails()"
+          data-bs-dismiss="modal">Save</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
       </div>
     </div>
   </div>

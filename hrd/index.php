@@ -69,6 +69,13 @@ if (isset($_SESSION['username'])) {
     </nav>
   </header>
 
+  <div id="loadingOverlay" class="loading-overlay">
+    <!-- <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div> -->
+    <img src="assets/images/loadingv2.svg" alt="" width="15%">
+  </div>
+
   <!-- Edit Profile Modal -->
   <?php
 
@@ -223,7 +230,15 @@ if (isset($_SESSION['username'])) {
       });
     }
 
+    function toggleLoadingOverlay() {
+      const loadingElement = document.getElementById('loadingOverlay');
 
+      // Check if the loading element is currently hidden
+      const isHidden = loadingElement.style.display === "none" || loadingElement.style.display === "";
+
+      // Set the display property based on the current state
+      loadingElement.style.display = isHidden ? 'flex' : 'none';
+    }
 
   </script>
 </body>

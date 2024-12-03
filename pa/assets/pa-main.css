@@ -136,6 +136,23 @@ body {
   padding: 1em;
 }
 
+.back-header {
+  margin-top: -1em;
+  margin-left: -1em;
+  margin-right: -1em;
+  margin-bottom: 1em;
+  background-color: #c8d2f7;
+  /* color: white; */
+  /* padding: 0.5em; */
+  font-weight: bold;
+}
+
+.back-button {
+  cursor: pointer;
+  width: min-content;
+  padding: 0.5em;
+}
+
 .homepage-viewTraining-content h3 {
   color: #093980;
   font-weight: bold;
@@ -335,6 +352,7 @@ body {
 #payment-label {
   position: relative;
   z-index: 1;
+  transition: box-shadow 0.3s ease;
 }
 
 #payment-checkbox:checked ~ #payment-label::after {
@@ -352,6 +370,10 @@ body {
   left: 0;
   right: 0;
   text-align: center;
+}
+
+#payment-label:hover{
+box-shadow: 0px 3px 1px 1px black;
 }
 
 @keyframes slideRight {
@@ -377,8 +399,27 @@ body {
 }
 
 #payment-field {
-  display: none;
-  transform: translateY(-100%);
-  overflow: hidden;
-  transition: all ease 1s;
+  border: 1px solid #02163a;
+  border-top: 10px solid #02163a;
+  margin-top: 1em;
+  padding: 0.5em;
+  flex-direction: column;
+}
+
+#attendance-status-content {
+  display: flex;
+  font-weight: bold;
+  color: #02163a;
+  border-bottom: 1px solid #02163a;
+  justify-content: center;
+  align-items: center;
+}
+
+#attendance-status-remark {
+  display: flex;
+  font-weight: bold;
+  color: #02163a;
+  border-bottom: 1px solid #02163a;
+  justify-content: center;
+  align-items: center;
 }
