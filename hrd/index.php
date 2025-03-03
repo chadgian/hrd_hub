@@ -21,6 +21,8 @@ if (isset($_SESSION['username'])) {
       exit();
     }
   }
+} else {
+  header("Location: ../");
 } ?>
 
 <!DOCTYPE html>

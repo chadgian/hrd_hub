@@ -1,6 +1,18 @@
 <?php
 include '../components/classes/userSession.php';
 
+// if (isset($_SESSION['role'])) {
+//   if ($_SESSION['role'] == "admin") {
+//     header("Location: /hrd_hub/hrd");
+//   } else if ($_SESSION['role'] == "general") {
+//     header("Location: /hrd_hub/employeeHome.php");
+//   } else {
+//     header("Location: /hrd_hub/pa");
+//   }
+// } else {
+//   header("Location: /hrd_hub/");
+// }
+
 $userSession = new UserSession();
 
 $userSession->validateCookie($_COOKIE['rememberme']);

@@ -50,7 +50,7 @@ if (isset($_SESSION['userID'])) {
         $altEmailDetail = $getEmployeeDetailData['altEmail'] == "" ? "N/A" : $getEmployeeDetailData['altEmail'];
 
         //agency information
-        $sectorRaw = $getEmployeeDetailData['sector'];
+        $sectorRaw = strtolower($getEmployeeDetailData['sector']);
         $sectorDetail = match ($getEmployeeDetailData['sector']) {
           "nga" => "National Government Agency",
           "suc" => "State/Local University and College",
@@ -62,14 +62,14 @@ if (isset($_SESSION['userID'])) {
         $agencyDetail = $getEmployeeDetailData['agencyName'];
         $positionDetail = $getEmployeeDetailData['position'];
 
-        $foRaw = $getEmployeeDetailData['province'];
+        $foRaw = strtolower($getEmployeeDetailData['province']);
         $foDetail = match ($getEmployeeDetailData['province']) {
-          "Iloilo" => "FO - Iloilo",
-          "Antique" => "FO - Antique",
-          "Capiz" => "FO - Capiz",
-          "Aklan" => "FO - Aklan",
-          "Negros" => "FO - Negros Occidental",
-          "Guimaras" => "FO - Guimaras",
+          "Iloilo" => "Iloilo",
+          "Antique" => "Antique",
+          "Capiz" => "Capiz",
+          "Aklan" => "Aklan",
+          "Negros" => "Negros Occidental",
+          "Guimaras" => "Guimaras",
           "other" => "Others"
         };
 
@@ -286,7 +286,7 @@ if (isset($_SESSION['userID'])) {
               </div>
               <div class="row">
                 <div class="col-md-12 d-flex detail-data flex-row">
-                  <div class="detail-name" style="flex: 1;">CSC Field Office:</div>
+                  <div class="detail-name" style="flex: 1;">Province:</div>
                   <div class="detail-content" style="flex: 2;"><?php echo $foDetail; ?></div>
                 </div>
               </div>
@@ -408,6 +408,8 @@ if (isset($_SESSION['userID'])) {
                   <option value="single">Single</option>
                   <option value="married">Married</option>
                   <option value="widow">Widow</option>
+                  <option value="annulled">Annulled</option>
+                  <option value="secret">Rather not say</option>
                 </select>
                 <script>
                   document.getElementById("civilStatus").value = "<?php echo $civilStatusDetail; ?>";
@@ -465,14 +467,15 @@ if (isset($_SESSION['userID'])) {
                   value="<?php echo $positionDetail; ?>" required>
               </div>
               <div class="form-group col-md-6">
-                <label for="location">CSC Field Office that has jurisdiction in your area <small>*</small></label>
+                <label for="location">Province <small>*</small></label>
                 <select name="fo" id="fo" class="form-control">
-                  <option value="iloilo">FO Iloilo</option>
-                  <option value="guimaras">FO Guimaras</option>
-                  <option value="antique">FO Antique</option>
-                  <option value="capiz">FO Capiz</option>
-                  <option value="negros">FO Negros Occidental</option>
-                  <option value="aklan">FO Aklan</option>
+                  <option value="iloilo">Iloilo</option>
+                  <option value="guimaras">Guimaras</option>
+                  <option value="antique">Antique</option>
+                  <option value="capiz">Capiz</option>
+                  <option value="negros">Negros Occidental</option>
+                  <option value="aklan">Aklan</option>
+                  <option value="other">Others</option>
                 </select>
                 <script>
                   document.getElementById("fo").value = "<?php echo $foRaw; ?>";

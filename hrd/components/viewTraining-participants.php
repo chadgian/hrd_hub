@@ -20,8 +20,8 @@
           </li>
           <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#generateIDModal" href="#">Generate ID</a>
           </li>
-          <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#exportAttendanceModal">Export
-              Attendance</a></li>
+          <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#exportAttendanceModal">Generate
+              Attendance Sheet</a></li>
         </ul>
       </div>
       <div>
@@ -37,7 +37,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exportAttendanceModalLabel">Export Attendance Sheet</h1>
+          <h1 class="modal-title fs-5" id="exportAttendanceModalLabel">Generate Attendance Sheet</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body d-flex flex-column gap-3 align-items-center">

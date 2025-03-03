@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   // Saving variables
   $prefix = trim($_POST['prefix']) . " ";
   $firstName = trim($_POST["firstName"]);
-  $middleInitial = " " . trim(trimMiddleInitial($_POST['middleInitial']) . ".");
+  $middleInitial = trim($_POST['middleInitial']) == "" ? "" : " " . trim(trimMiddleInitial($_POST['middleInitial']) . ".");
   $lastName = trim($_POST['lastName']);
   $suffix = $_POST['suffix'];
   $nickname = trim($_POST['nickname']);
@@ -28,6 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $position = trim($_POST['position']);
   $sector = $_POST['sector'];
   $agencyName = $_POST['agencyName'];
+  $agencyAddress = $_POST['agencyAddress'];
   $fo = $_POST['fo'];
   $foodRestriction = trim($_POST['foodRestrictions']);
   $userID = $_POST['userID'];
@@ -41,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   $slipFolder = "../../assets/conf_slips/$trainingID/";
 
-  $agencyID = getAgencyID($agencyName, $sector, $fo);
+  $agencyID = getAgencyID($agencyName, $sector, $fo, $agencyAddress);
 
   if (!file_exists($slipFolder)) {
     mkdir($slipFolder, 0777, true); // Create directory with full permissions (0777)
@@ -206,7 +207,7 @@ function generateRandomPassword()
   return $randomPassword;
 }
 
-function getAgencyID($agencyName, $sector, $province)
+function getAgencyID($agencyName, $sector, $province, $agencyAddress)
 {
   global $conn;
 
@@ -218,10 +219,17 @@ function getAgencyID($agencyName, $sector, $province)
 
     if ($result->num_rows > 0) {
       $row = $result->fetch_assoc();
+
+      if (trim($row['address']) == "") {
+        $updateStmt = $conn->prepare("UPDATE agency SET address = ? WHERE agencyID = ?");
+        $updateStmt->bind_param("ss", $agencyAddress, $row['agencyID']);
+        $updateStmt->execute();
+      }
+
       return $row['agencyID'];
     } else {
-      $saveAgency = $conn->prepare("INSERT INTO agency (agencyName, sector, province) VALUES (?, ?, ?)");
-      $saveAgency->bind_param("sss", $agencyName, $sector, $province);
+      $saveAgency = $conn->prepare("INSERT INTO agency (agencyName, sector, province, address) VALUES (?, ?, ?, ?)");
+      $saveAgency->bind_param("sss", $agencyName, $sector, $province, $agencyAddress);
       $saveAgency->execute();
       return $conn->insert_id;
     }

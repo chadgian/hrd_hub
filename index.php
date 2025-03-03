@@ -84,7 +84,8 @@ checkLogin();
       <!-- Slide 1 -->
       <div class="carousel-item active">
         <div class="carousel-container">
-          <h2 class="animate__animated animate__fadeInDown">Welcome to <span>CSC RO VI</span></h2>
+          <!-- <h2 class="animate__animated animate__fadeInDown mb-0">WELCOME</h2> -->
+          <img src="assets/img/learn_logo.png" class="img-fluid" width="30%">
           <p class="animate__animated fanimate__adeInUp">Do you wish to work on your skill set this year?<br>
             Do you seek to boost your career opportunities through professional growth?<br>
             Do you intend to develop yourself and meet the best version of you as a public servant this year?<br>
@@ -158,7 +159,7 @@ checkLogin();
               Download the confirmation slip here.
             </p>
             <a href="https://docs.google.com/document/d/1zpErKPHplS372J2YuByOVdzByVrTOUFO/edit?usp=sharing&ouid=105828518073961897200&rtpof=true&sd=true"
-              target="_blank" class="btn-learn-more">Confirmation Slip</a>
+              target="_blank" class="btn-learn-more">Download Confirmation Slip</a>
           </div>
         </div>
 
@@ -264,7 +265,8 @@ checkLogin();
               <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                 data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false"
                 aria-controls="panelsStayOpen-collapseOne">
-                <span>TRAINING INVITATION AND CONFIRMATION OF ATTENDANCE</span> <i class="bi bi-chevron-down arrow"></i>
+                <span style="font-weight: bold;">TRAINING INVITATION AND CONFIRMATION OF ATTENDANCE</span> <i
+                  class="bi bi-chevron-down arrow"></i>
               </button>
             </h2>
             <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse">
@@ -301,7 +303,7 @@ checkLogin();
               <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                 data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false"
                 aria-controls="panelsStayOpen-collapseTwo">
-                CONDUCT OF TRAINING <i class="bi bi-chevron-down arrow"></i>
+                <span style="font-weight: bold;">CONDUCT OF TRAINING</span> <i class="bi bi-chevron-down arrow"></i>
               </button>
             </h2>
             <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
@@ -333,7 +335,8 @@ checkLogin();
               <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                 data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false"
                 aria-controls="panelsStayOpen-collapseThree">
-                REQUEST FOR CONDUCT OF TRAINING PROGRAMS <i class="bi bi-chevron-down arrow"></i>
+                <span style="font-weight: bold;">REQUEST FOR CONDUCT OF TRAINING PROGRAMS</span> <i
+                  class="bi bi-chevron-down arrow"></i>
               </button>
             </h2>
             <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse">
@@ -385,7 +388,8 @@ checkLogin();
               <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                 data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="false"
                 aria-controls="panelsStayOpen-collapseFour">
-                REQUEST FOR SME/RESOURCE SPEAKER SERVICES <i class="bi bi-chevron-down arrow"></i>
+                <span style="font-weight: bold;">REQUEST FOR SME/RESOURCE SPEAKER SERVICES</span> <i
+                  class="bi bi-chevron-down arrow"></i>
               </button>
             </h2>
             <div id="panelsStayOpen-collapseFour" class="accordion-collapse collapse">
@@ -459,7 +463,7 @@ checkLogin();
       <div class="container">
 
         <div class="section-title" data-aos="zoom-out">
-          <h2>F.A.Q</h2>
+          <h2>F.A.Q.</h2>
           <p>Frequently Asked Questions</p>
         </div>
 
@@ -739,7 +743,8 @@ checkLogin();
                 <textarea class="form-control" name="message" id="message" rows="5" placeholder="Message"
                   required></textarea>
               </div>
-              <div class="text-center"><button type="submit" class="concern-btn text-center">Send Message</button></div>
+              <div class="text-center"><button type="submit" class="concern-btn text-center" onclick="contactus()">Send
+                  Message</button></div>
             </form>
 
           </div>
@@ -749,12 +754,18 @@ checkLogin();
       </div>
     </section><!-- End Contact Section -->
 
+    <script>
+      function contactus() {
+        event.preventDefault();
+      }
+    </script>
+
   </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
   <footer id="footer">
     <div class="container">
-      <h3>Civil Service Commission - Regional Office VI</h3>
+      <h3>Civil Service Commission Regional Office No. VI</h3>
       <p>Gawing Lingkod Bayani ang Bawat Kawani.</p>
       <div class="copyright">
         &copy; Copyright 2024. All Rights Reserved
@@ -862,7 +873,8 @@ checkLogin();
       'agencyID' => $agencyId,
       'agencyName' => $agencyName,
       'sector' => $agencySector,
-      'province' => $agencyProvince
+      'province' => $agencyProvince,
+      'address' => $getAllAgenciesData['address']
     ];
   }
   ?>
@@ -973,6 +985,8 @@ checkLogin();
                   <option value="single">Single</option>
                   <option value="married">Married</option>
                   <option value="widow">Widow</option>
+                  <option value="annuled">Annuled</option>
+                  <option value="other">Other</option>
                 </select>
               </div>
             </div>
@@ -1000,19 +1014,19 @@ checkLogin();
             <!-- Agency Information -->
             <h6 class="mb-3 form-title">AGENCY INFORMATION</h6>
             <div class="form-row">
-              <div class="form-group col-md-6">
-                <label for="location">CSC Field Office that has jurisdiction in your area <small>*</small></label>
+              <div class="form-group col-md-4">
+                <label for="location">Province <small>*</small></label>
                 <select name="fo" id="fo" class="form-control">
-                  <option value="iloilo">FO Iloilo</option>
-                  <option value="guimaras">FO Guimaras</option>
-                  <option value="antique">FO Antique</option>
-                  <option value="capiz">FO Capiz</option>
-                  <option value="negros">FO Negros Occidental</option>
-                  <option value="aklan">FO Aklan</option>
+                  <option value="iloilo">Iloilo</option>
+                  <option value="guimaras">Guimaras</option>
+                  <option value="antique">Antique</option>
+                  <option value="capiz">Capiz</option>
+                  <option value="negros">Negros Occidental</option>
+                  <option value="aklan">Aklan</option>
                   <option value="other">Others</option>
                 </select>
               </div>
-              <div class="form-group col-md-6">
+              <div class="form-group col-md-4">
                 <label for="sector">Sector <small>*</small></label>
                 <select class="form-control" id="sector" name="sector">
                   <option value="lgu">LGU (Local Government Unit)</option>
@@ -1022,21 +1036,26 @@ checkLogin();
                   <option value="others">Other</option>
                 </select>
               </div>
+              <div class="form-group col-md-4">
+                <label for="position">Position <small>*</small></label>
+                <input type="text" class="form-control" id="position" name="position"
+                  placeholder="Human Resource Specialist I" required>
+              </div>
             </div>
             <div class="form-row">
               <div class="form-group col-md-6">
                 <label for="agencyName">Name of Agency / Organization <small><u>(please don't
                       abbreviate)</u></small> <small>*</small></label>
-                <input list="agencyList" class="form-control" id="agencyName" name="agencyName"
+                <input list="agencyList" role="combobox" class="form-control" id="agencyName" name="agencyName"
                   placeholder="Type or select your agency..." autocomplete="off">
-                <datalist id="agencyList">
+                <datalist id="agencyList" role="listbox">
 
                 </datalist>
               </div>
               <div class="form-group col-md-6">
-                <label for="position">Position <small>*</small></label>
-                <input type="text" class="form-control" id="position" name="position"
-                  placeholder="Human Resource Specialist I" required>
+                <label for="agencyAddress">Address <small>*</small></label>
+                <input type="text" class="form-control" id="agencyAddress" name="agencyAddress"
+                  placeholder="Mandurriao, Iloilo City" required>
               </div>
             </div>
 
@@ -1069,7 +1088,7 @@ checkLogin();
     function updateAgencySelect() {
       const sector = document.getElementById("sector").value;
       const province = document.getElementById("fo").value;
-      console.log(<?php echo json_encode($allAgencies); ?>);
+      //console.log(<?php //echo json_encode($allAgencies); ?>);
       const agenciesList = <?php echo json_encode($allAgencies); ?>;
 
       document.getElementById("agencyList").innerHTML = "";
@@ -1085,13 +1104,27 @@ checkLogin();
           agencyOption.value = agency.agencyName;
           document.getElementById("agencyList").appendChild(agencyOption);
 
-          console.log(agency.agencyID + " - " + agency.agencyName);
+          // console.log(agency.agencyID + " - " + agency.agencyName);
         } else {
-          console.log(sector + " = " + agency.sector);
-          console.log(province + " = " + agency.province);
-          console.log(agency.agencyID + " - " + agency.agencyName);
+          // console.log(sector + " = " + agency.sector);
+          // console.log(province + " = " + agency.province);
+          // console.log(agency.agencyID + " - " + agency.agencyName);
         }
       });
+
+      document.getElementById("agencyName").addEventListener('input', function () {
+        const agencyName = this.value;
+        const addressField = document.getElementById("agencyAddress");
+
+        const selectedAgency = agenciesList.find(agency => agency.agencyName === agencyName);
+
+        if (selectedAgency) {
+          addressField.value = selectedAgency.address;
+        } else {
+          addressField.value = "";
+        }
+
+      })
     }
   </script>
 
@@ -1194,13 +1227,22 @@ checkLogin();
             </div>
             <div class="row mb-2" style="padding: 0; margin: 0; border-bottom: 1px solid #b8b8b8;">
               <div class="col-md-12 d-flex">
+                <div class="review-information-name">Agency Address:</div>
+                <div class="review-information-content" style="flex:2;" id="reviewAgencyAddress">Civil Service
+                  Commission -
+                  Regional Office No.
+                  VI</div>
+              </div>
+            </div>
+            <div class="row mb-2" style="padding: 0; margin: 0; border-bottom: 1px solid #b8b8b8;">
+              <div class="col-md-12 d-flex">
                 <div class="review-information-name">Position:</div>
                 <div class="review-information-content" style="flex:2;" id="reviewPosition">GIP Intern</div>
               </div>
             </div>
             <div class="row mb-2" style="padding: 0; margin: 0;">
               <div class="col-md-12 d-flex">
-                <div class="review-information-name">CSC Field Office:</div>
+                <div class="review-information-name">Province:</div>
                 <div class="review-information-content" style="flex:2;" id="reviewFO">CSC FO - Iloilo</div>
               </div>
             </div>
@@ -1376,6 +1418,7 @@ checkLogin();
         const position = document.getElementById("position").value;
         // const sector = document.getElementById("sector").value;
         const agencyName = document.getElementById("agencyName").value;
+        const agencyAddress = document.getElementById("agencyAddress").value;
         const fo = document.getElementById("fo").value;
         const foodRestrictions = document.getElementById("foodRestrictions").value == "" ? "N/A" : document.getElementById("foodRestrictions").value;
 
@@ -1419,6 +1462,7 @@ checkLogin();
         $("#reviewAltEmail").html(altEmail);
         $("#reviewSector").html(sector);
         $("#reviewAgencyName").html(agencyName);
+        $("#reviewAgencyAddress").html(agencyAddress);
         $("#reviewPosition").html(position);
         $("#reviewFO").html(fo);
         $("#reviewFoodRestrictions").html(foodRestrictions);
@@ -1471,7 +1515,7 @@ checkLogin();
           if (data.openReg == "0") {
             $('.proceed-btn')
               .prop('disabled', true)       // Disable the button
-              .text('Registration Close')   // Change the text
+              .text('Registration Closed')   // Change the text
               .css('background-color', 'grey'); // Change the color
           } else {
             $('.proceed-btn')
@@ -1545,6 +1589,7 @@ checkLogin();
           const position = document.getElementById("position").value;
           const sector = document.getElementById("sector").value;
           const agencyName = document.getElementById("agencyName").value;
+          const agencyAddress = document.getElementById("agencyAddress").value;
           const fo = document.getElementById("fo").value;
           const foodRestrictions = document.getElementById("foodRestrictions").value;
 
@@ -1566,6 +1611,7 @@ checkLogin();
           registrationFormData.append("position", position);
           registrationFormData.append("sector", sector);
           registrationFormData.append("agencyName", agencyName);
+          registrationFormData.append("agencyAddress", agencyAddress);
           registrationFormData.append("fo", fo);
           registrationFormData.append("foodRestrictions", foodRestrictions);
           registrationFormData.append("confirmationSlip", document.getElementById("uploadFile").files[0]);

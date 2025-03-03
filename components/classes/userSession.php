@@ -192,20 +192,21 @@ class UserSession
 
   private function getAgencyID($agencyName, $sector, $province)
   {
-    global $conn;
+    // global $conn;
 
-    $getEmployeeID = $conn->prepare("SELECT * FROM agency WHERE agencyName = ?, sector = ?, province = ?");
+    $getEmployeeID = $this->conn->prepare("SELECT * FROM agency WHERE agencyName = ? AND sector = ? AND province = ?");
     $getEmployeeID->bind_param("sss", $agencyName, $sector, $province);
+    $getEmployeeID->execute();
     $result = $getEmployeeID->get_result();
 
     if ($result->num_rows > 0) {
       $row = $result->fetch_assoc();
       return $row['agencyID'];
     } else {
-      $saveAgency = $conn->prepare("INSERT INTO agency (agencyName, sector, province) VALUES (?, ?, ?)");
+      $saveAgency = $this->conn->prepare("INSERT INTO agency (agencyName, sector, province) VALUES (?, ?, ?)");
       $saveAgency->bind_param("sss", $agencyName, $sector, $province);
       $saveAgency->execute();
-      return $conn->insert_id;
+      return $this->conn->insert_id;
     }
   }
 
@@ -231,7 +232,7 @@ class UserSession
       $fo = $updatedDetails['fo'];
       $foodRestriction = $updatedDetails['foodRestriction'];
 
-      $agencyID = getAgencyID($agencyName, $sector, $fo);
+      $agencyID = $this->getAgencyID($agencyName, $sector, $fo);
 
       $updateProfileStmt = $this->conn->prepare("
         UPDATE employee 

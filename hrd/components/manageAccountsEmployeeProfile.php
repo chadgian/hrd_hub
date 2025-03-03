@@ -13,16 +13,17 @@ $fullname = getFullName($employee);
 
 $prefix = trim($employee['prefix']) == null ? "N/A" : trim($employee['prefix']);
 $suffix = trim($employee['suffix']) == null ? "N/A" : trim($employee['suffix']);
+$foodRestriction = trim($employee['foodRestriction']) == null ? "N/A" : trim($employee['foodRestriction']);
+$altEmail = trim($employee['altEmail']) == null ? "N/A" : trim($employee['altEmail']);
 
 echo "<div class='ma-viewAgency-employeeProfile-header'><span style='font-weight: normal; font-size: small; cursor: pointer;' onclick='goBackMAHome()'>Back</span><span>$fullname</span>
       <div class='dropdown'>
         <div data-bs-toggle='dropdown' aria-expanded='false' style='font-size: small; font-weight: normal; cursor: pointer;'>
-          Dropdown button
+          Menu
         </div>
         <ul class='dropdown-menu'>
-          <li><a class='dropdown-item' href='#'>Action</a></li>
-          <li><a class='dropdown-item' href='#'>Another action</a></li>
-          <li><a class='dropdown-item' href='#'>Something else here</a></li>
+          <li><span class='dropdown-item' style='cursor: pointer;' data-bs-toggle='modal' data-bs-target='#editEmployeeModal'>Edit Profile</span></li>
+          <li><span class='dropdown-item' style='cursor: pointer;' onclick='editEmployeeProfile($employeeID)'>Update Credentials</span></li>
         </ul>
       </div>
     </div>";
@@ -86,7 +87,7 @@ echo "
     </div>
     <div class='d-flex detail-data'>
       <div class='detail-name'>Alternative Email:</div>
-      <div class='detail-content'>{$employee['altEmail']}</div>
+      <div class='detail-content'>{$altEmail}</div>
     </div>
     <div class='d-flex detail-data'>
       <div class='detail-name'>Email:</div>
@@ -111,7 +112,7 @@ echo "
     </div>
   <div class='detail-title'>FOOD RESTRICTIONS:</div>
   <div class='d-flex detail-data'>
-    <div class='detail-content'>{$employee['foodRestriction']}</div>
+    <div class='detail-content'>{$foodRestriction}</div>
   </div>
 </div>
 </div>

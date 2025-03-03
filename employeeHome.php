@@ -1,6 +1,6 @@
 <?php
-include 'components/functions/checkLogin.php';
-checkLogin();
+include_once 'components/classes/manageRole.php';
+$manageRole = new ManageRole("employee");
 if (session_status() == PHP_SESSION_NONE) {
   session_start();
 }
@@ -145,7 +145,8 @@ if ($getEmployeeDetailStmt->execute()) {
       <!-- Slide 1 -->
       <div class="carousel-item active">
         <div class="carousel-container">
-          <h2 class="animate__animated animate__fadeInDown">Welcome to <span>CSC RO VI</span></h2>
+          <!-- <h2 class="animate__animated animate__fadeInDown">Welcome to <span>CSC RO VI</span></h2> -->
+          <img src="assets/img/learn_logo.png" class="img-fluid" width="30%">
           <p class="animate__animated fanimate__adeInUp">Do you wish to work on your skill set this year?<br>
             Do you seek to boost your career opportunities through professional growth?<br>
             Do you intend to develop yourself and meet the best version of you as a public servant this year?<br>
@@ -219,7 +220,7 @@ if ($getEmployeeDetailStmt->execute()) {
               Download the confirmation slip here.
             </p>
             <a href="https://docs.google.com/document/d/1zpErKPHplS372J2YuByOVdzByVrTOUFO/edit?usp=sharing&ouid=105828518073961897200&rtpof=true&sd=true"
-              target="_blank" class="btn-learn-more">Confirmation Slip</a>
+              target="_blank" class="btn-learn-more">Download Confirmation Slip</a>
           </div>
         </div>
 
@@ -520,7 +521,7 @@ if ($getEmployeeDetailStmt->execute()) {
       <div class="container">
 
         <div class="section-title" data-aos="zoom-out">
-          <h2>F.A.Q</h2>
+          <h2>F.A.Q.</h2>
           <p>Frequently Asked Questions</p>
         </div>
 
@@ -815,7 +816,7 @@ if ($getEmployeeDetailStmt->execute()) {
   <!-- ======= Footer ======= -->
   <footer id="footer">
     <div class="container">
-      <h3>Civil Service Commission - Regional Office VI</h3>
+      <h3>Civil Service Commission Regional Office No. VI</h3>
       <p>Gawing Lingkod Bayani ang Bawat Kawani.</p>
       <div class="copyright">
         &copy; Copyright 2024. All Rights Reserved

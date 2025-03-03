@@ -63,6 +63,16 @@ function checkLogin()
       }
       break;
 
+    case '/hrd':
+      if (isset($_SESSION['userID'])) {
+        if ($_SESSION['role'] !== "admin") {
+          redirectBasedOnRole($baseURL);
+        }
+      } else {
+        checkRememberMe($baseURL);
+      }
+      break;
+
     case '/hrd/index.php':
       if (isset($_SESSION['userID'])) {
         if ($_SESSION['role'] !== "admin") {
