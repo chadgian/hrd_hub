@@ -1,15 +1,15 @@
 <?php
 include "../../components/processes/db_connection.php";
 
-echo "<div class='ma-registeredEmployees'>Registered Employees <div style='cursor: pointer;' onclick='adminAccount()'><small>Admin Accounts</small></div></div>
+echo "<div class='ma-registeredEmployees'><div style='cursor: pointer;' onclick='adminAccount()'><small>Registered Employees </small></div>Admin Accounts</div>
 <div class='ma-search'>
   <input type='search' id='ma-searchInput' name='ma-searchInput' placeholder='Search'>
-  <button class='addAgency-btn d-flex justify-content-center align-items-center gap-2' data-bs-toggle='modal' data-bs-target='#addAgencyModal'>
+  <button class='addAgency-btn d-flex justify-content-center align-items-center gap-2' data-bs-toggle='modal' data-bs-target='#addAccountModal'>
     <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-plus-circle' viewBox='0 0 16 16'>
       <path d='M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16'/>
       <path d='M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4'/>
     </svg>
-    Add agency
+    Add Account
   </button>
 </div>
 <div class='ma-agencyList'>";

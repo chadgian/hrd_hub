@@ -17,6 +17,19 @@ $userSession = new UserSession();
 
 $userSession->validateCookie($_COOKIE['rememberme']);
 
+if (isset($_COOKIE['rememberme'])) {
+  try {
+    $userSession->validateCookie(htmlspecialchars($_COOKIE['rememberme']));
+  } catch (Exception $e) {
+    // Handle the error, e.g., log it and redirect to an error page
+    error_log($e->getMessage());
+    header("Location: /hrd_hub/error.php");
+    exit();
+  }
+}
+
+$trainingID = isset($_GET['t']) ? intval($_GET['t']) : 0;
+
 $trainingID = $_GET['t'] ?? 0;
 ?>
 

@@ -15,7 +15,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   // Saving variables
   $prefix = trim($_POST['prefix']) . " ";
   $firstName = trim($_POST["firstName"]);
-  $middleInitial = trim($_POST['middleInitial']) == "" ? "" : " " . trim(trimMiddleInitial($_POST['middleInitial']) . ".");
+  $middleInitial = trim($_POST['middleInitial']);
+  $middleInitial = $middleInitial === "" ? "" : trim($middleInitial) . ".";
   $lastName = trim($_POST['lastName']);
   $suffix = $_POST['suffix'];
   $nickname = trim($_POST['nickname']);
@@ -229,7 +230,7 @@ function getAgencyID($agencyName, $sector, $province, $agencyAddress)
       return $row['agencyID'];
     } else {
       $saveAgency = $conn->prepare("INSERT INTO agency (agencyName, sector, province, address) VALUES (?, ?, ?, ?)");
-      $saveAgency->bind_param("sss", $agencyName, $sector, $province, $agencyAddress);
+      $saveAgency->bind_param("ssss", $agencyName, $sector, $province, $agencyAddress);
       $saveAgency->execute();
       return $conn->insert_id;
     }

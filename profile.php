@@ -63,13 +63,13 @@ if (isset($_SESSION['userID'])) {
         $positionDetail = $getEmployeeDetailData['position'];
 
         $foRaw = strtolower($getEmployeeDetailData['province']);
-        $foDetail = match ($getEmployeeDetailData['province']) {
-          "Iloilo" => "Iloilo",
-          "Antique" => "Antique",
-          "Capiz" => "Capiz",
-          "Aklan" => "Aklan",
-          "Negros" => "Negros Occidental",
-          "Guimaras" => "Guimaras",
+        $foDetail = match ($foRaw) {
+          "iloilo" => "Iloilo",
+          "antique" => "Antique",
+          "capiz" => "Capiz",
+          "aklan" => "Aklan",
+          "negros" => "Negros Occidental",
+          "guimaras" => "Guimaras",
           "other" => "Others"
         };
 
@@ -215,7 +215,10 @@ if (isset($_SESSION['userID'])) {
               <div class="row">
                 <div class="col-md-6 d-flex detail-data">
                   <div class="detail-name">Middle Initial:</div>
-                  <div class="detail-content"><?php echo $middleInitialDetail; ?></div>
+                  <div class="detail-content">
+                    <?php $displayMI = $middleInitialDetail === "" ? "N/A" : $middleInitialDetail;
+                    echo $displayMI; ?>
+                  </div>
                 </div>
                 <div class="col-md-6 d-flex detail-data">
                   <div class="detail-name">Last Name:</div>

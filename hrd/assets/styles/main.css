@@ -1082,13 +1082,23 @@ input[type="date"]{
 .ma-registeredEmployees {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
   padding: 0.5em;
   width: 100%;
   color: white;
   background-color: #13256D;
   font-size: large;
   font-weight: bold;
+}
+
+.regForm {
+  display: flex;
+  flex-direction: column;
+  color: #24305E;
+}
+
+.form-title {
+  font-weight: bolder;
 }
 
 #ma-searchInput {
