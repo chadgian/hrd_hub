@@ -23,7 +23,7 @@ echo "<div class='ma-viewAgency-employeeProfile-header'><span style='font-weight
         </div>
         <ul class='dropdown-menu'>
           <li><span class='dropdown-item' style='cursor: pointer;' onclick='editProfile()'>Edit Profile</span></li>
-          <li><span class='dropdown-item' style='cursor: pointer;' onclick='editEmployeeProfile($employeeID)'>Update Credentials</span></li>
+          <li><span class='dropdown-item' style='cursor: pointer;' onclick='resetAccountPassword($userID)'>Reset Password</span></li>
         </ul>
       </div>
     </div>";
@@ -142,7 +142,7 @@ foreach ($trainings as $training) {
           <div class='d-flex flex-row'>Attendance Status: <div style='color: $attendanceColor; font-weight: bold;padding-left: 5px;'>{$AttendanceStatus}</div></div>
         </div>";
 
-  echo "<a class='ma-viewAgency-employeeProfile-trainingDetails' href='index.php?p=7&t={$training['trainingID']}'>Visit training</a>";
+  echo "<a class='ma-viewAgency-employeeProfile-trainingDetails' href='index.php?p=6&t={$training['trainingID']}'>Visit training</a>";
 
   echo "</div>";
 }

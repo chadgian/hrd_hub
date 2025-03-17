@@ -1,5 +1,5 @@
 <?php
-if (isset($_GET['t']) && $page == 7) {
+if (isset($_GET['t']) && $page == 6) {
   $trainingID = $_GET['t'];
   include 'components/viewTraining.php';
 } else {
@@ -7,4 +7,3 @@ if (isset($_GET['t']) && $page == 7) {
   include 'components/allTrainingContent.php';
   echo "</div>";
 }
-?>

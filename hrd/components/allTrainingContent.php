@@ -13,7 +13,11 @@
         $getYearStmt->execute();
         $getYearResult = $getYearStmt->get_result();
         while ($row = $getYearResult->fetch_assoc()) {
-          echo "<option value='" . $row['year'] . "'>" . $row['year'] . "</option>";
+          if ($row['year'] == date('Y')) {
+            echo "<option value='" . $row['year'] . "' selected>" . $row['year'] . "</option>";
+          } else {
+            echo "<option value='" . $row['year'] . "'>" . $row['year'] . "</option>";
+          }
         }
         ?>
       </select>

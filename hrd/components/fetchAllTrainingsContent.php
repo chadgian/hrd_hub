@@ -27,7 +27,7 @@ switch ($year) {
           </div>
           <div class='training-name'><span>$trainingName</span></div>
           <div class='view-training'>
-            <a href='../hrd/index.php?p=7&t=$trainingID' class='view-training-btn'>View</a>
+            <a href='../hrd/index.php?p=6&t=$trainingID' class='view-training-btn'>View</a>
           </div>
         </div>
       ";
@@ -50,7 +50,7 @@ switch ($year) {
       while ($trainingRow = $getTrainingResult->fetch_assoc()) {
         echo "<div class='trainingContainer'>";
         echo "<h6>" . $trainingRow['trainingName'] . "</h6>";
-        echo "<button class='allTrainingView-btn' onclick='{$trainingRow['trainingID']}'>View</button>";
+        echo "<a style='color: white !important; text-decoration: none !important;' href='index.php?p=6&t={$trainingRow['trainingID']}'><button class='allTrainingView-btn btn-primary'>View</button></a>";
         echo "</div>";
       }
 

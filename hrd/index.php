@@ -3,6 +3,10 @@ include_once '../components/functions/checkLogin.php';
 checkLogin();
 include "../components/processes/db_connection.php";
 include "../components/classes/trainingDetails.php";
+
+// $adminProfile = new UserSession();
+// $adminProfile->saveSessionData();
+
 if
 (session_status() == PHP_SESSION_NONE) {
   session_start();
@@ -19,6 +23,8 @@ if (isset($_SESSION['username'])) {
     if ($checkLoginResult->num_rows < 1) {
       header("Location: ../");
       exit();
+    } else {
+      // $adminProfile->logout();
     }
   }
 } else {
@@ -158,7 +164,7 @@ if (isset($_SESSION['username'])) {
 
   <div class="main-body">
     <?php
-    $pageName = ['homePage', 'addTrainingPage', 'noticesPage', 'messagesPage', 'manageAccountsPage', 'manageEmployeesPage', 'scanAttendancePage', 'allTrainingsPage', 'databasePage'];
+    $pageName = ['homePage', 'addTrainingPage', 'noticesPage', 'messagesPage', 'manageAccountsPage', 'scanAttendancePage', 'allTrainingsPage', 'databasePage'];
 
     $page = $_GET['p'] ?? 0;
 
@@ -180,7 +186,7 @@ if (isset($_SESSION['username'])) {
   <script>
     var page = <?php echo $page; ?>;
 
-    const pageArray = ["home", "addTraining", "notices", "messages", "manageAccounts", "manageEmployees", "scanAttendance", "allTrainings", "database"];
+    const pageArray = ["home", "addTraining", "notices", "messages", "manageAccounts", "scanAttendance", "allTrainings", "database"];
 
     const pageName = document.querySelectorAll('#' + pageArray[page]);
     // const pageName = document.getElementById(pageArray[page]);
