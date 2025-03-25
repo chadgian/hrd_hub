@@ -1,6 +1,6 @@
 <?php
 // declare(strict_types=1);
-
+//sample
 session_start();
 set_time_limit(0);
 // ini_set('memory_limit', '-1');
@@ -62,7 +62,7 @@ if (isset($_POST['trainingID'])) {
   //echo "<h1>Generating ID...</h1>";
 
   while ($IDgenerationDone === false) {
-    $stmt = $conn->prepare("SELECT * FROM training_participants as tp INNER JOIN employee as e on tp.employeeID = e.employeeID WHERE tp.trainingID = ?");
+    $stmt = $conn->prepare("SELECT * FROM training_participants as tp INNER JOIN employee as e on tp.employeeID = e.employeeID INNER JOIN agency as a ON e.agency = a.agencyID WHERE tp.trainingID = ?");
     $stmt->bind_param("i", $id);
     if ($stmt->execute()) {
       $result = $stmt->get_result();

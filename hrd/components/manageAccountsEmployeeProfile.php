@@ -22,7 +22,7 @@ echo "<div class='ma-viewAgency-employeeProfile-header'><span style='font-weight
           Menu
         </div>
         <ul class='dropdown-menu'>
-          <li><span class='dropdown-item' style='cursor: pointer;' onclick='editProfile()'>Edit Profile</span></li>
+          <li><span class='dropdown-item' style='cursor: pointer;' onclick='editEmployeeProfile()'>Edit Profile</span></li>
           <li><span class='dropdown-item' style='cursor: pointer;' onclick='resetAccountPassword($userID)'>Reset Password</span></li>
         </ul>
       </div>
@@ -394,7 +394,7 @@ function getTrainings($employeeID)
 </div>
 
 <script>
-  function editProfile() {
+  function editEmployeeProfile() {
 
     //update the fields of edit modal
     $("#prefix").val("<?php echo $employee['prefix']; ?>");
