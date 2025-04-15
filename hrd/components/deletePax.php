@@ -44,6 +44,9 @@ if ($deleteParticipantResult == "ok") {
   echo "Error deleting participant: $deleteParticipantResult";
 }
 
+updateRegisteredPax($conn, $trainingID);
+$conn->close();
+
 function getEmployeeTrainingID($registrationID)
 {
   global $conn;
@@ -164,3 +167,23 @@ function addActivity($employeeID, $trainingID, $adminID)
 // attendance
 //  - delete WHERE employeeID == y
 //  - delete WHERE trainingID == t
+
+function updateRegisteredPax($conn, $trainingID)
+{
+  $countPaxStmt = $conn->prepare("SELECT * FROM attendance WHERE trainingID = ? AND day = 1");
+  $countPaxStmt->bind_param("s", $trainingID);
+  $countPaxStmt->execute();
+  $result = $countPaxStmt->get_result();
+
+  $totalPax = ($result->num_rows > 0) ? $result->num_rows : 0; // Ensure it always has a value
+
+  $countPaxStmt->close();
+
+  $setRemainingPaxStmt = $conn->prepare("UPDATE training_details SET registeredPax = ? WHERE trainingID = ?");
+  $setRemainingPaxStmt->bind_param("ii", $totalPax, $trainingID);
+  if ($setRemainingPaxStmt->execute()) {
+    return true;
+  }
+  $setRemainingPaxStmt->close();
+  return false;
+}

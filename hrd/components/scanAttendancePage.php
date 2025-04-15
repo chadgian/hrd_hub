@@ -19,31 +19,42 @@
             $start = new DateTime($training['startDate']);
             $end = new DateTime($training['endDate']);
             $numberOfDays = ($start->diff($end))->days + 1;
+            $currentDay = $now->diff($start)->days + 1;
 
-            if ($startDate->format('Y-m-d') == $now->format('Y-m-d')) {
+            if ($startDate->format('Y-m-d') <= $now->format('Y-m-d') && $end->format('Y-m-d') >= $now->format('Y-m-d')) {
               $hasCurrentTraining = true;
               echo "
               <div class='accordion-item'>
                 <h1 class='accordion-header'>
-                  <button class='accordion-button collapsed scanTrainingTitle' type='button' data-bs-toggle='collapse' data-bs-target='#training-collapse-{$training['trainingID']}' aria-expanded='false' aria-controls='training-collapse-{$training['trainingID']}'>
+                  <button class='accordion-button scanTrainingTitle' type='button' data-bs-toggle='collapse' data-bs-target='#training-collapse-{$training['trainingID']}' aria-expanded='true' aria-controls='training-collapse-{$training['trainingID']}'>
                       {$training['name']}
                   </button>
                 </h1>
-                <div id='training-collapse-{$training['trainingID']}' class='accordion-collapse collapse' data-bs-parent='#scanCurrentAccordion'>
+                <div id='training-collapse-{$training['trainingID']}' class='accordion-collapse collapse show' data-bs-parent='#scanCurrentAccordion'>
                   <div class='accordion-body'>
                     <div class='scanAttendanceContainer'>";
 
               for ($i = 1; $i <= $numberOfDays; $i++) {
-                echo "
+              echo "
                   <div class='scanAttendanceBtns'>
                     <h4 class='scanAttendanceDay'><b>DAY $i</b></h4>
                     <div class='scanAttendanceSelect'>
-                      <a href='scan.php?id={$training['trainingID']}&d=$i&log=in'>login</a>
-                      <a href='scan.php?id={$training['trainingID']}&d=$i&log=out'>logout</a>
+                      <a href='scan.php?t={$training['trainingID']}&d=$i&action=in'>login</a>
+                      <a href='scan.php?t={$training['trainingID']}&d=$i&action=out'>logout</a>
                     </div>
                   </div>
                 ";
               }
+          
+              // echo "
+              //     <div class='scanAttendanceBtns'>
+              //       <h4 class='scanAttendanceDay'><b>DAY $currentDay</b></h4>
+              //       <div class='scanAttendanceSelect'>
+              //         <a href='scan.php?t={$training['trainingID']}&d=$currentDay&action=in'>login</a>
+              //         <a href='scan.php?t={$training['trainingID']}&d=$currentDay&action=out'>logout</a>
+              //       </div>
+              //     </div>
+              //   ";
 
               echo "
                     </div>
@@ -56,51 +67,6 @@
 
           if (!$hasCurrentTraining) {
             echo "<i>No current training .</i>";
-          }
-          ?>
-        </div>
-      </div>
-      <div class="scanPrevious">
-        <h4 class="scanTitle">Previous Trainings</h4>
-        <div class="accordion" id="scanPreviousAccordion">
-          <?php
-          foreach ($trainingArray as $training) {
-            $startDate = DateTime::createFromFormat('Y-m-d', $training['startDate']);
-            $start = new DateTime($training['startDate']);
-            $end = new DateTime($training['endDate']);
-            $numberOfDays = ($start->diff($end))->days + 1;
-
-            if ($startDate < $now) {
-              echo "
-              <div class='accordion-item'>
-                <h1 class='accordion-header'>
-                  <button class='accordion-button collapsed scanTrainingTitle' type='button' data-bs-toggle='collapse' data-bs-target='#training-collapse-{$training['trainingID']}' aria-expanded='false' aria-controls='training-collapse-{$training['trainingID']}'>
-                      {$training['name']}
-                  </button>
-                </h1>
-                <div id='training-collapse-{$training['trainingID']}' class='accordion-collapse collapse' data-bs-parent='#scanPreviousAccordion'>
-                  <div class='accordion-body'>
-                    <div class='scanAttendanceContainer'>";
-
-              for ($i = 1; $i <= $numberOfDays; $i++) {
-                echo "
-                <div class='scanAttendanceBtns'>
-                  <h4 class='scanAttendanceDay'><b>DAY $i</b></h4>
-                  <div class='scanAttendanceSelect'>
-                    <a href='scan.php?id={$training['trainingID']}&d=$i&log=in'>login</a>
-                    <a href='scan.php?id={$training['trainingID']}&d=$i&log=out'>logout</a>
-                  </div>
-                </div>
-                ";
-              }
-
-              echo "
-                    </div>
-                  </div>
-                </div>
-              </div>
-              ";
-            }
           }
           ?>
         </div>

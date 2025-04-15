@@ -49,9 +49,18 @@ function addExistingEmployee($employeeID, $trainingID, $file)
       // Check if confSlip is set and upload it
       if (isset($file["name"]) && !empty($file["name"])) {
         if (uploadConfSlip($trainingID, $registrationID, $file) == "ok") {
-          // Commit the transaction if everything is okay
-          $conn->commit();
-          echo "ok";
+
+          // Prepare and bind statement for updating training activities
+          if (updateTrainingActivities($trainingID, $registrationID) && addParticipant($trainingID, $employeeID, $registrationID) && updateRegisteredPax($trainingID)) {
+            // Commit the transaction if update is successful
+            $conn->commit();
+            echo "ok";
+          } else {
+            // Rollback the transaction if update fails
+            $conn->rollback();
+            throw new Exception("Update training activities failed");
+          }
+
         } else {
           // Rollback the transaction if upload fails
           $conn->rollback();
@@ -110,5 +119,110 @@ function uploadConfSlip($trainingID, $registrationID, $file)
     return "ok";
   } else {
     return "error";
+  }
+}
+
+function updateTrainingActivities($trainingID, $registrationID)
+{
+  global $conn;
+
+  $updateActStmt = $conn->prepare("INSERT INTO training_activities (trainingID, trainingActivityType, relationID) VALUES (?, '0', ?)");
+  $updateActStmt->bind_param("ss", $trainingID, $registrationID);
+  if ($updateActStmt->execute()) {
+    return true;
+  }
+  $updateActStmt->close();
+}
+
+function addParticipant($trainingID, $employeeID, $registrationID)
+{
+  global $conn;
+
+  $getLastIDStmt = $conn->prepare("SELECT idNumber FROM training_participants WHERE trainingID = ? ORDER BY participantID DESC LIMIT 1");
+  $getLastIDStmt->bind_param("s", $trainingID);
+  $getLastIDStmt->execute();
+  $getLastIDStmt->bind_result($lastID);
+  $idNumber = ($getLastIDStmt->fetch()) ? $lastID + 1 : 1;
+  $getLastIDStmt->close();
+
+  $addParticipantStmt = $conn->prepare("INSERT INTO training_participants (employeeID, registrationID, trainingID, idNumber) VALUES (?, ?, ?, ?)");
+  $addParticipantStmt->bind_param("ssss", $employeeID, $registrationID, $trainingID, $idNumber);
+  if ($addParticipantStmt->execute()) {
+    if (addAttendance($trainingID, $employeeID)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  $addParticipantStmt->close();
+}
+
+function updateRegisteredPax($trainingID)
+{
+  global $conn;
+
+  $countPaxStmt = $conn->prepare("SELECT * FROM attendance WHERE trainingID = ? AND day = 1");
+  $countPaxStmt->bind_param("s", $trainingID);
+  $countPaxStmt->execute();
+  $result = $countPaxStmt->get_result();
+
+  $totalPax = ($result->num_rows > 0) ? $result->num_rows : 0; // Ensure it always has a value
+
+  $countPaxStmt->close();
+
+  $setRemainingPaxStmt = $conn->prepare("UPDATE training_details SET registeredPax = ? WHERE trainingID = ?");
+  $setRemainingPaxStmt->bind_param("ii", $totalPax, $trainingID);
+  if ($setRemainingPaxStmt->execute()) {
+    return true;
+  }
+
+  $setRemainingPaxStmt->close();
+}
+
+function addAttendance($trainingID, $employeeID)
+{
+  global $conn;
+
+  $stmt = $conn->prepare("SELECT startDate, endDate FROM training_details WHERE trainingID = ?");
+  $stmt->bind_param("s", $trainingID);
+  $stmt->execute();
+  $stmt->bind_result($startDate, $endDate);
+  $stmt->fetch();
+  $stmt->close();
+
+  if ($startDate && $endDate) {
+    // Convert to DateTime objects
+    $start = new DateTime($startDate);
+    $end = new DateTime($endDate);
+
+    // Calculate the number of days (including start and end date)
+    $interval = $start->diff($end);
+    $days = $interval->days + 1; // Add 1 to include both start and end date
+  }
+
+  $stmt2 = $conn->prepare("SELECT participantID FROM training_participants WHERE trainingID = ? AND employeeID = ?");
+  $stmt2->bind_param("ss", $trainingID, $employeeID);
+  $stmt2->execute();
+  $stmt2->bind_result($participantID);
+  $stmt2->fetch();
+  $stmt2->close();
+
+  $status = "ok";
+
+  for ($i = 1; $i <= $days; $i++) {
+    $addAttendanceStmt = $conn->prepare("INSERT INTO attendance (employeeID, trainingID, participantID, day) VALUES (?, ?, ?, ?)");
+    $addAttendanceStmt->bind_param("ssss", $employeeID, $trainingID, $participantID, $i);
+    if ($addAttendanceStmt->execute()) {
+      continue;
+    } else {
+      $status = "error";
+    }
+    $addAttendanceStmt->close();
+  }
+
+  if ($status == "ok") {
+    return true;
+  } else {
+    return false;
   }
 }

@@ -9,112 +9,77 @@ $conn->autocommit(false);
 
 // Start a transaction
 $conn->begin_transaction();
+$registrationID = null;
+$employeeID = null;
+$trainingID = null;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-  // Saving variables
-  $prefix = trim($_POST['prefix']) . " ";
-  $firstName = trim($_POST["firstName"]);
-  $middleInitial = trim($_POST['middleInitial']);
-  $middleInitial = $middleInitial === "" ? "" : trim($middleInitial) . ".";
-  $lastName = trim($_POST['lastName']);
-  $suffix = $_POST['suffix'];
-  $nickname = trim($_POST['nickname']);
-  $sex = $_POST['sex'];
-  $age = $_POST['age'];
-  $civilStatus = $_POST['civilStatus'];
-  $phoneNumber = $_POST['phoneNumber'];
-  $email = $_POST['email'];
-  $altEmail = $_POST['altEmail'];
-  $position = trim($_POST['position']);
-  $sector = $_POST['sector'];
-  $agencyName = $_POST['agencyName'];
-  $agencyAddress = $_POST['agencyAddress'];
-  $fo = $_POST['fo'];
-  $foodRestriction = trim($_POST['foodRestrictions']);
-  $userID = $_POST['userID'];
+  try {
 
-  $trainingID = $_POST['trainingID'];
+    // Saving variables
+    $prefix = trim($_POST['prefix']) . " ";
+    $firstName = trim($_POST["firstName"]);
+    $middleInitial = trim($_POST['middleInitial']);
+    $middleInitial = $middleInitial === "" ? "" : trim($middleInitial) . ".";
+    $lastName = trim($_POST['lastName']);
+    $suffix = $_POST['suffix'];
+    $nickname = trim($_POST['nickname']);
+    $sex = $_POST['sex'];
+    $age = $_POST['age'];
+    $civilStatus = $_POST['civilStatus'];
+    $phoneNumber = $_POST['phoneNumber'];
+    $email = $_POST['email'];
+    $altEmail = $_POST['altEmail'];
+    $position = trim($_POST['position']);
+    $sector = $_POST['sector'];
+    $agencyName = $_POST['agencyName'];
+    $agencyAddress = $_POST['agencyAddress'];
+    $fo = $_POST['fo'];
+    $foodRestriction = trim($_POST['foodRestrictions']);
+    $userID = $_POST['userID'];
 
-  // $sql = "SELECT MAX(registrationID) AS highest_registrationID FROM registration_details";
-  // $result = $conn->query($sql);
+    $trainingID = $_POST['trainingID'];
 
-  // uploading the confirmation slip
+    // $sql = "SELECT MAX(registrationID) AS highest_registrationID FROM registration_details";
+    // $result = $conn->query($sql);
 
-  $slipFolder = "../../assets/conf_slips/$trainingID/";
+    // uploading the confirmation slip
 
-  $agencyID = getAgencyID($agencyName, $sector, $fo, $agencyAddress);
+    $slipFolder = "../../assets/conf_slips/$trainingID/";
 
-  if (!file_exists($slipFolder)) {
-    mkdir($slipFolder, 0777, true); // Create directory with full permissions (0777)
-  }
+    $agencyID = getAgencyID($agencyName, $sector, $fo, $agencyAddress);
 
-  $status = "ok";
+    if (!file_exists($slipFolder)) {
+      mkdir($slipFolder, 0777, true); // Create directory with full permissions (0777)
+    }
 
-  $slipFile = $slipFolder . basename($_FILES["confirmationSlip"]["name"]);
-  $imageFileType = strtolower(pathinfo($slipFile, PATHINFO_EXTENSION));
+    $status = "ok";
 
-  //check if it is an actual image
-  $check = getimagesize($_FILES['confirmationSlip']['tmp_name']);
-  if ($check === false) {
-    // $status += ", not_image";
-  }
+    $slipFile = $slipFolder . basename($_FILES["confirmationSlip"]["name"]);
+    $imageFileType = strtolower(pathinfo($slipFile, PATHINFO_EXTENSION));
 
-  // Check file size
-  if ($_FILES['confirmationSlip']['size'] > 5000000) {
-    // $status += ", file_too_large";
-  }
+    //check if it is an actual image
+    $check = getimagesize($_FILES['confirmationSlip']['tmp_name']);
+    if ($check === false) {
+      // $status += ", not_image";
+    }
 
-  // check image format
-  if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
-    // $status += ", wrong_format";
-  }
+    // Check file size
+    if ($_FILES['confirmationSlip']['size'] > 5000000) {
+      // $status += ", file_too_large";
+    }
 
-
-
-  if ($status === "ok") {
-
-    if ($userID > 0) {
-      $getEmployeeID = $conn->prepare("SELECT employeeID FROM employee WHERE userID = ?");
-      $getEmployeeID->bind_param("s", $userID);
-
-      if ($getEmployeeID->execute()) {
-        $getEmployeeIDResult = $getEmployeeID->get_result();
-        $employeeID = $getEmployeeIDResult->fetch_assoc()['employeeID'];
-      } else {
-        echo "Get employee ID error: {$getEmployeeID->error}";
-      }
-
-      $registrationID = saveRegistration($trainingID, $employeeID, $userID);
-
-      $slipFileName = "$registrationID.$imageFileType";
-      $targetFile = "$slipFolder$slipFileName";
-
-      if (move_uploaded_file($_FILES["confirmationSlip"]["tmp_name"], $targetFile)) {
-        $status = "ok";
-        $conn->commit();
-        echo $status;
-      } else {
-        $status += ", error_upload";
-        $conn->rollback();
-        echo $status;
-      }
-      $getEmployeeID->close();
-      $conn->close();
-
-    } else {
-
-      $userAccount = explode("::", createUserAccount($prefix, $firstName, $lastName, $suffix, $middleInitial, $position, $agencyName, $email));
-
-      $userID = $userAccount[0];
-      $password = $userAccount[1];
-
-      $regStmt = $conn->prepare("INSERT INTO employee (userID, prefix, firstName, lastName, middleInitial, suffix, nickname, age, sex, civilStatus, phoneNumber, email, altEmail, position, agency, foodRestriction) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-      $regStmt->bind_param("ssssssssssssssss", $userID, $prefix, $firstName, $lastName, $middleInitial, $suffix, $nickname, $age, $sex, $civilStatus, $phoneNumber, $email, $altEmail, $position, $agencyID, $foodRestriction);
+    // check image format
+    if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
+      // $status += ", wrong_format";
+    }
 
 
-      if ($regStmt->execute()) {
 
+    if ($status === "ok") {
+
+      if ($userID > 0) {
         $getEmployeeID = $conn->prepare("SELECT employeeID FROM employee WHERE userID = ?");
         $getEmployeeID->bind_param("s", $userID);
 
@@ -122,40 +87,102 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           $getEmployeeIDResult = $getEmployeeID->get_result();
           $employeeID = $getEmployeeIDResult->fetch_assoc()['employeeID'];
         } else {
-          $conn->rollback();
           echo "Get employee ID error: {$getEmployeeID->error}";
         }
 
-        $registrationID = saveRegistration($trainingID, $employeeID, $userID);
+        $registrationID = saveRegistration($userID);
 
-        $slipFileName = $registrationID . "." . $imageFileType;
+        $slipFileName = "$registrationID.$imageFileType";
         $targetFile = "$slipFolder$slipFileName";
 
         if (move_uploaded_file($_FILES["confirmationSlip"]["tmp_name"], $targetFile)) {
-          $status = "ok::$password";
-          $conn->commit();
-          echo $status;
+          $status = "ok";
+
+          if (addParticipant() && updateRegisteredPax() && updateTrainingActivities()) {
+            $status = "ok";
+            $conn->commit();
+            echo $status;
+          } else {
+            $status += ", error_adding_participant";
+            $conn->rollback();
+            echo $status;
+          }
         } else {
           $status += ", error_upload";
           $conn->rollback();
           echo $status;
         }
+        $getEmployeeID->close();
+        $conn->close();
+
+      } else {
+
+        $userAccount = explode("::", createUserAccount($prefix, $firstName, $lastName, $suffix, $middleInitial, $position, $agencyName, $email));
+
+        $userID = $userAccount[0];
+        $password = $userAccount[1];
+
+        $regStmt = $conn->prepare("INSERT INTO employee (userID, prefix, firstName, lastName, middleInitial, suffix, nickname, age, sex, civilStatus, phoneNumber, email, altEmail, position, agency, foodRestriction) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $regStmt->bind_param("ssssssssssssssss", $userID, $prefix, $firstName, $lastName, $middleInitial, $suffix, $nickname, $age, $sex, $civilStatus, $phoneNumber, $email, $altEmail, $position, $agencyID, $foodRestriction);
+
+
+        if ($regStmt->execute()) {
+
+          $getEmployeeID = $conn->prepare("SELECT employeeID FROM employee WHERE userID = ?");
+          $getEmployeeID->bind_param("s", $userID);
+
+          if ($getEmployeeID->execute()) {
+            $getEmployeeIDResult = $getEmployeeID->get_result();
+            $employeeID = $getEmployeeIDResult->fetch_assoc()['employeeID'];
+          } else {
+            $conn->rollback();
+            echo "Get employee ID error: {$getEmployeeID->error}";
+          }
+
+          $registrationID = saveRegistration($userID);
+
+          $slipFileName = $registrationID . "." . $imageFileType;
+          $targetFile = "$slipFolder$slipFileName";
+
+          if (move_uploaded_file($_FILES["confirmationSlip"]["tmp_name"], $targetFile)) {
+            $status = "ok::$password";
+
+            if (addParticipant() && updateRegisteredPax() && updateTrainingActivities()) {
+              $status = "ok::$password";
+              $conn->commit();
+              echo $status;
+            } else {
+              $status += ", error_adding_participant";
+              $conn->rollback();
+              echo $status;
+            }
+          } else {
+            $status += ", error_upload";
+            $conn->rollback();
+            echo $status;
+          }
+        }
+        $regStmt->close();
+        $conn->close();
       }
-      $regStmt->close();
-      $conn->close();
+    } else {
+      // $conn->commit();
+      $conn->rollback();
+      echo $status;
     }
-  } else {
-    $conn->commit();
-    echo $status;
+  } catch (\Throwable $th) {
+    //throw $th;
+    $conn->rollback();
+    echo "NOT OKAY - " . $th;
   }
 } else {
   $conn->rollback();
-  echo "NOT OKAY";
+  echo "NOT OKAY - outside";
 }
 
-function saveRegistration($trainingID, $employeeID, $userID)
+function saveRegistration($userID)
 {
-  global $conn;
+  global $conn, $employeeID, $trainingID;
 
   $regTrainingStmt = $conn->prepare("INSERT INTO registration_details (trainingID, employeeID, userID) VALUES (?, ?, ?)");
   $regTrainingStmt->bind_param("sss", $trainingID, $employeeID, $userID);
@@ -236,5 +263,110 @@ function getAgencyID($agencyName, $sector, $province, $agencyAddress)
     }
   } else {
     $conn->rollback();
+  }
+}
+
+function addParticipant()
+{
+  global $registrationID, $trainingID, $employeeID, $conn;
+
+  $getLastIDStmt = $conn->prepare("SELECT idNumber FROM training_participants WHERE trainingID = ? ORDER BY participantID DESC LIMIT 1");
+  $getLastIDStmt->bind_param("s", $trainingID);
+  $getLastIDStmt->execute();
+  $getLastIDStmt->bind_result($lastID);
+  $idNumber = ($getLastIDStmt->fetch()) ? $lastID + 1 : 1;
+  $getLastIDStmt->close();
+
+  $addParticipantStmt = $conn->prepare("INSERT INTO training_participants (employeeID, registrationID, trainingID, idNumber) VALUES (?, ?, ?, ?)");
+  $addParticipantStmt->bind_param("ssss", $employeeID, $registrationID, $trainingID, $idNumber);
+  if ($addParticipantStmt->execute()) {
+    if (addAttendance()) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  $addParticipantStmt->close();
+}
+
+function updateRegisteredPax()
+{
+  global $conn, $trainingID;
+
+  $countPaxStmt = $conn->prepare("SELECT * FROM attendance WHERE trainingID = ? AND day = 1");
+  $countPaxStmt->bind_param("s", $trainingID);
+  $countPaxStmt->execute();
+  $result = $countPaxStmt->get_result();
+
+  $totalPax = ($result->num_rows > 0) ? $result->num_rows : 0; // Ensure it always has a value
+
+  $countPaxStmt->close();
+
+  $setRemainingPaxStmt = $conn->prepare("UPDATE training_details SET registeredPax = ? WHERE trainingID = ?");
+  $setRemainingPaxStmt->bind_param("ii", $totalPax, $trainingID);
+  if ($setRemainingPaxStmt->execute()) {
+    return true;
+  }
+
+  $setRemainingPaxStmt->close();
+}
+
+function updateTrainingActivities()
+{
+  global $conn, $trainingID, $registrationID;
+
+  $updateActStmt = $conn->prepare("INSERT INTO training_activities (trainingID, trainingActivityType, relationID) VALUES (?, '0', ?)");
+  $updateActStmt->bind_param("ss", $trainingID, $registrationID);
+  if ($updateActStmt->execute()) {
+    return true;
+  }
+  $updateActStmt->close();
+}
+
+function addAttendance()
+{
+  global $conn, $trainingID, $employeeID;
+
+  $stmt = $conn->prepare("SELECT startDate, endDate FROM training_details WHERE trainingID = ?");
+  $stmt->bind_param("s", $trainingID);
+  $stmt->execute();
+  $stmt->bind_result($startDate, $endDate);
+  $stmt->fetch();
+  $stmt->close();
+
+  if ($startDate && $endDate) {
+    // Convert to DateTime objects
+    $start = new DateTime($startDate);
+    $end = new DateTime($endDate);
+
+    // Calculate the number of days (including start and end date)
+    $interval = $start->diff($end);
+    $days = $interval->days + 1; // Add 1 to include both start and end date
+  }
+
+  $stmt2 = $conn->prepare("SELECT participantID FROM training_participants WHERE trainingID = ? AND employeeID = ?");
+  $stmt2->bind_param("ss", $trainingID, $employeeID);
+  $stmt2->execute();
+  $stmt2->bind_result($participantID);
+  $stmt2->fetch();
+  $stmt2->close();
+
+  $status = "ok";
+
+  for ($i = 1; $i <= $days; $i++) {
+    $addAttendanceStmt = $conn->prepare("INSERT INTO attendance (employeeID, trainingID, participantID, day) VALUES (?, ?, ?, ?)");
+    $addAttendanceStmt->bind_param("ssss", $employeeID, $trainingID, $participantID, $i);
+    if ($addAttendanceStmt->execute()) {
+      continue;
+    } else {
+      $status = "error";
+    }
+    $addAttendanceStmt->close();
+  }
+
+  if ($status == "ok") {
+    return true;
+  } else {
+    return false;
   }
 }

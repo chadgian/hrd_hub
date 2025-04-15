@@ -22,6 +22,8 @@
           </li>
           <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#exportAttendanceModal">Generate
               Attendance Sheet</a></li>
+          <li><a class="dropdown-item" href="#" onclick="downloadAttendance()">Download
+              Attendance Sheet</a></li>
         </ul>
       </div>
       <div>
@@ -1400,6 +1402,28 @@
         // Handle AJAX errors
         exportBtn.disabled = false;
         exportBtn.textContent = "Export Attendance";
+        console.log("AJAX error: " + textStatus + ': ' + errorThrown);
+        alert("An AJAX error occurred: " + textStatus + '. ' + errorThrown);
+      }
+    });
+  }
+
+  function downloadAttendance() {
+    const trainingID = <?php echo $id; ?>;
+
+    $.ajax({
+      type: "POST",
+      url: "components/downloadAttendance.php",
+      data: { trainingID: trainingID },
+      success: function (data) {
+        if (data == "ok") {
+          alert("Attendance sheet downloaded.");
+        } else {
+          console.log(data);
+        }
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        // Handle AJAX errors
         console.log("AJAX error: " + textStatus + ': ' + errorThrown);
         alert("An AJAX error occurred: " + textStatus + '. ' + errorThrown);
       }
