@@ -1324,15 +1324,16 @@ checkLogin();
   </div>
 
   <!-- Vendor JS Files -->
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <script src="assets/vendor/aos/aos.js"></script>
-  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script> -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
   <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
   <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
   <script src="assets/vendor/php-email-form/validate.js"></script>
 
-  <!-- jQuery -->
-  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <!-- DataTables JS -->
   <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap4.min.js"></script>
@@ -1396,6 +1397,7 @@ checkLogin();
   </script>
 
   <script>
+    checkRedirectReg();
 
     function toReviewDetails() {
       const status = checkRequiredFields();
@@ -1780,6 +1782,19 @@ checkLogin();
 
 
       });
+    }
+
+    function checkRedirectReg() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const trainingReg = urlParams.get('t');
+
+      if (trainingReg !== "") {
+        trainingDetails(trainingReg);
+
+        const modalElement = document.getElementById('staticBackdrop');
+        const modal = new bootstrap.Modal(modalElement);
+        modal.show();
+      }
     }
   </script>
 

@@ -4,7 +4,13 @@
       <?php include 'components/navbar.php'; ?>
     </div>
     <div class='col-md-7 middle-content'>
-      Messages
+      <?php
+      if (isset($_GET['m'])) {
+        include 'components/viewMessage.php';
+      } else {
+        include 'components/messageHomepage.php';
+      }
+      ?>
     </div>
     <div class='col-md-3 right-side'>
       <?php include 'components/recents.php'; ?>

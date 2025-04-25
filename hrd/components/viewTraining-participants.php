@@ -364,6 +364,7 @@
               <div class="status-list-title">Remark:</div>
               <div class="status-list-toggle d-flex flex-column gap-2">
                 <select name="attendanceRemark" id="attendanceRemark">
+                  <option value="">No Remarks</option>
                   <option value="0">Replaced</option>
                   <option value="1">Valid Cancellation</option>
                   <option value="2">Invalid Cancellation</option>
@@ -760,6 +761,7 @@
 
           const parsedData = JSON.parse(data);
           paymentDetailsValue = {};
+          $("#updateStatusLoading").removeClass("d-flex");
           $("#updateStatusLoading").addClass("d-none");
           fillStatusField(parsedData);
           $("#updateStatusContent").show();
