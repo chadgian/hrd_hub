@@ -68,6 +68,10 @@ if ($type == 0) {
 
         // echo json_encode($fetchProfileTrainingsData);
 
+        $downloadCOCBtn = $attendanceContent == "Incomplete" ? "disabled-link" : ($paymentContent == "Unpaid" ? "disabled-link" : "");
+
+        $COCStatus = $attendanceContent == "Incomplete" ? "Incomplete Attendance" : ($paymentContent == "Unpaid" ? "Unpaid Training Fee" : "");
+
         echo "
         <div class='training-detail'>
           <div class='training-detail-header'>{$fetchProfileTrainingsData['trainingName']}</div>
@@ -173,8 +177,21 @@ if ($type == 0) {
                 </div>
               </div>
             </div>
+            <div style='margin-top: 20px; font-size: small; font-weight: bold;justify-content: center;' class='d-flex'>
+              <a class='training-detail-group-title text-center btn btn-warning $downloadCOCBtn' style='flex: 1; margin-bottom: 5px; border-radius: 5px;' href='#'>
+                Certificate of Completion<br>
+                <span style='font-size: small; font-style: italic;'>$COCStatus</span>
+              </a>
+            </div>
           </div>
         </div>
+        <style>
+          .disabled-link {
+            pointer-events: none; /* make it unclickable */
+            opacity: 0.6; /* make it look disabled */
+            cursor: not-allowed;
+          }
+        </style>
         ";
 
 
