@@ -104,6 +104,19 @@
   </div>
 </div>
 
+<?php
+session_start();
+$getUsernameStmt = $conn->prepare("SELECT username FROM user WHERE userID = ?");
+$getUsernameStmt->bind_param("s", $_SESSION['userID']);
+$getUsernameStmt->execute();
+$getUsernameResult = $getUsernameStmt->get_result();
+$getUsernameData = $getUsernameResult->fetch_assoc();
+$getUsername = $getUsernameData['username'];
+$getUsernameStmt->close();
+
+// echo "userID: " . $_SESSION['userID'];
+?>
+
 <!-- Participant Status Modal -->
 <div class="modal fade" id="viewParticipantStatusModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
   aria-labelledby="viewParticipantStatusModalLabel" aria-hidden="true">
@@ -151,12 +164,15 @@
                 <label class="form-label" for="fieldOffice">Field Office</label>
                 <select name="fieldOffice" id="fieldOffice" class="form-control">
                   <option value="0">Select field office...</option>
-                  <option value="csc">Regional Office</option>
-                  <option value="aklan">FO - Aklan</option>
-                  <option value="antique">FO - Antique</option>
-                  <option value="guimaras">FO - Guimaras</option>
-                  <option value="iloilo">FO - Iloilo</option>
-                  <option value="negros">FO - Negros Occidental</option>
+                  <option value="csc" <?php echo $getUsername == "csc" ? "selected" : "" ?>>Regional Office</option>
+                  <option value="aklan" <?php echo $getUsername == "aklan" ? "selected" : "" ?>>FO - Aklan</option>
+                  <option value="antique" <?php echo $getUsername == "antique" ? "selected" : "" ?>>FO - Antique</option>
+                  <option value="capiz" <?php echo $getUsername == "capiz" ? "selected" : "" ?>>FO - Capiz</option>
+                  <option value="guimaras" <?php echo $getUsername == "guimaras" ? "selected" : "" ?>> FO - Guimaras
+                  </option>
+                  <option value="iloilo" <?php echo $getUsername == "iloilo" ? "selected" : "" ?>>FO - Iloilo</option>
+                  <option value="negros" <?php echo $getUsername == "negros" ? "selected" : "" ?>>FO - Negros Occidental
+                  </option>
                 </select>
               </div>
               <div class="col-md-6 d-flex flex-column">

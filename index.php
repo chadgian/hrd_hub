@@ -1788,7 +1788,7 @@ checkLogin();
       const urlParams = new URLSearchParams(window.location.search);
       const trainingReg = urlParams.get('t');
 
-      if (trainingReg !== "") {
+      if (trainingReg > 0) {
         trainingDetails(trainingReg);
 
         const modalElement = document.getElementById('staticBackdrop');
