@@ -181,7 +181,7 @@ if ($trainingResult->num_rows == 0) {
           </div>
           <div class="mb-3">
             <label for="participantDatePaid" class="form-label">Date Paid</label>
-            <input type="text" class="form-control" id="participantDatePaid" name="participantDatePaid" readonly>
+            <input type="date" class="form-control" id="participantDatePaid" name="participantDatePaid" readonly>
           </div>
           <div class="mb-3">
             <label for="participantRemarks" class="form-label">Remarks</label>

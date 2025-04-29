@@ -11,10 +11,11 @@ $position = $_POST['position'];
 $initials = $_POST['initials'];
 $username = $_POST['username'];
 $password = "@LingkodBayani";
+$agencyID = "19";
 
 if ($role == "admin") {
-  $addAdmin = $conn->prepare("INSERT INTO user (role, prefix, firstName, middleInitial, lastName, suffix, position, initials, username, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-  $addAdmin->bind_param("ssssssssss", $role, $prefix, $fname, $mname, $lname, $suffix, $position, $initials, $username, $password);
+  $addAdmin = $conn->prepare("INSERT INTO user (role, prefix, firstName, middleInitial, lastName, suffix, agency, position, initials, username, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+  $addAdmin->bind_param("sssssssssss", $role, $prefix, $fname, $mname, $lname, $suffix, $agencyID, $position, $initials, $username, $password);
   if ($addAdmin->execute()) {
     echo "ok";
   } else {
@@ -22,8 +23,8 @@ if ($role == "admin") {
   }
   $addAdmin->close();
 } else if ($role == "payment") {
-  $addPayment = $conn->prepare("INSERT INTO user (role, initials, username, password) VALUES (?, ?, ?, ?)");
-  $addPayment->bind_param("ssss", $role, $initials, $username, $password);
+  $addPayment = $conn->prepare("INSERT INTO user (role, initials, username, password, agency) VALUES (?, ?, ?, ?, ?)");
+  $addPayment->bind_param("sssss", $role, $initials, $username, $password, $agencyID);
   if ($addPayment->execute()) {
     echo "ok";
   } else {

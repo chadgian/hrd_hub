@@ -100,6 +100,11 @@ if ($oldTrainingsResult->num_rows > 0) {
           </div>
           <input type="hidden" id="editTrainingID" name="editTrainingID">
         </form>
+        <div class="d-flex justify-content-center mt-3">
+          <button type="button" class="btn btn-outline-danger" id="deleteTrainingBtn"
+            onclick="deleteOldTraining()">Delete
+            Training</button>
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
@@ -138,21 +143,21 @@ if ($oldTrainingsResult->num_rows > 0) {
       url: 'components/updateOldTraining.php',
       type: 'POST',
       data: {
-      trainingID: trainingID,
-      trainingName: trainingName,
-      startDate: startDate,
-      endDate: endDate
+        trainingID: trainingID,
+        trainingName: trainingName,
+        startDate: startDate,
+        endDate: endDate
       },
       success: function (response) {
-      console.log(response);
-      alert('Training updated successfully.');
-      window.location.reload();
+        console.log(response);
+        alert('Training updated successfully.');
+        window.location.reload();
       },
       error: function (xhr, status, error) {
-      console.error('Error:', error);
-      console.error('Status:', status);
-      console.error('Response:', xhr.responseText);
-      alert('An error occurred while updating the training.');
+        console.error('Error:', error);
+        console.error('Status:', status);
+        console.error('Response:', xhr.responseText);
+        alert('An error occurred while updating the training.');
       }
     });
   }
@@ -170,7 +175,8 @@ if ($oldTrainingsResult->num_rows > 0) {
         <div class="mb-3">
           <span>
             <strong>Note:</strong> Please ensure that the file you are importing is in the correct format. The file
-            should be a CSV or Excel file.
+            should be a CSV or Excel file. <a href="assets/sources/oldDatabaseSample.xlsx" download>Click here to
+              download the template.</a>
           </span>
         </div>
         <input type="file" class="form-control" id="importTrainingFile" accept=".csv, .xlsx, .xls">
@@ -219,5 +225,32 @@ if ($oldTrainingsResult->num_rows > 0) {
         importTrainingBtn.disabled = false;
       }
     });
+  }
+
+  function deleteOldTraining() {
+    const trainingID = document.getElementById('editTrainingID').value;
+    if (!trainingID) {
+      alert('No training selected for deletion.');
+      return;
+    }
+
+    if (confirm('Are you sure you want to delete this training? The participants and their data within this training will be deleted too. This action cannot be undone.')) {
+      $.ajax({
+        url: 'components/databaseDeleteOldTraining.php',
+        type: 'POST',
+        data: { trainingID: trainingID },
+        success: function (response) {
+          console.log(response);
+          alert('Training deleted successfully.');
+          window.location.reload();
+        },
+        error: function (xhr, status, error) {
+          console.error('Error:', error);
+          console.error('Status:', status);
+          console.error('Response:', xhr.responseText);
+          alert('An error occurred while deleting the training.');
+        }
+      });
+    }
   }
 </script>
