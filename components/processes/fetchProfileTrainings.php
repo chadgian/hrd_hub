@@ -177,12 +177,6 @@ if ($type == 0) {
                 </div>
               </div>
             </div>
-            <div style='margin-top: 20px; font-size: small; font-weight: bold;justify-content: center;' class='d-flex'>
-              <a class='training-detail-group-title text-center btn btn-warning $downloadCOCBtn' style='flex: 1; margin-bottom: 5px; border-radius: 5px;' href='#'>
-                Certificate of Completion<br>
-                <span style='font-size: small; font-style: italic;'>$COCStatus</span>
-              </a>
-            </div>
           </div>
         </div>
         <style>

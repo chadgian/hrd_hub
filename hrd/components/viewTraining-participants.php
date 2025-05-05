@@ -22,8 +22,10 @@
           </li>
           <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#exportAttendanceModal">Generate
               Attendance Sheet</a></li>
-          <li><a class="dropdown-item" href="#" onclick="downloadAttendance()">Download
-              Attendance Sheet</a></li>
+          <li><a class="dropdown-item" href="#" onclick="downloadParticipantData()">Download Participant Data</a></li>
+          <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#scannedAttendanceModal">Scanned
+              Attendance
+              Sheet</a></li>
         </ul>
       </div>
       <div>
@@ -43,17 +45,33 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body d-flex flex-column gap-3 align-items-center">
-          <button onclick="exportAttendance()" id="exportAttendanceBtn" class="btn btn-primary">Export
-            Attendance</button>
+          <div>
+            <?php
+            $trainingDetailsStmt = $conn->prepare("SELECT * FROM training_details WHERE trainingID = ?");
+            $trainingDetailsStmt->bind_param("s", $id);
+            $trainingDetailsStmt->execute();
+            $trainingDetailsResult = $trainingDetailsStmt->get_result();
+            $trainingDetails = $trainingDetailsResult->fetch_assoc();
+            $trainingStart = new DateTime($trainingDetails['startDate']);
+            $trainingEnd = new DateTime($trainingDetails['endDate']);
+            $trainingDays = $trainingEnd->diff($trainingStart)->days + 1;
+            $trainingName = $trainingDetails['trainingName'];
+
+            for ($i = 1; $i <= $trainingDays; $i++) {
+              echo "<button class='btn btn-primary m-1' onclick='exportAttendance($i)' id='exportAttendanceBtn$i'>Day $i</button>";
+            }
+            ?>
+          </div>
+          <!-- <button onclick="exportAttendance()" id="exportAttendanceBtn" class="btn btn-primary">Download Day 1</button> -->
           <span id="downloadAttendanceSheetSpan">
             <?php
-            $attendanceSheetFile = "assets/sources/attendance_sheets/{$id}_attendance_sheet.xlsx";
-
-            if (file_exists($attendanceSheetFile)) {
-              echo "<a href='{$attendanceSheetFile}' target='_blank'>Download Attendance Sheet</a>";
-            } else {
-              echo "<i>No attendance sheet available.</i>";
-            }
+            // $attendanceSheetFile = "assets/sources/attendance_sheets/{$id}_attendance_sheet.xlsx";
+            
+            // if (file_exists($attendanceSheetFile)) {
+            //   echo "<a href='{$attendanceSheetFile}' target='_blank'>Download Attendance Sheet</a>";
+            // } else {
+            //   echo "<i>No attendance sheet available.</i>";
+            // }
             ?>
           </span>
         </div>
@@ -589,6 +607,39 @@
         <h5>Generating ID</h5>
         <div id="response"></div>
         <button data-bs-dismiss="modal" aria-label="Close" id="generateID-close">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Scanned Attendance Sheet -->
+<div class="modal fade" id="scannedAttendanceModal" tabindex="-1" aria-labelledby="scannedAttendanceModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="scannedAttendanceModalLabel">Scanned Attendance Sheet</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <?php
+        $scannedAttendanceSheet = "assets/sources/scanned_attendance_sheets/{$id}_attendance_sheet.pdf";
+        if (file_exists($scannedAttendanceSheet)) {
+          echo "<embed src='{$scannedAttendanceSheet}' type='application/pdf' width='100%' height='500px'/>";
+          echo "<p>Click <a href='{$scannedAttendanceSheet}' download>here</a> to download the scanned attendance sheet.</p>";
+          echo "<input type='file' id='scannedAttendanceSheet' accept='.pdf'>";
+          echo "<button class='btn btn-primary' onclick='uploadScannedAttendanceSheet()'>Replace Scanned Attendance Sheet</button>";
+
+        } else {
+          echo "<p>No scanned attendance sheet available.</p>";
+          echo "<p>Upload a scanned attendance sheet to view it here.<small>(PDF only)</small></p>";
+          echo "<input type='file' id='scannedAttendanceSheet' accept='.pdf'>";
+          echo "<button class='btn btn-primary' onclick='uploadScannedAttendanceSheet()'>Upload Scanned Attendance Sheet</button>";
+        }
+        ?>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
@@ -1360,19 +1411,19 @@
     })
   }
 
-  function exportAttendance() {
+  function exportAttendance(day) {
     const trainingID = <?php echo $id; ?>;
-    const exportBtn = document.getElementById("exportAttendanceBtn");
+    const exportBtn = document.getElementById("exportAttendanceBtn" + day);
 
     // Disable the button and change its text to indicate processing
     exportBtn.disabled = true;
-    exportBtn.textContent = "Generating...";
+    // exportBtn.textContent = "Generating...";
 
 
     $.ajax({
       type: "POST",
       url: "components/exportAttendance.php",
-      data: { trainingID: trainingID },
+      data: { trainingID: trainingID, day: day },
       success: function (data) {
         if (data == "ok") {
           alert("Attendance sheet generated.");
@@ -1383,7 +1434,7 @@
 
           // Create a new download link
           const downloadLink = document.createElement("a");
-          downloadLink.href = `assets/sources/attendance_sheets/${trainingID}_attendance_sheet.xlsx`;
+          downloadLink.href = `assets/sources/attendance_sheets/[<?php echo $trainingName; ?>] Day ${day} Attendance Sheet.xlsx`;
           downloadLink.target = "_blank";
           downloadLink.id = "attendanceSheetLink";
           downloadLink.textContent = "Download Attendance Sheet";
@@ -1393,10 +1444,10 @@
           downloadLink.click();
 
           exportBtn.disabled = false;
-          exportBtn.textContent = "Export Attendance";
+          // exportBtn.textContent = "Export Attendance";
         } else {
           exportBtn.disabled = false;
-          exportBtn.textContent = "Export Attendance";
+          // exportBtn.textContent = "Export Attendance";
           console.log(data);
         }
       },
@@ -1410,12 +1461,12 @@
     });
   }
 
-  function downloadAttendance() {
+  function downloadParticipantData() {
     const trainingID = <?php echo $id; ?>;
 
     $.ajax({
       type: "POST",
-      url: "components/downloadAttendance.php",
+      url: "components/downloadParticipantData.php",
       data: { trainingID: trainingID },
       success: function (data) {
         if (data == "ok") {
@@ -1430,5 +1481,38 @@
         alert("An AJAX error occurred: " + textStatus + '. ' + errorThrown);
       }
     });
+  }
+
+  function uploadScannedAttendanceSheet() {
+    const fileInput = document.getElementById("scannedAttendanceSheet");
+    const scannedAttendanceSheet = fileInput.files[0];
+    const trainingID = <?php echo $id; ?>;
+
+    if (scannedAttendanceSheet) {
+      const formData = new FormData();
+      formData.append('scannedAttendanceSheet', scannedAttendanceSheet);
+      formData.append('trainingID', trainingID);
+
+      $.ajax({
+        type: "POST",
+        url: "components/uploadScannedAttendanceSheet.php",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+          if (data == "ok") {
+            alert("Scanned attendance sheet uploaded successfully.");
+            location.reload();
+          } else {
+            console.log(data);
+          }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+          console.error('checking employee record error: ', textStatus, errorThrown);
+        }
+      });
+    } else {
+      alert("Please select a file to upload.");
+    }
   }
 </script>

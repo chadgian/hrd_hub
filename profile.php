@@ -303,11 +303,11 @@ if (isset($_SESSION['userID'])) {
             Password</button>
         </div>
         <div class="col-md-6">
-          <div class="profile-notification">
+          <!-- <div class="profile-notification">
             <marquee behavior="scroll" direction="right" scrollamount="10" style="color: red;">
               This text will scroll from right to left.
             </marquee>
-          </div>
+          </div> -->
           <div class="profile-trainings">
             <div class="profile-trainings-header">
               <div class="training-header-nav" id="nav-0"

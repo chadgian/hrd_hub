@@ -10,6 +10,7 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
 
 $trainingID = $_POST['trainingID'];
+$day = $_POST['day'];
 // $trainingID = "22";
 
 // Fill cells with training details
@@ -21,19 +22,20 @@ $trainingEnd = (new DateTime($trainingDetails['endDate']))->format("Y-m-d");
 $numDaysRaw = (new DateTime($trainingEnd))->diff(new DateTime($trainingStart));
 
 $numDays = ((int) $numDaysRaw->days) + 1;
+$inputFileName = '../assets/sources/attendance_template_1day.xlsx';
 
-if ($numDays == 1) {
-  // Load the existing Excel file
-  $inputFileName = '../assets/sources/attendance_template_1day.xlsx';
-} elseif ($numDays == 2) {
-  // Load the existing Excel file
-  $inputFileName = '../assets/sources/attendance_template_2days.xlsx';
-} elseif ($numDays == 3) {
-  // Load the existing Excel file
-  $inputFileName = '../assets/sources/attendance_template_3days.xlsx';
-} else {
-  die("Error: More than 3 number of days.");
-}
+// if ($numDays == 1) {
+//   // Load the existing Excel file
+//   $inputFileName = '../assets/sources/attendance_template_1day.xlsx';
+// } elseif ($numDays == 2) {
+//   // Load the existing Excel file
+//   $inputFileName = '../assets/sources/attendance_template_2days.xlsx';
+// } elseif ($numDays == 3) {
+//   // Load the existing Excel file
+//   $inputFileName = '../assets/sources/attendance_template_3days.xlsx';
+// } else {
+//   die("Error: More than 3 number of days.");
+// }
 
 $spreadsheet = IOFactory::load($inputFileName);
 
@@ -42,6 +44,7 @@ $sheet = $spreadsheet->getActiveSheet();
 
 //fill training name
 $sheet->setCellValue('A8', $trainingDetails['trainingName']);
+$trainingName = $trainingDetails['trainingName'];
 
 //fill training date
 if ($trainingDetails['startDate'] == $trainingDetails['endDate']) {
@@ -53,6 +56,9 @@ $sheet->setCellValue('A9', $trainingDate);
 
 //fill training venue
 $sheet->setCellValue('A10', $trainingDetails['venue']);
+
+//
+$sheet->setCellValue('D12', "Day $day");
 
 // fill participant details
 $paxList = getPaxList($trainingID);
@@ -94,7 +100,7 @@ $sheet->getStyle($range)->applyFromArray($styleArray);
 
 // Save the modified file
 $writer = new Xlsx($spreadsheet);
-$outputFileName = "../assets/sources/attendance_sheets/{$trainingID}_attendance_sheet.xlsx";
+$outputFileName = "../assets/sources/attendance_sheets/[{$trainingName}] Day $day Attendance Sheet.xlsx";
 $writer->save($outputFileName);
 
 echo "ok";

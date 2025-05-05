@@ -21,7 +21,7 @@
       </div>
 
       <?php
-      include __DIR__ . '\..\..\..\components\processes\db_connection.php';
+      include __DIR__ . '/../../../components/processes/db_connection.php';
 
       date_default_timezone_set('Asia/Manila');
 

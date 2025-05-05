@@ -11,7 +11,7 @@ include_once '../components/functions/checkLogin.php';
 //     header("Location: /hrd_hub/pa");
 //   }
 // } else {
-//   header("Location: /hrd_hub/" );
+//   header("Location: /hrd_hub/");
 // }
 
 $userSession = new UserSession();
@@ -60,7 +60,7 @@ $trainingID = $_GET['t'] ?? 0;
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav">
             <a class="nav-link active" onclick="setAddress('p', 0)">Home</a>
-            <a class="nav-link" href="../components/processes/logoutProcess.php">Logout</a>
+            <a class="nav-link" href="components/processes/logout.php">Logout</a>
           </div>
         </div>
       </div>

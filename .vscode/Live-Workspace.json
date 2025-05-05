@@ -1,0 +1,22 @@
+
+{
+    "profile": "default",
+
+    "protocol": "ftp",
+    "host": "cscro6-trainings.atwebpages.com",
+    "port": 21,
+    "user": "4451946",
+    "password": "iamchad17",
+    
+    "remotePath": "/",
+    "uploadOnSave": false,
+    "saveOnCheckIn": false,
+    "clearCacheOnCheckIn": false,
+    
+    "ignore": [
+        "*/.DS_Store",
+        "*/.vscode/*",
+        "*/.git/*",
+        "*/*.LCK"
+    ]
+}

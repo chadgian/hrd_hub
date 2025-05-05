@@ -48,12 +48,21 @@ for ($i = 0; $i < $trainingDays; $i++) {
     $sheet->setCellValue('E1', 'Agency');
     $sheet->setCellValue('F1', 'Login');
     $sheet->setCellValue('G1', 'Logout');
+    $sheet->setCellValue('H1', 'Status');
+    $sheet->setCellValue('I1', 'OR Number');
+    $sheet->setCellValue('J1', 'Date Paid');
+    $sheet->setCellValue('K1', 'Remarks');
 
     $rowCount = 2;
 
     while ($row = $attendanceResult->fetch_assoc()) {
       $loginTime = ($row['login'] == !NULL) ? date('H:i', strtotime($row['login'])) : "";
       $logoutTime = ($row['logout'] == !NULL) ? date('H:i', strtotime($row['logout'])) : "";
+      $status = ($row['attendance'] == 1 && $row['payment'] == 1) ? "Completed" : "Incomplete";
+      $orNumber = ($row['receiptNumber'] == !NULL) ? $row['receiptNumber'] : "";
+      $datePaid = ($row['paymentDate'] == !NULL) ? date('Y-m-d', strtotime($row['paymentDate'])) : "";
+      $remarks = ($row['remarks'] == !NULL) ? $row['remarks'] : "";
+      $remarks = ($row['attendanceRemarks'] == !NULL) ? $remarks . " :: " . $row['attendanceRemarks'] : $remarks;
 
       $sheet->setCellValue('A' . $rowCount, $rowCount - 1);
       $sheet->setCellValue('B' . $rowCount, $row['lastName']);
@@ -62,6 +71,11 @@ for ($i = 0; $i < $trainingDays; $i++) {
       $sheet->setCellValue('E' . $rowCount, $row['agencyName']);
       $sheet->setCellValue('F' . $rowCount, $loginTime);
       $sheet->setCellValue('G' . $rowCount, $logoutTime);
+      $sheet->setCellValue('H' . $rowCount, $status);
+      $sheet->setCellValue('I' . $rowCount, $orNumber);
+      $sheet->setCellValue('J' . $rowCount, $datePaid);
+      $sheet->setCellValue('K' . $rowCount, $remarks);
+
       $rowCount++;
     }
 
