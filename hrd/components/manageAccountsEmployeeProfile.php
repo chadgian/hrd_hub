@@ -34,8 +34,7 @@ echo "
 <div class='profile-details-header'>
   <span style='font-weight: 500; font-size: large;'>Registration Details</span>
   <svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='currentColor'
-    class='bi bi-pencil-square' viewBox='0 0 16 16' style='cursor: pointer;' data-bs-toggle='modal'
-    data-bs-target='#editRegistrationDetails'>
+    class='bi bi-pencil-square' viewBox='0 0 16 16' style='cursor: pointer;' onclick='editEmployeeProfile()'>
     <path
       d='M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z' />
     <path fill-rule='evenodd'
@@ -356,9 +355,105 @@ function getTrainings($employeeID)
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="agencyName">Name of Agency / Organization </label>
-              <select class="form-control" id="agencyName" name="agencyName">
-              </select>
+              <input list="agencyList" role="combobox" class="form-control" id="agencyName" name="agencyName"
+                placeholder="Type or select your agency..." autocomplete="off">
+              <datalist id="agencyList" role="listbox">
+
+              </datalist>
             </div>
+            <?php
+            $getAllAgencies = $conn->prepare("SELECT * FROM agency");
+            $getAllAgencies->execute();
+            $getAllAgenciesResult = $getAllAgencies->get_result();
+
+            $allAgencies = [];
+            while ($getAllAgenciesData = $getAllAgenciesResult->fetch_assoc()) {
+              $agencyId = $getAllAgenciesData['agencyID'];
+              $agencyName = $getAllAgenciesData['agencyName'];
+              $agencySector = $getAllAgenciesData['sector'];
+              $agencyProvince = $getAllAgenciesData['province'];
+              //debug 1
+              // echo $agencyName;
+              // echo "<br>";
+            
+              $allAgencies[] = [
+                'agencyID' => $agencyId,
+                'agencyName' => $agencyName,
+                'sector' => $agencySector,
+                'province' => $agencyProvince,
+                'address' => $getAllAgenciesData['address']
+              ];
+            }
+
+            //debug 2
+            // foreach ($allAgencies as $agency) {
+            //   echo $agency['agencyName'];
+            // }
+            // echo "<br><br>";
+            
+            $encodeAllAgency = json_encode(utf8ize($allAgencies), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+
+            function utf8ize($mixed)
+            {
+              if (is_array($mixed)) {
+                foreach ($mixed as $key => $value) {
+                  $mixed[$key] = utf8ize($value);
+                }
+              } elseif (is_string($mixed)) {
+                return mb_convert_encoding($mixed, 'UTF-8', 'UTF-8');
+              }
+              return $mixed;
+            }
+
+
+            ?>
+            <script>
+              updateAgencySelect();
+              document.getElementById("sector").addEventListener("change", updateAgencySelect)
+              document.getElementById("fo").addEventListener("change", updateAgencySelect)
+              document.getElementById("agencyName").addEventListener("input", updateAgencySelect)
+
+              function updateAgencySelect() {
+                const sector = document.getElementById("sector").value;
+                const province = document.getElementById("fo").value;
+                const agenciesList = <?php echo $encodeAllAgency; ?>;
+
+                document.getElementById("agencyList").innerHTML = "";
+
+                // const otherAgency = document.createElement("option");
+                // otherAgency.value = "0";
+                // otherAgency.text = "Others";
+                // document.getElementById("agencyList").appendChild(otherAgency);
+
+                agenciesList.forEach(agency => {
+                  if (agency.sector.toLowerCase() == sector && agency.province.toLowerCase() == province) {
+                    const agencyOption = document.createElement("option");
+                    agencyOption.value = agency.agencyName;
+                    document.getElementById("agencyList").appendChild(agencyOption);
+
+                    // console.log(agency.agencyID + " - " + agency.agencyName);
+                  } else {
+                    // console.log(sector + " = " + agency.sector);
+                    // console.log(province + " = " + agency.province);
+                    // console.log(agency.agencyID + " - " + agency.agencyName);
+                  }
+                });
+
+                // document.getElementById("agencyName").addEventListener('input', function () {
+                //   const agencyName = this.value;
+                //   const addressField = document.getElementById("agencyAddress");
+
+                //   const selectedAgency = agenciesList.find(agency => agency.agencyName === agencyName);
+
+                //   if (selectedAgency) {
+                //     addressField.value = selectedAgency.address;
+                //   } else {
+                //     addressField.value = "";
+                //   }
+
+                // })
+              }
+            </script>
             <div class="form-group col-md-6">
               <label for="position">Position <small>*</small></label>
               <input type="text" class="form-control" id="position" name="position" required>
@@ -416,7 +511,7 @@ function getTrainings($employeeID)
     $("#foodRestrictions").val("<?php echo $employee['foodRestriction']; ?>");
 
 
-    updateAgencyNameSelect();
+    // updateAgencyNameSelect();
     $("#editEmployeeModal").modal("show");
   }
 
@@ -435,7 +530,7 @@ function getTrainings($employeeID)
     var personalEmail = $("#personalEmail").val();
     var altEmail = $("#altEmail").val();
     var sector = $("#sector").val();
-    var agencyID = $("#agencyName").val();
+    var agencyName = $("#agencyName").val();
     var civilStatus = $("#civilStatus").val();
     var foodRestrictions = $("#foodRestrictions").val();
 
@@ -468,45 +563,54 @@ function getTrainings($employeeID)
         personalEmail: personalEmail,
         altEmail: altEmail,
         sector: sector,
-        agencyID: agencyID,
+        agencyName: agencyName,
         civilStatus: civilStatus,
         foodRestrictions: foodRestrictions,
         employeeID: employeeID,
         userID: userID
       },
       success: function (data) {
-        $("#updateProfileStatus").text("Profile updated!");
-        $("#updateProfileStatusGif").hide();
-        setTimeout(() => {
-          $("#loadingModal").modal("hide");
-          location.reload();
-        }, 1000);
+        if (data = "ok") {
+          $("#updateProfileStatus").text("Profile updated!");
+          $("#updateProfileStatusGif").hide();
+          setTimeout(() => {
+            $("#loadingModal").modal("hide");
+            // location.reload();
+            window.history.back();
+          }, 1000);
+        } else {
+          $("#updateProfileStatus").text("Error updating profile!");
+          $("#updateProfileStatusGif").hide();
+          setTimeout(() => {
+            $("#loadingModal").modal("hide");
+          }, 1000);
+        }
       }
     })
   }
 
-  $("#sector").change(updateAgencyNameSelect);
-  $("#fo").change(updateAgencyNameSelect);
+  // $("#sector").change(updateAgencyNameSelect);
+  // $("#fo").change(updateAgencyNameSelect);
 
-  function updateAgencyNameSelect() {
-    var sector = $("#sector").val().toLowerCase();
-    var province = $("#fo").val().toLowerCase();
+  // function updateAgencyNameSelect() {
+  //   var sector = $("#sector").val().toLowerCase();
+  //   var province = $("#fo").val().toLowerCase();
 
-    const agencies = <?php echo $allAgency; ?>;
+  //   const agencies = <?php echo $allAgency; ?>;
 
-    console.log(agencies);
+  //   console.log(agencies);
 
-    let agencyNameSelect = $("#agencyName");
-    agencyNameSelect.empty();
-    agencyNameSelect.append("<option value=''>Select Agency</option>");
-    for (let i = 0; i < agencies.length; i++) {
-      if (agencies[i].sector.toLowerCase() == sector && agencies[i].province.toLowerCase() == province) {
-        if (agencies[i].agencyID == <?php echo $employee['agencyID']; ?>) {
-          agencyNameSelect.append(`<option value='${agencies[i].agencyID}' selected>${agencies[i].agencyName}</option>`);
-        } else {
-          agencyNameSelect.append(`<option value='${agencies[i].agencyID}'>${agencies[i].agencyName}</option>`);
-        }
-      }
-    }
-  }
+  //   let agencyNameSelect = $("#agencyName");
+  //   agencyNameSelect.empty();
+  //   agencyNameSelect.append("<option value=''>Select Agency</option>");
+  //   for (let i = 0; i < agencies.length; i++) {
+  //     if (agencies[i].sector.toLowerCase() == sector && agencies[i].province.toLowerCase() == province) {
+  //       if (agencies[i].agencyID == <?php echo $employee['agencyID']; ?>) {
+  //         agencyNameSelect.append(`<option value='${agencies[i].agencyID}' selected>${agencies[i].agencyName}</option>`);
+  //       } else {
+  //         agencyNameSelect.append(`<option value='${agencies[i].agencyID}'>${agencies[i].agencyName}</option>`);
+  //       }
+  //     }
+  //   }
+  // }
 </script>

@@ -16,7 +16,7 @@ $age = $_POST['age'];
 $phoneNumber = $_POST['phoneNumber'];
 $email = $_POST['personalEmail'];
 $altEmail = $_POST['altEmail'];
-$agencyID = $_POST['agencyID'];
+$agencyID = getAgencyID($_POST['agencyName']);
 $civilStatus = $_POST['civilStatus'];
 $foodRestrictions = $_POST['foodRestrictions'];
 $employeeID = $_POST['employeeID'];
@@ -99,4 +99,16 @@ if ($updateProfileStmt->execute()) {
 } else {
   $conn->rollback();
   echo "Error: " . $conn->error;
+}
+
+function getAgencyID($agencyName)
+{
+  global $conn;
+  $stmt = $conn->prepare("SELECT agencyID FROM agency WHERE agencyName = ?");
+  $stmt->bind_param("s", $agencyName);
+  $stmt->execute();
+  $stmt->bind_result($agencyID);
+  $stmt->fetch();
+  $stmt->close();
+  return $agencyID;
 }
