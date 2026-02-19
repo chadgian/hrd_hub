@@ -39,7 +39,8 @@ function checkLogin()
   }
   includeFiles();
 
-  $baseURL = '/hrd_hub'; // Change this to your base URL
+  require_once __DIR__ . '/../config/app.php';
+  $baseURL = appConfig()['app']['base_url'];
   $currentPage = str_replace($baseURL, '', $_SERVER['PHP_SELF']);
 
   switch ($currentPage) {

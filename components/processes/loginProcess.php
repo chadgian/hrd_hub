@@ -1,4 +1,8 @@
 <?php
+include '../functions/security.php';
+requirePostMethod();
+requireCsrf();
+
 include '../classes/userSession.php';
 $userSession = new UserSession();
 
@@ -17,8 +21,10 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
         break;
       case "payment":
         header("Location: /hrd_hub/pa");
+        break;
       default:
-        echo $result;
+        header("Location: /hrd_hub/");
+        break;
     }
   } else {
     header("Location: ../../login.php?e=1");

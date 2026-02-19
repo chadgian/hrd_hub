@@ -1,18 +1,23 @@
 <?php
+include '../../components/functions/security.php';
+requirePostMethod();
+requireRole('admin');
+
 include '../../components/processes/db_connection.php';
 
-$userID = $_POST['userID'];
-$defaultPassword = "@LingkodBayani";
+$userID = (int) ($_POST['userID'] ?? 0);
+$defaultPassword = '@LingkodBayani';
+$defaultPasswordHash = password_hash($defaultPassword, PASSWORD_DEFAULT);
 
 $conn->begin_transaction();
 
-$resetPswrdStmt = $conn->prepare("UPDATE user SET password = ? WHERE userID = ?");
-$resetPswrdStmt->bind_param("si", $defaultPassword, $userID);
+$resetPswrdStmt = $conn->prepare('UPDATE user SET password = ? WHERE userID = ?');
+$resetPswrdStmt->bind_param('si', $defaultPasswordHash, $userID);
 if ($resetPswrdStmt->execute()) {
   $conn->commit();
-  echo "ok";
-} else {
-  $conn->rollback();
-  echo "Password reset failed!";
+  echo 'ok';
+  exit();
 }
-$resetPswrdStmt->close();
+
+$conn->rollback();
+echo 'Password reset failed';

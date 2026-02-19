@@ -1,5 +1,6 @@
 <?php
 include_once 'components/functions/checkLogin.php';
+include_once 'components/functions/html.php';
 checkLogin();
 ?>
 
@@ -178,8 +179,8 @@ checkLogin();
         if ($noticeStmt->execute()) {
           $noticeResult = $noticeStmt->get_result();
           while ($noticeData = $noticeResult->fetch_assoc()) {
-            $noticeTitle = $noticeData['noticeTitle'];
-            $noticeBody = $noticeData['noticeBody'];
+            $noticeTitle = escape($noticeData['noticeTitle']);
+            $noticeBody = escape($noticeData['noticeBody']);
 
             echo "
             <div class='notices-content' data-aos='fade-up'>
