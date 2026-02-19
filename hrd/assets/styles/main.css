@@ -1470,3 +1470,76 @@ input[type="date"]{
     scale: 95%;
   } */
 }
+/*--------------------------------- UX polish & motion ---------------------------------*/
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.middle-content > * {
+  animation: fadeSlideUp 0.45s ease both;
+}
+
+.training-item,
+.recent-acts,
+.addTraining-content,
+.participantTable-container,
+.attendanceTable-container {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.training-item:hover,
+.recent-acts:hover,
+.addTraining-content:hover,
+.participantTable-container:hover,
+.attendanceTable-container:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.view-training-btn,
+.addTraining-btn,
+button,
+input[type="submit"] {
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.view-training-btn:hover,
+.addTraining-btn:hover,
+button:hover,
+input[type="submit"]:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.16);
+}
+
+.view-training-btn:active,
+.addTraining-btn:active,
+button:active,
+input[type="submit"]:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .middle-content > * {
+    animation: none;
+  }
+
+  .training-item,
+  .recent-acts,
+  .addTraining-content,
+  .participantTable-container,
+  .attendanceTable-container,
+  .view-training-btn,
+  .addTraining-btn,
+  button,
+  input[type="submit"] {
+    transition: none;
+  }
+}
