@@ -625,12 +625,14 @@
       $.ajax({
         type: "POST",
         url: "components/manageAccountsResetPassword.php",
+        dataType: "json",
         data: {
           userID: adminID
         },
         success: function (data) {
-          if (data == "ok") {
+          if (data && data.ok) {
             alert("Password reset successfully!");
+            console.log(`New password for ${adminUsername}: ${data.newPassword}`);
           } else {
             alert("Something went wrong. Please contact admin.")
             console.log(data);
@@ -645,12 +647,14 @@
       $.ajax({
         type: "POST",
         url: "components/manageAccountsResetPassword.php",
+        dataType: "json",
         data: {
           userID: userID
         },
         success: function (data) {
-          if (data == "ok") {
+          if (data && data.ok) {
             alert("Password reset successfully!");
+            console.log(`New password for account ${userID}: ${data.newPassword}`);
           } else {
             alert("Something went wrong. Please contact admin.")
             console.log(data);

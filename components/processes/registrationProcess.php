@@ -202,9 +202,10 @@ function createUserAccount($prefix, $firstName, $lastName, $suffix, $middleIniti
   global $agencyID;
 
   $password = generateRandomPassword();
+  $passwordHash = password_hash($password, PASSWORD_DEFAULT);
 
   $createAccountStmt = $conn->prepare("INSERT INTO user (role, prefix, firstname, lastName, suffix, middleInitial, position, agency, username, password) VALUES ('general', ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-  $createAccountStmt->bind_param("sssssssss", $prefix, $firstName, $lastName, $suffix, $middleInitial, $position, $agencyID, $email, $password);
+  $createAccountStmt->bind_param("sssssssss", $prefix, $firstName, $lastName, $suffix, $middleInitial, $position, $agencyID, $email, $passwordHash);
 
   if ($createAccountStmt->execute()) {
     $userID = $conn->insert_id;

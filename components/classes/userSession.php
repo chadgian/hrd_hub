@@ -56,20 +56,27 @@ class UserSession
         if ($result->num_rows > 0) {
           $user = $result->fetch_assoc();
 
-          // Verify the password
-          if ($password === $user['password']) {
-            $this->userID = $user['userID'];
-            // Store user details in the session
-            if ($this->saveSessionData()) {
-              $this->rememberme();
-              return true;  // Successfully logged in
-            } else {
-              return false;
+          $storedPassword = $user['password'];
+          $isLegacyPlaintext = !preg_match('/^\$2y\$|^\$argon2/', $storedPassword);
+          $passwordValid = password_verify($password, $storedPassword) || ($isLegacyPlaintext && hash_equals($storedPassword, $password));
+
+          if ($passwordValid) {
+            if ($isLegacyPlaintext) {
+              $rehashStmt = $this->conn->prepare("UPDATE user SET password = ? WHERE userID = ?");
+              $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+              $rehashStmt->bind_param("si", $hashedPassword, $user['userID']);
+              $rehashStmt->execute();
             }
 
-          } else {
+            $this->userID = $user['userID'];
+            if ($this->saveSessionData()) {
+              $this->rememberme();
+              return true;
+            }
             return false;
           }
+
+          return false;
         }
       } else {
         return false;

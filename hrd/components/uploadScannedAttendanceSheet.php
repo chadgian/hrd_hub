@@ -1,23 +1,39 @@
 <?php
+include '../../components/functions/security.php';
+requirePostMethod();
+requireRole('admin');
 
-$scannedAttendanceSheet = $_FILES['scannedAttendanceSheet'];
-$trainingID = $_POST['trainingID'];
+include '../../components/config/app.php';
+$config = appConfig();
 
-// upload the scanned attendance sheet to the server
-$targetDir = "../assets/sources/scanned_attendance_sheets/";
-// rename the file to avoid conflicts
-$filename = $trainingID . "_attendance_sheet.pdf";
+$scannedAttendanceSheet = $_FILES['scannedAttendanceSheet'] ?? null;
+$trainingID = $_POST['trainingID'] ?? '';
 
+if (!$scannedAttendanceSheet || !preg_match('/^[0-9]+$/', (string) $trainingID)) {
+  jsonResponse(400, ['ok' => false, 'message' => 'Invalid upload request']);
+}
+
+if (($scannedAttendanceSheet['size'] ?? 0) > $config['upload']['max_bytes']) {
+  jsonResponse(400, ['ok' => false, 'message' => 'File too large']);
+}
+
+$finfo = new finfo(FILEINFO_MIME_TYPE);
+$mimeType = $finfo->file($scannedAttendanceSheet['tmp_name']);
+if ($mimeType !== 'application/pdf') {
+  jsonResponse(400, ['ok' => false, 'message' => 'Invalid file type. Only PDF files are allowed.']);
+}
+
+$targetDir = dirname(__DIR__) . '/storage/scanned_attendance_sheets/';
+if (!is_dir($targetDir)) {
+  mkdir($targetDir, 0750, true);
+}
+
+$filename = $trainingID . '_attendance_sheet_' . bin2hex(random_bytes(8)) . '.pdf';
 $targetFile = $targetDir . $filename;
 
-// Check if the file is a valid PDF
-if ($scannedAttendanceSheet['type'] === 'application/pdf') {
-  // Move the uploaded file to the target directory
-  if (move_uploaded_file($scannedAttendanceSheet['tmp_name'], $targetFile)) {
-    echo "ok";
-  } else {
-    echo "There was an error uploading the file.";
-  }
-} else {
-  echo "Invalid file type. Only PDF files are allowed.";
+if (move_uploaded_file($scannedAttendanceSheet['tmp_name'], $targetFile)) {
+  echo 'ok';
+  exit();
 }
+
+echo 'There was an error uploading the file.';

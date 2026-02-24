@@ -1,0 +1,10 @@
+.env
+
+/vendor/
+
+hrd/assets/generated_ids/
+hrd/assets/sources/scanned_attendance_sheets/
+assets/conf_slips/
+
+*.log
+.DS_Store

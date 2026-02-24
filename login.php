@@ -1,6 +1,8 @@
 <?php
 include_once 'components/functions/checkLogin.php';
+include_once 'components/functions/security.php';
 checkLogin();
+$csrfToken = csrfToken();
 ?>
 
 <!DOCTYPE html>
@@ -25,6 +27,7 @@ checkLogin();
       echo '<div style="color: red; width: 100%; text-align: center; font-size: small;">Invalid login</div>';
     } ?>
     <form action="components/processes/loginProcess.php" method="post" class="login-form">
+      <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrfToken, ENT_QUOTES, 'UTF-8'); ?>">
       <div class="inputGroup">
         <div class="inputIcon">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person"
